@@ -30,7 +30,7 @@ public class HelloServlet extends HttpServlet {
     public void destroy() {
     }
 
-    private void process(HttpServletRequest req, HttpServletResponse resp){
-
+    private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.getWriter().println("sample");
     }
 }
