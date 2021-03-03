@@ -1,5 +1,9 @@
 package by.epam.jwd.finalproj.pool;
 
-public class ConnectionPool {
+public enum ConnectionPool {
+    INSTANCE;
 
+    public void returnConnection(ProxyConnection proxyConnection) {
+
+    }
 }
