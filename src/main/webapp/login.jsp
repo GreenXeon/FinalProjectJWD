@@ -14,7 +14,7 @@
 <form action="controller" method="post">
     <input type="hidden" name="command" value="login" />
     <label>Email:</label>
-    <input name="email" size="30" />
+    <input name="login" size="30" />
     <br><br>
     <label>Password:</label>
     <input type="password" name="password" size="30" />

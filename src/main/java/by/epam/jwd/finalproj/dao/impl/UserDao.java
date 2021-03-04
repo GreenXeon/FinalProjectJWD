@@ -5,6 +5,7 @@ import by.epam.jwd.finalproj.dao.CommonDao;
 import by.epam.jwd.finalproj.model.Roles;
 import by.epam.jwd.finalproj.model.User;
 import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,14 +21,9 @@ public class UserDao implements CommonDao<User> {
     @Override
     public Optional<List<User>> findAll() {
         List<User> users = new ArrayList<>();
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb_model?serverTimezone=Europe/Minsk&useSSL=false",
-                "root", "root")) {
-            Statement statement = conn.createStatement();
+        logger.debug("test logging");
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
+            final Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM p_users");
             while (resultSet.next()) {
                 User user = new User(
