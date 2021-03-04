@@ -7,6 +7,8 @@ import by.epam.jwd.finalproj.dao.impl.UserDao;
 import by.epam.jwd.finalproj.model.User;
 import by.epam.jwd.finalproj.model.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.List;
@@ -21,6 +23,8 @@ public class HelloServlet extends HttpServlet {
 
     private static final String COMMAND_PARAMETER_NAME = "command";
 
+    private final Logger logger = LogManager.getLogger(HelloServlet.class);
+
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         process(req, resp);
     }
@@ -34,18 +38,11 @@ public class HelloServlet extends HttpServlet {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.getWriter().println("hello, nigger " + req.getParameter("login") + " " + req.getParameter("command"));
-        //final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
-        //final Command businessCommand = Command.retrieveCommand(commandName);
-        //final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
-        UserDao userDao = new UserDao();
-        Optional<List<User>> users = userDao.findAll();
-        if (users.isPresent()){
-            resp.getWriter().println("users are read from database");
-            resp.getWriter().println(users.get().get(0).getLogin());
-        }
-        else {
-            resp.getWriter().println("reading is failed");
-        }
+        logger.info("nicelog");
+        final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
+        final Command businessCommand = Command.retrieveCommand(commandName);
+        final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
+
         /*UserService userService = new UserService();
         Optional<UserDto> user = userService.login(req.getParameter("login"), req.getParameter("password"));
         if (!user.isPresent()) {
@@ -53,13 +50,14 @@ public class HelloServlet extends HttpServlet {
         }
         else {
             resp.getWriter().println("ok");
+            resp.getWriter().println(user.get().getLogin());
         }*/
 
-        /*if (result.isRedirect()) {
+        if (result.isRedirect()) {
             //todo
         } else {
             final RequestDispatcher dispatcher = req.getRequestDispatcher(result.getPage());
             dispatcher.forward(req, resp);
-        }*/
+        }
     }
 }
