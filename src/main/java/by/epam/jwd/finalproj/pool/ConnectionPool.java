@@ -1,5 +1,7 @@
 package by.epam.jwd.finalproj.pool;
 
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -71,7 +73,7 @@ public class ConnectionPool {
         }
     }
 
-    private void init(){
+    public void init(){
         registerDrivers();
         try {
             for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
@@ -116,5 +118,6 @@ public class ConnectionPool {
                 e.printStackTrace();
             }
         }
+        AbandonedConnectionCleanupThread.uncheckedShutdown();
     }
 }

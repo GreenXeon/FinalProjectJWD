@@ -6,6 +6,7 @@ import by.epam.jwd.finalproj.command.WrappingRequestContext;
 import by.epam.jwd.finalproj.dao.impl.UserDao;
 import by.epam.jwd.finalproj.model.User;
 import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.pool.ConnectionPool;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
