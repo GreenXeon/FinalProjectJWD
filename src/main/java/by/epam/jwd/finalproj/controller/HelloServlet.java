@@ -39,20 +39,11 @@ public class HelloServlet extends HttpServlet {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         resp.getWriter().println("hello, nigger " + req.getParameter("login") + " " + req.getParameter("command"));
-        logger.info("nicelog");
+        logger.info(req.getAttribute("login") + " is a user!");
+        logger.info("Request is processing");
         final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
         final Command businessCommand = Command.retrieveCommand(commandName);
         final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
-
-        /*UserService userService = new UserService();
-        Optional<UserDto> user = userService.login(req.getParameter("login"), req.getParameter("password"));
-        if (!user.isPresent()) {
-            resp.getWriter().println("failed");
-        }
-        else {
-            resp.getWriter().println("ok");
-            resp.getWriter().println(user.get().getLogin());
-        }*/
 
         if (result.isRedirect()) {
             //todo

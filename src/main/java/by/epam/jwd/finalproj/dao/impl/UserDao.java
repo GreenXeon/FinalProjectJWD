@@ -21,7 +21,6 @@ public class UserDao implements CommonDao<User> {
     @Override
     public Optional<List<User>> findAll() {
         List<User> users = new ArrayList<>();
-        logger.debug("test logging");
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM p_users");
@@ -35,12 +34,14 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBoolean(9),
                         Roles.findRoleById(resultSet.getInt(8))
                 );
+                logger.info("User " + resultSet.getString(2) + " is read");
                 users.add(user);
             }
             return Optional.of(users);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        logger.info("No users are read");
         return Optional.empty();
     }
 

@@ -13,13 +13,15 @@
 <body>
 <form action="controller" method="post">
     <input type="hidden" name="command" value="login" />
-    <label>Email:</label>
+    <label>Login:</label>
     <input name="login" size="30" />
     <br><br>
     <label>Password:</label>
     <input type="password" name="password" size="30" />
     <br><br>
     <button type="submit">Login</button>
+    <br>
+    ${errorMessage}
 </form>
 </body>
 </html>
