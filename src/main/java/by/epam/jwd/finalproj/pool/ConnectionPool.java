@@ -1,6 +1,8 @@
 package by.epam.jwd.finalproj.pool;
 
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +20,8 @@ public class ConnectionPool {
 
     private final Queue<ProxyConnection> availableConnections;
     private final Queue<ProxyConnection> takenConnections;
+
+    private final Logger logger = LogManager.getLogger(ConnectionPool.class);
 
     private static final int INITIAL_POOL_SIZE = 8;
     private static final int INCREMENT_SIZE = 4;
@@ -54,6 +58,7 @@ public class ConnectionPool {
             //todo: pool extension
             Connection connection = availableConnections.peek();
             takenConnections.add((ProxyConnection) connection);
+            logger.info("Connection is peeked from pool");
             return connection;
         }
         finally {
@@ -67,6 +72,7 @@ public class ConnectionPool {
             if (takenConnections.contains(connection)) {
                 takenConnections.remove(connection);
                 availableConnections.add((ProxyConnection) connection);
+                logger.info("Connection is returned in pool");
             }
         } finally {
             lock.unlock();
@@ -77,7 +83,7 @@ public class ConnectionPool {
         registerDrivers();
         try {
             for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-                final Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb_model?serverTimezone=Europe/Minsk&useSSL=false",
+                final Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb_model?serverTimezone=Europe/Minsk&allowPublicKeyRetrieval=true&useSSL=false",
                         "root", "root");
                 final ProxyConnection proxyConnection = new ProxyConnection(conn);
                 availableConnections.add(proxyConnection);

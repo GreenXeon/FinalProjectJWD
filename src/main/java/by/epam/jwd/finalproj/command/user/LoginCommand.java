@@ -25,17 +25,27 @@ public enum LoginCommand implements Command {
 
     @Override
     public ResponseContext execute(RequestContext request) {
-        final String login = String.valueOf(request.getAttribute("login")).trim();
-        final String password = String.valueOf(request.getAttribute("password")).trim();
+        ResponseContext result;
+        final String login = String.valueOf(request.getParameter("login")).trim();
+        final String password = String.valueOf(request.getParameter("password")).trim();
+        if (login.isEmpty()){
+            request.setAttribute("errorMessage", "Login is empty!");
+            return ShowLoginPageCommand.INSTANCE.execute(request);
+        }
+        else if(password.isEmpty()){
+            request.setAttribute("errorMessage", "Password is empty!");
+            return ShowLoginPageCommand.INSTANCE.execute(request);
+        }
+
         logger.info(login + " " + password);
         final Optional<UserDto> user = userService.login(login, password);
-        ResponseContext result;
+
         if (user.isPresent()){
             request.setAttribute("username", login);
             result = ShowMainPageCommand.INSTANCE.execute(request);
         }
         else{
-            request.setAttribute("errorMessage", "User is not found!");
+            request.setAttribute("errorMessage", "Wrong login or password!");
             result = ShowLoginPageCommand.INSTANCE.execute(request);
         }
         return result;

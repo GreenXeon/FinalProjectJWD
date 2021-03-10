@@ -34,6 +34,11 @@ public class WrappingRequestContext implements RequestContext{
         session.setAttribute(name, value);
     }
 
+    @Override
+    public String getParameter(String name) {
+        return request.getParameter(name);
+    }
+
     public static RequestContext of(HttpServletRequest request) {
         return new WrappingRequestContext(request);
     }

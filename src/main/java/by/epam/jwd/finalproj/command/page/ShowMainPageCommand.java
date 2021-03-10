@@ -10,7 +10,7 @@ public enum ShowMainPageCommand implements Command {
     private static final ResponseContext MAIN_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/index.jsp";
+            return "/index.jsp";
         }
 
         @Override

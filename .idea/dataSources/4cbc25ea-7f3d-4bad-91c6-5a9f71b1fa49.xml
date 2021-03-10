@@ -915,6 +915,7 @@ SELECT|sys.sys_config
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="289" parent="283" name="u_login">
       <Position>2</Position>
@@ -938,7 +939,7 @@ SELECT|sys.sys_config
       <Position>6</Position>
       <DataType>varchar(45)|0s</DataType>
     </column>
-    <column id="294" parent="283" name="u_registation">
+    <column id="294" parent="283" name="u_registration">
       <Position>7</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>

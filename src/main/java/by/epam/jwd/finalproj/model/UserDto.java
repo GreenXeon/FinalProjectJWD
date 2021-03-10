@@ -5,21 +5,31 @@ import java.util.Objects;
 
 public class UserDto {
     String login;
+    String password;
     String name;
     String surname;
     String email;
+    boolean isBlocked;
+    Roles role;
     Timestamp registrationDate;
 
-    public UserDto(String login, String name, String surname, String email, Timestamp registrationDate) {
+    public UserDto(String login, String password, String name, String surname, String email, Roles role, boolean isBlocked, Timestamp registrationDate) {
         this.login = login;
+        this.password  = password;
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.isBlocked = isBlocked;
+        this.role = role;
         this.registrationDate = registrationDate;
     }
 
     public String getLogin() {
         return login;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getName() {
@@ -38,6 +48,14 @@ public class UserDto {
         return registrationDate;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public Roles getRole() {
+        return role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,11 +71,14 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "UserDto{" +
                 "login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
+                ", isBlocked=" + isBlocked +
+                ", role=" + role +
                 ", registrationDate=" + registrationDate +
                 '}';
     }

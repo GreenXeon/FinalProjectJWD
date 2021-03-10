@@ -10,6 +10,10 @@ public enum Roles {
         this.i = i;
     }
 
+    public int getI() {
+        return i;
+    }
+
     public static Roles findRoleById(int i){
         for (Roles role : Roles.values()){
             if (role.i == i){

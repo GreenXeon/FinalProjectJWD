@@ -18,6 +18,7 @@
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.12.1" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.16" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+          <element id="library" level="project" name="Maven: org.mindrot:jbcrypt:0.4" />
         </element>
       </element>
       <element id="directory" name="META-INF">
