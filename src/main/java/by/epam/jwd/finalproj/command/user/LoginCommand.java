@@ -5,6 +5,7 @@ import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
+import by.epam.jwd.finalproj.command.page.ShowWelcomePageCommand;
 import by.epam.jwd.finalproj.model.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,7 @@ public enum LoginCommand implements Command {
             request.setAttribute("errorMessage", "Login is empty!");
             return ShowLoginPageCommand.INSTANCE.execute(request);
         }
-        else if(password.isEmpty()){
+        else if (password.isEmpty()){
             request.setAttribute("errorMessage", "Password is empty!");
             return ShowLoginPageCommand.INSTANCE.execute(request);
         }
@@ -41,6 +42,8 @@ public enum LoginCommand implements Command {
         final Optional<UserDto> user = userService.login(login, password);
 
         if (user.isPresent()){
+            request.setSessionAttribute("role", user.get().getRole());
+            request.setAttribute("users", userService.findAll().get());
             request.setAttribute("username", login);
             result = ShowMainPageCommand.INSTANCE.execute(request);
         }

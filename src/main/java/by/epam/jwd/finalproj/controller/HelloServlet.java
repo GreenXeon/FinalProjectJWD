@@ -38,14 +38,11 @@ public class HelloServlet extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        resp.getWriter().println("hello, nigger " + req.getParameter("login") + " " + req.getParameter("command"));
+        resp.getWriter().println("hello, " + req.getParameter("login") + " - " + req.getParameter("command"));
         logger.info("Request is processing");
         final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
-        logger.info("Command name is received");
         final Command businessCommand = Command.retrieveCommand(commandName);
-        logger.info("Command is found by name");
         final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
-        logger.info("Command is executed");
         if (result.isRedirect()) {
             //todo
         } else {

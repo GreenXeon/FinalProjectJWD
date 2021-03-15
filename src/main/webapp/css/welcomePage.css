@@ -1,0 +1,21 @@
+body{
+    text-align: center;
+    margin: 0;
+}
+
+.main{
+    width: auto;
+    margin-left: 13%;
+    margin-right: 13%;
+    padding: 10%;
+    background-color: lightblue;
+    font-family: Arial;
+}
+
+button{
+    padding: 1%;
+    font-family: Arial;
+    font-style: inherit;
+    font-size: 1.2em;
+    width: 15%;
+}

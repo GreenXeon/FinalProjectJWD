@@ -35,7 +35,9 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
-                        null, null, null,
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
                         resultSet.getTimestamp(7),
                         resultSet.getBoolean(9),
                         Roles.findRoleById(resultSet.getInt(8))

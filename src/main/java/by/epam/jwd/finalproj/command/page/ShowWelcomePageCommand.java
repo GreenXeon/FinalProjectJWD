@@ -4,13 +4,13 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 
-public enum ShowMainPageCommand implements Command {
+public enum ShowWelcomePageCommand implements Command {
     INSTANCE;
 
-    private static final ResponseContext MAIN_PAGE_RESPONSE = new ResponseContext() {
+    private static final ResponseContext WELCOME_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/mainPage.jsp";
+            return "/index.jsp";
         }
 
         @Override
@@ -21,6 +21,6 @@ public enum ShowMainPageCommand implements Command {
 
     @Override
     public ResponseContext execute(RequestContext request) {
-        return MAIN_PAGE_RESPONSE;
+        return WELCOME_PAGE_RESPONSE;
     }
 }

@@ -2,9 +2,10 @@
 <html>
 <head>
     <title>Periodicals subscription</title>
-    <link href="${pageContext.request.contextPath}/css/mainPage.css" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/css/welcomePage.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<jsp:include page="jsp/indexHeader.jsp"/>
 <div class="main">
     <h1>Welcome to the periodicals subscription!</h1>
     <h3>Choose an action</h3>

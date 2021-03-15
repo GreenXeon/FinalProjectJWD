@@ -13,6 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserService implements CommonService<UserDto> {
 
@@ -28,7 +29,16 @@ public class UserService implements CommonService<UserDto> {
 
     @Override
     public Optional<List<UserDto>> findAll() {
-        return Optional.empty();
+        Optional<List<User>> allUsers = userDao.findAll();
+        if (!allUsers.isPresent()){
+            return Optional.empty();
+        }
+        return Optional.of(
+                allUsers.get()
+                        .stream()
+                        .map(this::convertToDto)
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -39,7 +49,6 @@ public class UserService implements CommonService<UserDto> {
     public Optional<UserDto> login(String login, String password){
         final Optional<User> user = userDao.findByLogin(login);
         logger.info(password + " - password");
-        logger.info("Loging started");
         if (user.isPresent()){
             logger.info("User is present");
             String passwordHash = user.get().getPassword();
@@ -57,7 +66,7 @@ public class UserService implements CommonService<UserDto> {
         }
         else {
             logger.info("else is gone");
-            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt()));
+            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));
             logger.info(result);
             logger.info("User is not found");
             return Optional.empty();
