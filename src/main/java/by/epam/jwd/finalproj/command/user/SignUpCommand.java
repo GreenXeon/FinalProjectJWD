@@ -41,6 +41,7 @@ public enum SignUpCommand implements Command {
         } else if (!password.equals(passwordSecond)) {
             request.setAttribute("errorMessage", "Passwords are not equal!");
         } else {
+            //todo: existing login check
             String salt = BCrypt.gensalt(15);
             String passwordHash = BCrypt.hashpw(password, salt);
             Optional<UserDto> user = userService.save(new UserDto(login, passwordHash, null, null, null, Roles.USER,

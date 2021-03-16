@@ -4,25 +4,25 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
+import by.epam.jwd.finalproj.service.CommonService;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 
 import java.util.Collections;
 import java.util.List;
 
-public enum ShowMainPageCommand implements Command {
+public enum ShowGuestPageCommand implements Command {
     INSTANCE;
 
     private final PeriodicalService periodicalService;
 
-    ShowMainPageCommand(){
+    ShowGuestPageCommand(){
         this.periodicalService = new PeriodicalService();
     }
 
-
-    private static final ResponseContext MAIN_PAGE_RESPONSE = new ResponseContext() {
+    private static final ResponseContext GUEST_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/user/mainUserPage.jsp";
+            return "/jsp/guest.jsp";
         }
 
         @Override
@@ -35,6 +35,6 @@ public enum ShowMainPageCommand implements Command {
     public ResponseContext execute(RequestContext request) {
         final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         request.setAttribute("periodicals", periodicals);
-        return MAIN_PAGE_RESPONSE;
+        return GUEST_PAGE_RESPONSE;
     }
 }

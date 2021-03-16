@@ -1,5 +1,7 @@
 package by.epam.jwd.finalproj.model.periodicals;
 
+import java.math.BigDecimal;
+
 public class Periodical {
     int id;
     PeriodicalType type;
@@ -7,9 +9,9 @@ public class Periodical {
     String publisher;
     String author;
     int publishYear;
-    double subCost;
+    BigDecimal subCost;
 
-    public Periodical(int id, PeriodicalType type, String name, String publisher, String author, int publishYear, double subCost) {
+    public Periodical(int id, String name, String author, int publishYear, PeriodicalType type, BigDecimal subCost, String publisher) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -43,7 +45,7 @@ public class Periodical {
         return publishYear;
     }
 
-    public double getSubCost() {
+    public BigDecimal getSubCost() {
         return subCost;
     }
 }

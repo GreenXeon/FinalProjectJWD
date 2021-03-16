@@ -48,13 +48,9 @@ public class UserService implements CommonService<UserDto> {
 
     public Optional<UserDto> login(String login, String password){
         final Optional<User> user = userDao.findByLogin(login);
-        logger.info(password + " - password");
         if (user.isPresent()){
-            logger.info("User is present");
             String passwordHash = user.get().getPassword();
-            logger.info("Password hash is read");
             boolean equalPass = BCrypt.checkpw(password, passwordHash);
-            logger.info("Hash and password are checked");
             if (equalPass){
                 logger.info("User " + login + " is valid");
                 return user.map(this::convertToDto);
@@ -65,10 +61,7 @@ public class UserService implements CommonService<UserDto> {
             }
         }
         else {
-            logger.info("else is gone");
-            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));
-            logger.info(result);
-            logger.info("User is not found");
+            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));            logger.info("User is not found");
             return Optional.empty();
         }
     }

@@ -3,7 +3,9 @@ package by.epam.jwd.finalproj.command.user;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
-import by.epam.jwd.finalproj.command.page.ShowWelcomePageCommand;
+import by.epam.jwd.finalproj.command.page.ShowGuestPageCommand;
+
+import javax.servlet.http.Cookie;
 
 public enum LogoutCommand implements Command {
     INSTANCE;
@@ -11,6 +13,11 @@ public enum LogoutCommand implements Command {
     @Override
     public ResponseContext execute(RequestContext request) {
         request.invalidateSession();
-        return ShowWelcomePageCommand.INSTANCE.execute(request);
+        Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies){
+                cookie.setMaxAge(0);
+                //todo
+            }
+        return ShowGuestPageCommand.INSTANCE.execute(request);
     }
 }

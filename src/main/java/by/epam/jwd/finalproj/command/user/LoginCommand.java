@@ -4,9 +4,10 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
+import by.epam.jwd.finalproj.command.page.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
-import by.epam.jwd.finalproj.command.page.ShowWelcomePageCommand;
 import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,7 @@ public enum LoginCommand implements Command {
 
     @Override
     public ResponseContext execute(RequestContext request) {
-        ResponseContext result;
+        ResponseContext result = null;
         final String login = String.valueOf(request.getParameter("login")).trim();
         final String password = String.valueOf(request.getParameter("password")).trim();
         if (login.isEmpty()){
@@ -42,10 +43,16 @@ public enum LoginCommand implements Command {
         final Optional<UserDto> user = userService.login(login, password);
 
         if (user.isPresent()){
-            request.setSessionAttribute("role", user.get().getRole());
-            request.setAttribute("users", userService.findAll().get());
-            request.setAttribute("username", login);
-            result = ShowMainPageCommand.INSTANCE.execute(request);
+            //request.setSessionAttribute("role", user.get().getRole());
+            //request.setAttribute("users", new PeriodicalService().findAll().get());
+            //request.setAttribute("username", login);
+
+            if (user.get().getRole().name().equalsIgnoreCase("user")){
+                result = ShowMainPageCommand.INSTANCE.execute(request);
+            }
+            else {
+                result = ShowMainAdminPageCommand.INSTANCE.execute(request);
+            }
         }
         else{
             request.setAttribute("errorMessage", "Wrong login or password!");

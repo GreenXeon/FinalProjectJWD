@@ -3,17 +3,9 @@ package by.epam.jwd.finalproj.controller;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.WrappingRequestContext;
-import by.epam.jwd.finalproj.dao.impl.UserDao;
-import by.epam.jwd.finalproj.model.User;
-import by.epam.jwd.finalproj.model.UserDto;
-import by.epam.jwd.finalproj.pool.ConnectionPool;
-import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.*;
-import java.util.List;
-import java.util.Optional;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -38,11 +30,12 @@ public class HelloServlet extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        resp.getWriter().println("hello, " + req.getParameter("login") + " - " + req.getParameter("command"));
         logger.info("Request is processing");
         final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
         final Command businessCommand = Command.retrieveCommand(commandName);
         final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
+
+        //todo: check result for null and make exception
         if (result.isRedirect()) {
             //todo
         } else {

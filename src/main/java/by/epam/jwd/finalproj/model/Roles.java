@@ -1,6 +1,7 @@
 package by.epam.jwd.finalproj.model;
 
 public enum Roles {
+    GUEST(0),
     USER(1),
     ADMIN(2);
 

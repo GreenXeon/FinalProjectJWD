@@ -1,5 +1,6 @@
 package by.epam.jwd.finalproj.command;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +38,11 @@ public class WrappingRequestContext implements RequestContext{
     @Override
     public String getParameter(String name) {
         return request.getParameter(name);
+    }
+
+    @Override
+    public Cookie[] getCookies() {
+        return request.getCookies();
     }
 
     public static RequestContext of(HttpServletRequest request) {

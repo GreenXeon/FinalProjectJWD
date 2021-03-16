@@ -1,5 +1,6 @@
 package by.epam.jwd.finalproj.model.periodicals;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class PeriodicalDto {
@@ -8,9 +9,9 @@ public class PeriodicalDto {
     String publisher;
     String author;
     int publishYear;
-    double subCost;
+    BigDecimal subCost;
 
-    public PeriodicalDto(PeriodicalType type, String name, String publisher, String author, int publishYear, double subCost) {
+    public PeriodicalDto(String name, String author, int publishYear, PeriodicalType type, BigDecimal subCost, String publisher) {
         this.type = type;
         this.name = name;
         this.publisher = publisher;
@@ -39,7 +40,7 @@ public class PeriodicalDto {
         return publishYear;
     }
 
-    public double getSubCost() {
+    public BigDecimal getSubCost() {
         return subCost;
     }
 
@@ -48,7 +49,7 @@ public class PeriodicalDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PeriodicalDto that = (PeriodicalDto) o;
-        return publishYear == that.publishYear && Double.compare(that.subCost, subCost) == 0 && type == that.type && Objects.equals(name, that.name) && Objects.equals(publisher, that.publisher) && Objects.equals(author, that.author);
+        return publishYear == that.publishYear && type == that.type && name.equals(that.name) && publisher.equals(that.publisher) && author.equals(that.author) && subCost.equals(that.subCost);
     }
 
     @Override

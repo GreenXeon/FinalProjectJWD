@@ -10,4 +10,17 @@ public enum PeriodicalType {
     PeriodicalType(int i) {
         this.i = i;
     }
+
+    public int getI() {
+        return i;
+    }
+
+    public static PeriodicalType findById(int id){
+        for (PeriodicalType type : PeriodicalType.values()){
+            if (type.i == id){
+                return type;
+            }
+        }
+        return null;
+    }
 }
