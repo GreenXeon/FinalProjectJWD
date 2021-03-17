@@ -14,9 +14,11 @@
 </head>
 <body>
 <jsp:include page="adminHeader.jsp"/>
+<a href="${pageContext.request.contextPath}/controller?command=show_add_per">Add periodical</a>
 <c:if test="${not empty requestScope.periodicals}">
     <div class="periodicals">
         <table>
+            <caption>Periodicals</caption>
             <tr>
                 <th>Name</th>
                 <th>Author</th>
@@ -24,19 +26,23 @@
                 <th>Type</th>
                 <th>Cost</th>
                 <th>Publisher</th>
-                <th>Buy</th>
+                <th>Change</th>
+                <th>Delete</th>
             </tr>
             <c:forEach var="periodical" items="${requestScope.periodicals}">
                 <tr>
-                    <th>${periodical.name}</th>
-                    <th>${periodical.author}</th>
-                    <th>${periodical.publishYear}</th>
-                    <th>${periodical.type}</th>
-                    <th>${periodical.subCost}</th>
-                    <th>${periodical.publisher}</th>
-                    <th>
-                        <a href="#">Subscribe</a>
-                    </th>
+                    <td>${periodical.name}</td>
+                    <td>${periodical.author}</td>
+                    <td>${periodical.publishYear}</td>
+                    <td>${periodical.type}</td>
+                    <td>${periodical.subCost}</td>
+                    <td>${periodical.publisher}</td>
+                    <td>
+                        <a href="#">Change</a>
+                    </td>
+                    <td>
+                        <a href="#">Delete</a>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

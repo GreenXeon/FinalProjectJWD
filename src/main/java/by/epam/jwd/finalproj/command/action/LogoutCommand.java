@@ -1,4 +1,4 @@
-package by.epam.jwd.finalproj.command.user;
+package by.epam.jwd.finalproj.command.action;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
@@ -16,7 +16,6 @@ public enum LogoutCommand implements Command {
         Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies){
                 cookie.setMaxAge(0);
-                //todo
             }
         return ShowGuestPageCommand.INSTANCE.execute(request);
     }

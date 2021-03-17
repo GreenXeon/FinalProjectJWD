@@ -1,13 +1,12 @@
-package by.epam.jwd.finalproj.command.user;
+package by.epam.jwd.finalproj.command.action;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
-import by.epam.jwd.finalproj.command.page.ShowMainAdminPageCommand;
+import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
 import by.epam.jwd.finalproj.model.UserDto;
-import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,6 +29,7 @@ public enum LoginCommand implements Command {
         ResponseContext result = null;
         final String login = String.valueOf(request.getParameter("login")).trim();
         final String password = String.valueOf(request.getParameter("password")).trim();
+
         if (login.isEmpty()){
             request.setAttribute("errorMessage", "Login is empty!");
             return ShowLoginPageCommand.INSTANCE.execute(request);
@@ -39,14 +39,9 @@ public enum LoginCommand implements Command {
             return ShowLoginPageCommand.INSTANCE.execute(request);
         }
 
-        logger.info(login + " " + password);
         final Optional<UserDto> user = userService.login(login, password);
-
         if (user.isPresent()){
-            //request.setSessionAttribute("role", user.get().getRole());
-            //request.setAttribute("users", new PeriodicalService().findAll().get());
-            //request.setAttribute("username", login);
-
+            request.setSessionAttribute("role", user.get().getRole().name());
             if (user.get().getRole().name().equalsIgnoreCase("user")){
                 result = ShowMainPageCommand.INSTANCE.execute(request);
             }

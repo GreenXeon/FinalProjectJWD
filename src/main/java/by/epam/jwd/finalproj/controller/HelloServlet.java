@@ -35,9 +35,15 @@ public class HelloServlet extends HttpServlet {
         final Command businessCommand = Command.retrieveCommand(commandName);
         final ResponseContext result = businessCommand.execute(WrappingRequestContext.of(req));
 
+        /*if ((commandName.equalsIgnoreCase("login") && result != null)){
+            Cookie userrole = new Cookie("role", String.valueOf(req.getSession().getAttribute("role")));
+            userrole.setMaxAge(60 * 60 * 24 * 30);
+            resp.addCookie(userrole);
+        }*/
+
         //todo: check result for null and make exception
         if (result.isRedirect()) {
-            //todo
+            resp.sendRedirect(req.getContextPath() + req.getServletPath() + result.getPage());
         } else {
             final RequestDispatcher dispatcher = req.getRequestDispatcher(result.getPage());
             dispatcher.forward(req, resp);

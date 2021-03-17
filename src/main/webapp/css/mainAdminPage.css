@@ -1,5 +1,6 @@
 table{
     width: 100%;
+    border-collapse: collapse;
 }
 
 body{
@@ -7,9 +8,24 @@ body{
     background-color: lightblue;
 }
 
+th, td, tr{
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+td{
+    padding: 12px;
+    background-color: lightsteelblue;
+}
+
 th{
-    font-family: Candara, sans-serif;
-    font-size: 1.1em;
+    background-color: #808fbd;
+    color: aliceblue;
+    padding: 8px;
 }
 
 .periodicals{
@@ -17,4 +33,15 @@ th{
     margin-right: 13%;
     margin-left: 13%;
     width: auto;
+}
+
+caption{
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.7em;
+    padding-bottom: 30px;
+    padding-top: 10px;
+}
+
+.periodicals table tr td:first-child{
+    font-weight: bold;
 }

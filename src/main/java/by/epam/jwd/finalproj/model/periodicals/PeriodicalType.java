@@ -1,9 +1,9 @@
 package by.epam.jwd.finalproj.model.periodicals;
 
 public enum PeriodicalType {
-    BOOK(1),
-    NEWSPAPER(2),
-    MAGAZINE(3);
+    NEWSPAPER(1),
+    MAGAZINE(2),
+    COMICS(3);
 
     private final int i;
 

@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 public class WrappingRequestContext implements RequestContext{
     private final HttpServletRequest request;
@@ -36,6 +37,11 @@ public class WrappingRequestContext implements RequestContext{
     }
 
     @Override
+    public Object getSessionAttribute(String name) {
+        return request.getSession().getAttribute(name);
+    }
+
+    @Override
     public String getParameter(String name) {
         return request.getParameter(name);
     }
@@ -43,6 +49,17 @@ public class WrappingRequestContext implements RequestContext{
     @Override
     public Cookie[] getCookies() {
         return request.getCookies();
+    }
+
+    @Override
+    public Optional<Cookie> getCookieByName(String name) {
+        Cookie[] cookies = getCookies();
+        for(Cookie cookie : cookies){
+            if (cookie.getName().equalsIgnoreCase(name)){
+                return Optional.of(cookie);
+            }
+        }
+        return Optional.empty();
     }
 
     public static RequestContext of(HttpServletRequest request) {

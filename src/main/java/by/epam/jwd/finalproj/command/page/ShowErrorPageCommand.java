@@ -4,13 +4,13 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 
-public enum ShowSignUpPageCommand implements Command {
+public enum ShowErrorPageCommand implements Command {
     INSTANCE;
 
-    private static final ResponseContext SIGNUP_PAGE_RESPONSE = new ResponseContext() {
+    private static final ResponseContext ERROR_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/WEB-INF/jsp/signUp.jsp";
+            return "/WEB-INF/jsp/errorPage.jsp";
         }
 
         @Override
@@ -21,6 +21,6 @@ public enum ShowSignUpPageCommand implements Command {
 
     @Override
     public ResponseContext execute(RequestContext request) {
-        return SIGNUP_PAGE_RESPONSE;
+        return ERROR_PAGE_RESPONSE;
     }
 }

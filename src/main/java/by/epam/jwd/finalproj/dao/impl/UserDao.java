@@ -1,10 +1,8 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.command.user.LoginCommand;
 import by.epam.jwd.finalproj.dao.CommonDao;
 import by.epam.jwd.finalproj.model.Roles;
 import by.epam.jwd.finalproj.model.User;
-import by.epam.jwd.finalproj.model.UserDto;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -58,7 +58,6 @@ public class ConnectionPool {
             //todo: pool extension
             Connection connection = availableConnections.peek();
             takenConnections.add((ProxyConnection) connection);
-            logger.info("Connection is peeked from pool");
             return connection;
         }
         finally {
@@ -72,7 +71,6 @@ public class ConnectionPool {
             if (takenConnections.contains(connection)) {
                 takenConnections.remove(connection);
                 availableConnections.add((ProxyConnection) connection);
-                logger.info("Connection is returned in pool");
             }
         } finally {
             lock.unlock();
@@ -85,6 +83,7 @@ public class ConnectionPool {
             for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
                 final Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb_model?serverTimezone=Europe/Minsk&allowPublicKeyRetrieval=true&useSSL=false",
                         "root", "root");
+                //todo: take info from properties
                 final ProxyConnection proxyConnection = new ProxyConnection(conn);
                 availableConnections.add(proxyConnection);
             }

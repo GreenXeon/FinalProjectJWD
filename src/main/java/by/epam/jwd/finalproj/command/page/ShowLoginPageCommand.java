@@ -10,7 +10,7 @@ public enum ShowLoginPageCommand implements Command {
     private static final ResponseContext LOGIN_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/login.jsp";
+            return "/WEB-INF/jsp/login.jsp";
         }
 
         @Override

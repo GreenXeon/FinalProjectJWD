@@ -22,7 +22,7 @@ public enum ShowGuestPageCommand implements Command {
     private static final ResponseContext GUEST_PAGE_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/guest.jsp";
+            return "/WEB-INF/jsp/guest.jsp";
         }
 
         @Override

@@ -54,6 +54,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
 
     @Override
     public Optional<Periodical> save(Periodical entity) {
+        logger.info("saving started");
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(ADD_PERIODICAL);
             preparedStatement.setString(1, entity.getName());

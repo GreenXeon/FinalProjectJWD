@@ -1,4 +1,4 @@
-package by.epam.jwd.finalproj.command.user;
+package by.epam.jwd.finalproj.command.action;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;

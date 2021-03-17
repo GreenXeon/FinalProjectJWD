@@ -11,8 +11,8 @@
     <div class="page-title"><h2>Periodicals Subscription</h2></div>
     <span class="menu">
         <nav>
-            <a href="${pageContext.request.contextPath}/controller?command=showlogin">Sign in</a>
-            <a href="${pageContext.request.contextPath}/controller?command=showsignup">Sign up</a>
+            <a href="#">Periodicals</a>
+            <a href="#">Users</a>
             <a href="${pageContext.request.contextPath}/controller?command=logout">Logout</a>
         </nav>
     </span>

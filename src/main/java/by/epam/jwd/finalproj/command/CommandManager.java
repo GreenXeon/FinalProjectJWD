@@ -1,9 +1,12 @@
 package by.epam.jwd.finalproj.command;
 
+import by.epam.jwd.finalproj.command.action.admin.AddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.*;
-import by.epam.jwd.finalproj.command.user.LoginCommand;
-import by.epam.jwd.finalproj.command.user.LogoutCommand;
-import by.epam.jwd.finalproj.command.user.SignUpCommand;
+import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
+import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
+import by.epam.jwd.finalproj.command.action.LoginCommand;
+import by.epam.jwd.finalproj.command.action.LogoutCommand;
+import by.epam.jwd.finalproj.command.action.SignUpCommand;
 
 public enum CommandManager {
     LOGIN(LoginCommand.INSTANCE),
@@ -12,7 +15,13 @@ public enum CommandManager {
     SHOWLOGIN(ShowLoginPageCommand.INSTANCE),
     SHOWSIGNUP(ShowSignUpPageCommand.INSTANCE),
     SHOWGUEST(ShowGuestPageCommand.INSTANCE),
-    DEFAULT(ShowPeriodicalsCommand.INSTANCE);
+    SHOW_ADD_PER(ShowAddPeriodicalCommand.INSTANCE),
+    SHOW_ERROR(ShowErrorPageCommand.INSTANCE),
+    SHOW_USER_MAIN(ShowMainPageCommand.INSTANCE),
+    SHOW_PER_ADMIN(ShowMainAdminPageCommand.INSTANCE),
+
+    ADD_PERIODICAL(AddPeriodicalCommand.INSTANCE),
+    DEFAULT(ShowGuestPageCommand.INSTANCE);
 
     private final Command command;
 

@@ -1,4 +1,4 @@
-package by.epam.jwd.finalproj.command.page;
+package by.epam.jwd.finalproj.command.page.admin;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
@@ -25,7 +25,7 @@ public enum ShowMainAdminPageCommand implements Command {
     private static final ResponseContext MAIN_ADMIN_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/jsp/admin/mainAdminPage.jsp";
+            return "/WEB-INF/jsp/admin/mainAdminPage.jsp";
         }
 
         @Override
@@ -38,7 +38,6 @@ public enum ShowMainAdminPageCommand implements Command {
     public ResponseContext execute(RequestContext request) {
         final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         request.setAttribute("periodicals", periodicals);
-        logger.info(periodicals.get(0).getName());
         return MAIN_ADMIN_RESPONSE;
     }
 }
