@@ -14,15 +14,18 @@
 </head>
 <body>
 <jsp:include page="adminHeader.jsp"/>
-<a href="${pageContext.request.contextPath}/controller?command=show_add_per">Add periodical</a>
+
 <c:if test="${not empty requestScope.periodicals}">
     <div class="periodicals">
+        <h2 class="caption">Periodicals</h2>
+        <div class="add-button">
+            <a href="${pageContext.request.contextPath}/controller?command=show_add_per">Add periodical</a>
+        </div>
         <table>
-            <caption>Periodicals</caption>
             <tr>
                 <th>Name</th>
                 <th>Author</th>
-                <th>Publish year</th>
+                <th>Publish date</th>
                 <th>Type</th>
                 <th>Cost</th>
                 <th>Publisher</th>
@@ -33,12 +36,12 @@
                 <tr>
                     <td>${periodical.name}</td>
                     <td>${periodical.author}</td>
-                    <td>${periodical.publishYear}</td>
+                    <td>${periodical.publishDate}</td>
                     <td>${periodical.type}</td>
                     <td>${periodical.subCost}</td>
                     <td>${periodical.publisher}</td>
                     <td>
-                        <a href="#">Change</a>
+                        <a href="${pageContext.request.contextPath}/controller?command=show_change_periodical&periodicalName=${periodical.name}">Change</a>
                     </td>
                     <td>
                         <a href="#">Delete</a>

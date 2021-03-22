@@ -21,7 +21,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
 
     private final String GET_ALL_PERIODICALS = "SELECT * FROM periodicals";
     private final String GET_PERIODICAL_BY_NAME = "SELECT * FROM periodicals WHERE p_name = (?)";
-    private final String ADD_PERIODICAL = "INSERT INTO periodicals (p_name, p_author, publish_year, type_id, " +
+    private final String ADD_PERIODICAL = "INSERT INTO periodicals (p_name, p_author, publish_date, type_id, " +
             "p_cost, p_publisher)" +
             "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -36,7 +36,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
-                        resultSet.getInt(4),
+                        resultSet.getDate(4).toLocalDate(),
                         PeriodicalType.findById(resultSet.getInt(5)),
                         resultSet.getBigDecimal(6),
                         resultSet.getString(7)
@@ -59,7 +59,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             final PreparedStatement preparedStatement = conn.prepareStatement(ADD_PERIODICAL);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getAuthor());
-            preparedStatement.setInt(3, entity.getPublishYear());
+            preparedStatement.setObject(3, entity.getPublishDate());
             preparedStatement.setInt(4, entity.getType().getI());
             preparedStatement.setBigDecimal(5, entity.getSubCost());
             preparedStatement.setString(6, entity.getPublisher());
@@ -71,4 +71,28 @@ public class PeriodicalDao implements CommonDao<Periodical> {
         }
         return Optional.empty();
     }
+
+    public Optional<Periodical> findByName(String name){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_PERIODICAL_BY_NAME);
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                Periodical periodical = new Periodical(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDate(4).toLocalDate(),
+                        PeriodicalType.findById(resultSet.getInt(5)),
+                        resultSet.getBigDecimal(6),
+                        resultSet.getString(7)
+                );
+                return Optional.of(periodical);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return Optional.empty();
+    }
 }
+

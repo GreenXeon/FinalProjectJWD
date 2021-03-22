@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class UserDto {
+    int id;
     String login;
     String password;
     String name;
@@ -13,7 +14,8 @@ public class UserDto {
     Roles role;
     Timestamp registrationDate;
 
-    public UserDto(String login, String password, String name, String surname, String email, Roles role, boolean isBlocked, Timestamp registrationDate) {
+    public UserDto(int id, String login, String password, String name, String surname, String email, Roles role, boolean isBlocked, Timestamp registrationDate) {
+        this.id = id;
         this.login = login;
         this.password  = password;
         this.name = name;
@@ -22,6 +24,10 @@ public class UserDto {
         this.isBlocked = isBlocked;
         this.role = role;
         this.registrationDate = registrationDate;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getLogin() {

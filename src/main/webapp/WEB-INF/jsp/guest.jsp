@@ -20,7 +20,7 @@
             <tr>
                 <th>Name</th>
                 <th>Author</th>
-                <th>Publish year</th>
+                <th>Publish date</th>
                 <th>Type</th>
                 <th>Cost</th>
                 <th>Publisher</th>
@@ -29,7 +29,7 @@
                 <tr>
                     <th>${periodical.name}</th>
                     <th>${periodical.author}</th>
-                    <th>${periodical.publishYear}</th>
+                    <th>${periodical.publishDate}</th>
                     <th>${periodical.type}</th>
                     <th>${periodical.subCost}</th>
                     <th>${periodical.publisher}</th>

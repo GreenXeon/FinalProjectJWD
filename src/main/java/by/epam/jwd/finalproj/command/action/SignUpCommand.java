@@ -44,7 +44,7 @@ public enum SignUpCommand implements Command {
             //todo: existing login check
             String salt = BCrypt.gensalt(15);
             String passwordHash = BCrypt.hashpw(password, salt);
-            Optional<UserDto> user = userService.save(new UserDto(login, passwordHash, null, null, null, Roles.USER,
+            Optional<UserDto> user = userService.save(new UserDto(0, login, passwordHash, null, null, null, Roles.USER,
                     false, new Timestamp(System.currentTimeMillis())));
             if (user.isPresent()) {
                 logger.info("saved");

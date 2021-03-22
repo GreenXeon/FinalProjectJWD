@@ -67,12 +67,12 @@ public class UserService implements CommonService<UserDto> {
     }
 
     private UserDto convertToDto(User user){
-        return new UserDto(user.getLogin(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail(),  user.getRole(), user.isBlocked(), user.getRegistrationDate());
+        return new UserDto(user.getId(), user.getLogin(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail(),  user.getRole(), user.isBlocked(), user.getRegistrationDate());
     }
 
     private User convertToEntity(UserDto userDto){
         return new User(
-                0,
+                userDto.getId(),
                 userDto.getLogin(),
                 userDto.getPassword(),
                 userDto.getName(),

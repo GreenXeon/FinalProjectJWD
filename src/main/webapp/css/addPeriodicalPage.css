@@ -1,0 +1,9 @@
+input, select{
+    margin-bottom: 15px;
+}
+
+body{
+    margin: 0;
+    text-align: center;
+    background-color: lightblue;
+}

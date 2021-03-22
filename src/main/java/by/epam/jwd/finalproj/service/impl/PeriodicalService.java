@@ -7,7 +7,9 @@ import by.epam.jwd.finalproj.service.CommonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,6 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
         if (!allPeriodicals.isPresent()){
             return Optional.empty();
         }
-
         return Optional.of(
                 allPeriodicals.get()
                     .stream()
@@ -36,18 +37,25 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
         );
     }
 
+    public Optional<PeriodicalDto> findByName(String name){
+        Optional<Periodical> periodical = periodicalDao.findByName(name);
+        if (!periodical.isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(convertToDto(periodicalDao.findByName(name).get()));
+    }
+
     @Override
     public Optional<PeriodicalDto> save(PeriodicalDto dto) {
         return Optional.of(convertToDto(periodicalDao.save(convertToEntity(dto)).get()));
-
     }
 
     private Periodical convertToEntity(PeriodicalDto dto) {
         return new Periodical(
-                0,
+                dto.getId(),
                 dto.getName(),
                 dto.getAuthor(),
-                dto.getPublishYear(),
+                dto.getPublishDate(),
                 dto.getType(),
                 dto.getSubCost(),
                 dto.getPublisher()
@@ -56,9 +64,10 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
 
     private PeriodicalDto convertToDto(Periodical periodical){
         return new PeriodicalDto(
+                periodical.getId(),
                 periodical.getName(),
                 periodical.getAuthor(),
-                periodical.getPublishYear(),
+                periodical.getPublishDate(),
                 periodical.getType(),
                 periodical.getSubCost(),
                 periodical.getPublisher()

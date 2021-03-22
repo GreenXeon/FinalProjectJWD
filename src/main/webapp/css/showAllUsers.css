@@ -1,0 +1,47 @@
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+body{
+    margin: 0;
+    background-color: lightblue;
+}
+
+th, td, tr{
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+    text-align: center;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+td{
+    padding: 12px;
+    background-color: lightsteelblue;
+}
+
+th{
+    background-color: #808fbd;
+    color: aliceblue;
+    padding: 8px;
+}
+
+.users{
+    padding-top: 25px;
+    margin-right: 13%;
+    margin-left: 13%;
+    width: auto;
+}
+
+caption{
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.7em;
+    padding-bottom: 30px;
+    padding-top: 10px;
+}
+
+.users table tr td:first-child{
+    font-weight: bold;
+}

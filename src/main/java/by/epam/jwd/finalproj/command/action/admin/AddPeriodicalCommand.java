@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 public enum AddPeriodicalCommand implements Command {
@@ -30,14 +32,14 @@ public enum AddPeriodicalCommand implements Command {
     public ResponseContext execute(RequestContext request) {
         final String name = String.valueOf(request.getParameter("name"));
         final String author = String.valueOf(request.getParameter("author"));
-        final int publishYear = Integer.parseInt(request.getParameter("publishYear"));
+        final LocalDate publishDate = LocalDate.parse(request.getParameter("publishDate"));
         final PeriodicalType type = PeriodicalType.findById(Integer.parseInt(request.getParameter("type")));
         final BigDecimal cost = new BigDecimal(request.getParameter("cost")).setScale(2);
         final String publisher = String.valueOf(request.getParameter("publisher"));
         //todo: validation check
-
+        logger.info(publishDate);
         ResponseContext result = null;
-        /*PeriodicalDto periodicalToAdd = new PeriodicalDto(name, author, publishYear, type, cost, publisher);
+        PeriodicalDto periodicalToAdd = new PeriodicalDto(0, name, author, publishDate, type, cost, publisher);
         Optional<PeriodicalDto> newPeriodical = periodicalService.save(periodicalToAdd);
         if(newPeriodical.isPresent()){
             logger.info("Periodical is saved");
@@ -46,7 +48,7 @@ public enum AddPeriodicalCommand implements Command {
         else {
             logger.error("Periodical is not saved");
             result = ShowErrorPageCommand.INSTANCE.execute(request);
-        }*/
+        }
         result = ShowAddPeriodicalCommand.INSTANCE.execute(request);
         return result;
     }

@@ -8,11 +8,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link href="${pageContext.request.contextPath}/css/adminHeader.css" rel="stylesheet" type="text/css">
 <header class="site-header">
-    <div class="page-title"><h2>Periodicals Subscription</h2></div>
+    <div class="page-title"><h2>Periodicals Subscription Admin Panel</h2></div>
     <span class="menu">
         <nav>
-            <a href="#">Periodicals</a>
-            <a href="#">Users</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_per_admin">Periodicals</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_all_users">Users</a>
             <a href="${pageContext.request.contextPath}/controller?command=logout">Logout</a>
         </nav>
     </span>

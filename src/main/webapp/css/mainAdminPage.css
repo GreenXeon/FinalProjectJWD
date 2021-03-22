@@ -1,6 +1,7 @@
 table{
     width: 100%;
     border-collapse: collapse;
+    margin-top: 25px;
 }
 
 body{
@@ -29,19 +30,58 @@ th{
 }
 
 .periodicals{
-    padding-top: 25px;
+    margin-top: 40px;
+    text-align: center;
     margin-right: 13%;
     margin-left: 13%;
     width: auto;
 }
 
-caption{
+.caption{
     font-family: "Arial Black", sans-serif;
     font-size: 1.7em;
-    padding-bottom: 30px;
-    padding-top: 10px;
 }
 
 .periodicals table tr td:first-child{
     font-weight: bold;
+}
+
+.add-button{
+    position: relative;
+    font-size: 1.3em;
+    font-family: Georgia, sans-serif;
+    text-transform: uppercase;
+    transition: color .2s linear;
+    display: inline;
+    padding-bottom: 5px;
+}
+
+.add-button a{
+    text-decoration: none;
+    color: black;
+}
+
+.add-button:after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 3px;
+
+    background-color: black;
+    opacity: 0;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+
+    transition: opacity .5s;
+}
+
+.add-button:hover:after{
+    opacity: 1;
+}
+
+.add-button:hover{
+    color: #808fbd;
 }

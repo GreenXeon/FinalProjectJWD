@@ -1,23 +1,30 @@
 package by.epam.jwd.finalproj.model.periodicals;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class PeriodicalDto {
+    int id;
     PeriodicalType type;
     String name;
     String publisher;
     String author;
-    int publishYear;
+    LocalDate publishDate;
     BigDecimal subCost;
 
-    public PeriodicalDto(String name, String author, int publishYear, PeriodicalType type, BigDecimal subCost, String publisher) {
+    public PeriodicalDto(int id, String name, String author, LocalDate publishDate, PeriodicalType type, BigDecimal subCost, String publisher) {
+        this.id = id;
         this.type = type;
         this.name = name;
         this.publisher = publisher;
         this.author = author;
-        this.publishYear = publishYear;
+        this.publishDate = publishDate;
         this.subCost = subCost;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public PeriodicalType getType() {
@@ -36,8 +43,8 @@ public class PeriodicalDto {
         return author;
     }
 
-    public int getPublishYear() {
-        return publishYear;
+    public LocalDate getPublishDate() {
+        return publishDate;
     }
 
     public BigDecimal getSubCost() {
@@ -49,12 +56,12 @@ public class PeriodicalDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PeriodicalDto that = (PeriodicalDto) o;
-        return publishYear == that.publishYear && type == that.type && name.equals(that.name) && publisher.equals(that.publisher) && author.equals(that.author) && subCost.equals(that.subCost);
+        return id == that.id && type == that.type && Objects.equals(name, that.name) && Objects.equals(publisher, that.publisher) && Objects.equals(author, that.author) && Objects.equals(publishDate, that.publishDate) && Objects.equals(subCost, that.subCost);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, name, publisher, author, publishYear, subCost);
+        return Objects.hash(type, name, publisher, author, publishDate, subCost);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class PeriodicalDto {
                 ", name='" + name + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", author='" + author + '\'' +
-                ", publishYear=" + publishYear +
+                ", publishYear=" + publishDate +
                 ", subCost=" + subCost +
                 '}';
     }
