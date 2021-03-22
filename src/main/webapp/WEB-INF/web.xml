@@ -7,4 +7,6 @@
         <error-page>
             <location>/WEB-INF/jsp/errorPage.jsp</location>
         </error-page>
+
+        <request-character-encoding>UTF-8</request-character-encoding>
 </web-app>
