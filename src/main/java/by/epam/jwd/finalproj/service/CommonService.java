@@ -10,5 +10,5 @@ public interface CommonService<T> {
 
     Optional<T> update(T dto);
 
-    void delete(T dto);
+    boolean delete(int id);
 }

@@ -48,7 +48,11 @@
                         <a href="${url}">Change</a>
                     </td>
                     <td>
-                        <a href="#">Delete</a>
+                        <c:url value="${pageContext.request.contextPath}/controller" var="url">
+                            <c:param name="command" value="delete_periodical" />
+                            <c:param name="periodicalId" value="${periodical.id}" />
+                        </c:url>
+                        <a href="${url}">Delete</a>
                     </td>
                 </tr>
             </c:forEach>

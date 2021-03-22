@@ -78,8 +78,8 @@ public class UserDao implements CommonDao<User> {
     }
 
     @Override
-    public void delete(User dto) {
-
+    public boolean delete(int id) {
+        return false;
     }
 
     public Optional<User> findByLogin(String login) {

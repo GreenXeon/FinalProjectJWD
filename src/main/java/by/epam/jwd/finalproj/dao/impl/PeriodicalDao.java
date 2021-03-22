@@ -1,15 +1,12 @@
 package by.epam.jwd.finalproj.dao.impl;
 
 import by.epam.jwd.finalproj.dao.CommonDao;
-import by.epam.jwd.finalproj.model.Roles;
-import by.epam.jwd.finalproj.model.User;
 import by.epam.jwd.finalproj.model.periodicals.Periodical;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalType;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +18,12 @@ public class PeriodicalDao implements CommonDao<Periodical> {
 
     private final String GET_ALL_PERIODICALS = "SELECT * FROM periodicals";
     private final String GET_PERIODICAL_BY_NAME = "SELECT * FROM periodicals WHERE p_name = (?)";
+    private final String GET_PERIODICAL_BY_ID = "SELECT * FROM periodicals WHERE id = (?)";
     private final String ADD_PERIODICAL = "INSERT INTO periodicals (p_name, p_author, publish_date, type_id, " +
             "p_cost, p_publisher) VALUES (?, ?, ?, ?, ?, ?)";
     private final String UPDATE_PERIODICAL = "UPDATE periodicals SET p_name = ?, p_author = ?," +
             "publish_date = ?, type_id = ?, p_cost = ?, p_publisher = ? WHERE id = ?";
+    private final String DELETE_PERIODICAL_BY_ID = "DELETE FROM periodicals WHERE id = ?";
 
     @Override
     public Optional<List<Periodical>> findAll() {
@@ -94,8 +93,47 @@ public class PeriodicalDao implements CommonDao<Periodical> {
     }
 
     @Override
-    public void delete(Periodical dto) {
+    public boolean delete(int id) {
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(DELETE_PERIODICAL_BY_ID);
+            preparedStatement.setInt(1, id);
+            int deletedRows = preparedStatement.executeUpdate();
+            if (deletedRows > 0) {
+                logger.info("Successful deleting of " + deletedRows + " row(-s) - Periodical with id " + id);
+                return true;
+            } else {
+                logger.info("Unsuccessful deleting of periodical with id " + id);
+                return false;
+            }
+        } catch (SQLException throwables) {
+            logger.error("Deleting periodical with " + id + " id is failed");
+            throwables.printStackTrace();
+            return false;
+        }
+    }
 
+    public Optional<Periodical> findById(int id){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_PERIODICAL_BY_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                Periodical periodical = new Periodical(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDate(4).toLocalDate(),
+                        PeriodicalType.findById(resultSet.getInt(5)),
+                        resultSet.getBigDecimal(6),
+                        resultSet.getString(7)
+                );
+                return Optional.of(periodical);
+            }
+            return Optional.empty();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     public Optional<Periodical> findByName(String name){
@@ -122,4 +160,3 @@ public class PeriodicalDao implements CommonDao<Periodical> {
         }
     }
 }
-

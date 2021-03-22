@@ -42,11 +42,11 @@ public enum UpdatePeriodicalCommand implements Command {
         final PeriodicalDto periodicalToChange = new PeriodicalDto(id, name, author, publishDate, type, cost, publisher);
         Optional<PeriodicalDto> updatedPeriodical = periodicalService.update(periodicalToChange);
         if (!updatedPeriodical.isPresent()){
-            logger.error("Periodical '" + name + "' with id " + id + " is not updated");
+            logger.error("Periodical with id " + id + " is not updated");
             //todo: set errorMessage
             return ShowErrorPageCommand.INSTANCE.execute(request);
         }
-        logger.info("Periodical '" + name + "' with id " + id + " is updated");
+        logger.info("Periodical with id " + id + " is updated");
         return ShowMainAdminPageCommand.INSTANCE.execute(request);
     }
 }

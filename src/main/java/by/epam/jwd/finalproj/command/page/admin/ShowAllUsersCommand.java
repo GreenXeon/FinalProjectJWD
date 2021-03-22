@@ -8,7 +8,6 @@ import by.epam.jwd.finalproj.service.impl.UserService;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public enum ShowAllUsersCommand implements Command {
     INSTANCE;

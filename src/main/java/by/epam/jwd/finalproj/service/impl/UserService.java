@@ -52,8 +52,8 @@ public class UserService implements CommonService<UserDto> {
     }
 
     @Override
-    public void delete(UserDto dto) {
-
+    public boolean delete(int id) {
+        return userDao.delete(id);
     }
 
     public Optional<UserDto> login(String login, String password){

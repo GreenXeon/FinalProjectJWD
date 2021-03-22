@@ -10,5 +10,5 @@ public interface CommonDao<T> {
 
     Optional<T> update(T entity);
 
-    void delete(T entity);
+    boolean delete(int id);
 }

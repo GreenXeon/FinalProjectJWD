@@ -38,11 +38,13 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
     }
 
     public Optional<PeriodicalDto> findByName(String name){
-        Optional<Periodical> periodical = periodicalDao.findByName(name);
-        if (!periodical.isPresent()) {
-            return Optional.empty();
-        }
-        return Optional.of(convertToDto(periodicalDao.findByName(name).get()));
+        Optional<Periodical> foundPeriodical = periodicalDao.findByName(name);
+        return foundPeriodical.map(this::convertToDto);
+    }
+
+    public Optional<PeriodicalDto> findById(int id){
+        Optional<Periodical> foundPeriodical = periodicalDao.findById(id);
+        return foundPeriodical.map(this::convertToDto);
     }
 
     @Override
@@ -56,8 +58,8 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
     }
 
     @Override
-    public void delete(PeriodicalDto dto) {
-
+    public boolean delete(int id) {
+        return periodicalDao.delete(id);
     }
 
     private Periodical convertToEntity(PeriodicalDto dto) {
