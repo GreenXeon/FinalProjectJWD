@@ -1,7 +1,8 @@
 package by.epam.jwd.finalproj.command;
 
 import by.epam.jwd.finalproj.command.action.admin.AddPeriodicalCommand;
-import by.epam.jwd.finalproj.command.page.admin.ShowChangePeriodicalCommand;
+import by.epam.jwd.finalproj.command.action.admin.UpdatePeriodicalCommand;
+import by.epam.jwd.finalproj.command.page.admin.ShowUpdatePeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.*;
 import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowAllUsersCommand;
@@ -22,8 +23,9 @@ public enum CommandManager {
     SHOW_USER_MAIN(ShowMainPageCommand.INSTANCE),
     SHOW_PER_ADMIN(ShowMainAdminPageCommand.INSTANCE),
     SHOW_ALL_USERS(ShowAllUsersCommand.INSTANCE),
-    SHOW_CHANGE_PERIODICAL(ShowChangePeriodicalCommand.INSTANCE),
+    SHOW_UPDATE_PERIODICAL(ShowUpdatePeriodicalCommand.INSTANCE),
 
+    UPDATE_PERIODICAL(UpdatePeriodicalCommand.INSTANCE),
     ADD_PERIODICAL(AddPeriodicalCommand.INSTANCE),
     DEFAULT(ShowGuestPageCommand.INSTANCE);
 

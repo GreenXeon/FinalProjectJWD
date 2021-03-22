@@ -22,8 +22,9 @@ public class PeriodicalDao implements CommonDao<Periodical> {
     private final String GET_ALL_PERIODICALS = "SELECT * FROM periodicals";
     private final String GET_PERIODICAL_BY_NAME = "SELECT * FROM periodicals WHERE p_name = (?)";
     private final String ADD_PERIODICAL = "INSERT INTO periodicals (p_name, p_author, publish_date, type_id, " +
-            "p_cost, p_publisher)" +
-            "VALUES (?, ?, ?, ?, ?, ?)";
+            "p_cost, p_publisher) VALUES (?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_PERIODICAL = "UPDATE periodicals SET p_name = ?, p_author = ?," +
+            "publish_date = ?, type_id = ?, p_cost = ?, p_publisher = ? WHERE id = ?";
 
     @Override
     public Optional<List<Periodical>> findAll() {
@@ -63,13 +64,38 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             preparedStatement.setInt(4, entity.getType().getI());
             preparedStatement.setBigDecimal(5, entity.getSubCost());
             preparedStatement.setString(6, entity.getPublisher());
-            int rows = preparedStatement.executeUpdate();
-            logger.info(rows + " rows were updated");
+            int addedRows = preparedStatement.executeUpdate();
+            logger.info(addedRows + " rows were added");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<Periodical> update(Periodical entity) {
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PERIODICAL);
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getAuthor());
+            preparedStatement.setObject(3, entity.getPublishDate());
+            preparedStatement.setInt(4, entity.getType().getI());
+            preparedStatement.setBigDecimal(5, entity.getSubCost());
+            preparedStatement.setString(6, entity.getPublisher());
+            preparedStatement.setInt(7, entity.getId());
+            int updatedRows = preparedStatement.executeUpdate();
+            logger.info(updatedRows + " rows were updated");
+            return Optional.of(entity);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public void delete(Periodical dto) {
+
     }
 
     public Optional<Periodical> findByName(String name){
@@ -89,10 +115,11 @@ public class PeriodicalDao implements CommonDao<Periodical> {
                 );
                 return Optional.of(periodical);
             }
+            return Optional.empty();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 }
 

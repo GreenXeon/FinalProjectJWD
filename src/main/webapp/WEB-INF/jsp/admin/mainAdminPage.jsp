@@ -42,7 +42,7 @@
                     <td>${periodical.publisher}</td>
                     <td>
                         <c:url value="${pageContext.request.contextPath}/controller" var="url">
-                            <c:param name="command" value="show_change_periodical" />
+                            <c:param name="command" value="show_update_periodical" />
                             <c:param name="periodicalName" value="${periodical.name}" />
                         </c:url>
                         <a href="${url}">Change</a>

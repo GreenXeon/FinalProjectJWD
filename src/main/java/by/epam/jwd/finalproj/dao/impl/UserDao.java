@@ -21,6 +21,7 @@ public class UserDao implements CommonDao<User> {
     private final String REGISTER_USER = "INSERT INTO p_users (u_login, u_password, u_name, u_surname, " +
             "u_email, u_registration, u_role)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_USER = "";
 
     @Override
     public Optional<List<User>> findAll() {
@@ -69,6 +70,16 @@ public class UserDao implements CommonDao<User> {
             throwables.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> update(User dto) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void delete(User dto) {
+
     }
 
     public Optional<User> findByLogin(String login) {

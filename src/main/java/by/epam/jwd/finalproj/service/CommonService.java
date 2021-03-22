@@ -7,4 +7,8 @@ public interface CommonService<T> {
     Optional<List<T>> findAll();
 
     Optional<T> save(T dto);
+
+    Optional<T> update(T dto);
+
+    void delete(T dto);
 }

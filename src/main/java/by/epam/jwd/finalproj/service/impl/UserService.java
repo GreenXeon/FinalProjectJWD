@@ -46,6 +46,16 @@ public class UserService implements CommonService<UserDto> {
         return Optional.of(convertToDto(userDao.save(convertToEntity(dto)).get()));
     }
 
+    @Override
+    public Optional<UserDto> update(UserDto dto) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void delete(UserDto dto) {
+
+    }
+
     public Optional<UserDto> login(String login, String password){
         final Optional<User> user = userDao.findByLogin(login);
         if (user.isPresent()){

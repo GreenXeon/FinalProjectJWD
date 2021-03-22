@@ -50,6 +50,16 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
         return Optional.of(convertToDto(periodicalDao.save(convertToEntity(dto)).get()));
     }
 
+    @Override
+    public Optional<PeriodicalDto> update(PeriodicalDto dto) {
+        return Optional.of(convertToDto(periodicalDao.update(convertToEntity(dto)).get()));
+    }
+
+    @Override
+    public void delete(PeriodicalDto dto) {
+
+    }
+
     private Periodical convertToEntity(PeriodicalDto dto) {
         return new Periodical(
                 dto.getId(),

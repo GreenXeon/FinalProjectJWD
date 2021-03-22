@@ -11,21 +11,21 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
-public enum ShowChangePeriodicalCommand implements Command {
+public enum ShowUpdatePeriodicalCommand implements Command {
     INSTANCE;
 
     private final PeriodicalService periodicalService;
 
-    ShowChangePeriodicalCommand(){
+    ShowUpdatePeriodicalCommand(){
         this.periodicalService = new PeriodicalService();
     }
 
-    private final Logger logger = LogManager.getLogger(ShowChangePeriodicalCommand.class);
+    private final Logger logger = LogManager.getLogger(ShowUpdatePeriodicalCommand.class);
 
-    private static final ResponseContext SHOW_CHANGE_PER_RESPONSE = new ResponseContext() {
+    private static final ResponseContext SHOW_UPDATE_PER_RESPONSE = new ResponseContext() {
         @Override
         public String getPage() {
-            return "/WEB-INF/jsp/admin/changePeriodicalPage.jsp";
+            return "/WEB-INF/jsp/admin/updatePeriodicalPage.jsp";
         }
 
         @Override
@@ -42,7 +42,7 @@ public enum ShowChangePeriodicalCommand implements Command {
         if (periodical.isPresent()){
             logger.info(periodicalName + " - " + periodical.get().getName());
             request.setAttribute("periodical", periodical.get());
-            return SHOW_CHANGE_PER_RESPONSE;
+            return SHOW_UPDATE_PER_RESPONSE;
         }
         logger.info("periodical " + periodicalName + " is not found");
         return ShowErrorPageCommand.INSTANCE.execute(request);

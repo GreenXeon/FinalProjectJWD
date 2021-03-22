@@ -8,4 +8,7 @@ public interface CommonDao<T> {
 
     Optional<T> save(T entity);
 
+    Optional<T> update(T entity);
+
+    void delete(T entity);
 }

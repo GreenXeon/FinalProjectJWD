@@ -16,7 +16,8 @@
 <body>
 <c:if test="${not empty requestScope.periodical}">
     <form action="controller" method="post">
-        <input type="hidden" name="command" value="change_periodical" />
+        <input type="hidden" name="command" value="update_periodical" />
+        <input type="hidden" name="periodicalId" value="${requestScope.periodical.id}">
         <label>Name</label>
         <input name="name" size="30" value="${requestScope.periodical.name}" required pattern="^[a-zA-Z0-9#№.,-=:;!?& ]{1,50}$"/>
         <br>
