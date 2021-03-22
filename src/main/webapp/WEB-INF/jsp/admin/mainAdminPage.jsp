@@ -41,7 +41,11 @@
                     <td>${periodical.subCost}</td>
                     <td>${periodical.publisher}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/controller?command=show_change_periodical&periodicalName=${periodical.name}">Change</a>
+                        <c:url value="${pageContext.request.contextPath}/controller" var="url">
+                            <c:param name="command" value="show_change_periodical" />
+                            <c:param name="periodicalName" value="${periodical.name}" />
+                        </c:url>
+                        <a href="${url}">Change</a>
                     </td>
                     <td>
                         <a href="#">Delete</a>

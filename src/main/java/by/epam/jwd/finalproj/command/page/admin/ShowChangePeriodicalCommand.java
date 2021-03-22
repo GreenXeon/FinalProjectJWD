@@ -37,6 +37,7 @@ public enum ShowChangePeriodicalCommand implements Command {
     @Override
     public ResponseContext execute(RequestContext request) {
         String periodicalName = request.getParameter("periodicalName");
+        logger.info(periodicalName);
         Optional<PeriodicalDto> periodical = periodicalService.findByName(periodicalName);
         if (periodical.isPresent()){
             logger.info(periodicalName + " - " + periodical.get().getName());

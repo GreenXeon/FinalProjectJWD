@@ -40,7 +40,7 @@ public enum AddPeriodicalCommand implements Command {
 
         //todo: validation check
         logger.info(cost);
-        ResponseContext result = null;
+        ResponseContext result;
         PeriodicalDto periodicalToAdd = new PeriodicalDto(0, name, author, publishDate, type, cost, publisher);
         Optional<PeriodicalDto> newPeriodical = periodicalService.save(periodicalToAdd);
         if(newPeriodical.isPresent()){
