@@ -30,6 +30,8 @@
             <div class="total-cost">
                 Total cost is
                     <span>${totalCost} BYN</span>
+                <br>
+                Your cash is <span>${requestScope.user.cash} BYN</span>
             </div>
             <hr>
             <div class="buttons">

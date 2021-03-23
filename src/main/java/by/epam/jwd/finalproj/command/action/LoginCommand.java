@@ -42,6 +42,7 @@ public enum LoginCommand implements Command {
         final Optional<UserDto> user = userService.login(login, password);
         if (user.isPresent()){
             request.setSessionAttribute("role", user.get().getRole().name());
+            request.setSessionAttribute("login", user.get().getLogin());
             if (user.get().getRole().name().equalsIgnoreCase("user")){
                 result = ShowMainPageCommand.INSTANCE.execute(request);
             }

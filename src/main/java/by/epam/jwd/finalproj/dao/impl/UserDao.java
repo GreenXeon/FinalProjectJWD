@@ -19,8 +19,8 @@ public class UserDao implements CommonDao<User> {
     private final String GET_ALL_USERS = "SELECT * FROM p_users";
     private final String GET_USER_BY_LOGIN = "SELECT * FROM p_users WHERE u_login = (?)";
     private final String REGISTER_USER = "INSERT INTO p_users (u_login, u_password, u_name, u_surname, " +
-            "u_email, u_registration, u_role)" +
-            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            "u_email, u_cash, u_registration, u_role)" +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private final String UPDATE_USER = "";
 
     @Override
@@ -37,9 +37,10 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getString(4),
                         resultSet.getString(5),
                         resultSet.getString(6),
-                        resultSet.getTimestamp(7),
-                        resultSet.getBoolean(9),
-                        Roles.findRoleById(resultSet.getInt(8))
+                        resultSet.getBigDecimal(7),
+                        resultSet.getTimestamp(8),
+                        resultSet.getBoolean(10),
+                        Roles.findRoleById(resultSet.getInt(9))
                 );
                 logger.info("User " + resultSet.getString(2) + " is read");
                 users.add(user);
@@ -61,8 +62,9 @@ public class UserDao implements CommonDao<User> {
             preparedStatement.setString(3, entity.getName());
             preparedStatement.setString(4, entity.getSurname());
             preparedStatement.setString(5, entity.getEmail());
-            preparedStatement.setTimestamp(6, entity.getRegistrationDate());
-            preparedStatement.setInt(7, entity.getRole().getI());
+            preparedStatement.setBigDecimal(6, entity.getCash());
+            preparedStatement.setTimestamp(7, entity.getRegistrationDate());
+            preparedStatement.setInt(8, entity.getRole().getI());
             int rows = preparedStatement.executeUpdate();
             logger.info(rows + " rows were updated");
             return Optional.of(entity);
@@ -93,9 +95,10 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getString(2),
                         resultSet.getString(3),
                         null, null, null,
-                        resultSet.getTimestamp(7),
-                        resultSet.getBoolean(9),
-                        Roles.findRoleById(resultSet.getInt(8))
+                        resultSet.getBigDecimal(7),
+                        resultSet.getTimestamp(8),
+                        resultSet.getBoolean(10),
+                        Roles.findRoleById(resultSet.getInt(9))
                 );
                 logger.info("User " + resultSet.getString(2) + " is read");
                 return Optional.of(user);

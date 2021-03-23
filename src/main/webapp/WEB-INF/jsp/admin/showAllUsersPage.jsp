@@ -24,6 +24,7 @@
                 <th>Surname</th>
                 <th>E-mail</th>
                 <th>Registration date</th>
+                <th>Cash</th>
                 <th>Role</th>
                 <th>Blocked</th>
                 <th>Block</th>
@@ -36,6 +37,7 @@
                     <td>${user.surname}</td>
                     <td>${user.email}</td>
                     <td>${user.registrationDate}</td>
+                    <td>${user.cash}</td>
                     <td>${user.role}</td>
                     <td>${user.blocked}</td>
                     <td>

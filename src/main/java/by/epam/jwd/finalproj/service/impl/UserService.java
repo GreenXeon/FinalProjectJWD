@@ -41,6 +41,11 @@ public class UserService implements CommonService<UserDto> {
         );
     }
 
+    public Optional<UserDto> findByLogin(String login){
+        Optional<User> foundUser = userDao.findByLogin(login);
+        return foundUser.map(this::convertToDto);
+    }
+
     @Override
     public Optional<UserDto> save(UserDto dto) {
         return Optional.of(convertToDto(userDao.save(convertToEntity(dto)).get()));
@@ -71,13 +76,14 @@ public class UserService implements CommonService<UserDto> {
             }
         }
         else {
-            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));            logger.info("User is not found");
+            boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));
+            logger.info("User is not found");
             return Optional.empty();
         }
     }
 
     private UserDto convertToDto(User user){
-        return new UserDto(user.getId(), user.getLogin(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail(),  user.getRole(), user.isBlocked(), user.getRegistrationDate());
+        return new UserDto(user.getId(), user.getLogin(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail(), user.getCash(), user.getRole(), user.isBlocked(), user.getRegistrationDate());
     }
 
     private User convertToEntity(UserDto userDto){
@@ -88,6 +94,7 @@ public class UserService implements CommonService<UserDto> {
                 userDto.getName(),
                 userDto.getSurname(),
                 userDto.getEmail(),
+                userDto.getCash(),
                 userDto.getRegistrationDate(),
                 userDto.isBlocked(),
                 userDto.getRole()
