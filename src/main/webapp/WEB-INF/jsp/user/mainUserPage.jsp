@@ -9,34 +9,48 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Main page</title>
+    <title>Main user page</title>
+    <link href="${pageContext.request.contextPath}/css/mainUserPage.css" rel="stylesheet" type="text/css">
 </head>
+<jsp:include page="userHeader.jsp"/>
 <body>
-hello, ${username}
-you are ${role}
 <c:if test="${not empty requestScope.periodicals}">
-    <div class="periodicals">
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Publish date</th>
-                <th>Type</th>
-                <th>Cost</th>
-                <th>Publisher</th>
-            </tr>
-            <c:forEach var="periodical" items="${requestScope.periodicals}">
+    <form action="controller" method="post">
+        <input type="hidden" name="command" value="show_subscribe" />
+        <div class="periodicals">
+            <h2 class="caption">Periodicals</h2>
+            <table>
                 <tr>
-                    <th>${periodical.name}</th>
-                    <th>${periodical.author}</th>
-                    <th>${periodical.publishDate}</th>
-                    <th>${periodical.type}</th>
-                    <th>${periodical.subCost}</th>
-                    <th>${periodical.publisher}</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Publish date</th>
+                    <th>Type</th>
+                    <th>Cost</th>
+                    <th>Publisher</th>
+                    <th>Choose</th>
                 </tr>
-            </c:forEach>
-        </table>
-    </div>
+                <c:forEach var="periodical" items="${requestScope.periodicals}">
+                    <tr>
+                        <td>${periodical.name}</td>
+                        <td>${periodical.author}</td>
+                        <td>${periodical.publishDate}</td>
+                        <td>${periodical.type}</td>
+                        <td>${periodical.subCost}</td>
+                        <td>${periodical.publisher}</td>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="selected" value="${periodical.id}">
+                            </label>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+            <div class="errorMessage">
+                    ${errorMessage}
+            </div>
+            <button type="submit" class="submit-button">Subscribe</button>
+        </div>
+    </form>
 </c:if>
 </body>
 </html>

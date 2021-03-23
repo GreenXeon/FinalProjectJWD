@@ -16,6 +16,7 @@
 <jsp:include page="indexHeader.jsp"/>
 <c:if test="${not empty requestScope.periodicals}">
     <div class="periodicals">
+        <h2 class="caption">Periodicals</h2>
         <table>
             <tr>
                 <th>Name</th>
@@ -27,12 +28,12 @@
             </tr>
             <c:forEach var="periodical" items="${requestScope.periodicals}">
                 <tr>
-                    <th>${periodical.name}</th>
-                    <th>${periodical.author}</th>
-                    <th>${periodical.publishDate}</th>
-                    <th>${periodical.type}</th>
-                    <th>${periodical.subCost}</th>
-                    <th>${periodical.publisher}</th>
+                    <td>${periodical.name}</td>
+                    <td>${periodical.author}</td>
+                    <td>${periodical.publishDate}</td>
+                    <td>${periodical.type}</td>
+                    <td>${periodical.subCost}</td>
+                    <td>${periodical.publisher}</td>
                 </tr>
             </c:forEach>
         </table>
