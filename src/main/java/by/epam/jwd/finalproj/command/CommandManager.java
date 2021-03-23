@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command;
 import by.epam.jwd.finalproj.command.action.admin.AddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.action.admin.DeletePeriodicalCommand;
 import by.epam.jwd.finalproj.command.action.admin.UpdatePeriodicalCommand;
+import by.epam.jwd.finalproj.command.page.user.ShowSubscribeCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowUpdatePeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.*;
 import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
@@ -26,6 +27,7 @@ public enum CommandManager {
     SHOW_PER_ADMIN(ShowMainAdminPageCommand.INSTANCE),
     SHOW_ALL_USERS(ShowAllUsersCommand.INSTANCE),
     SHOW_UPDATE_PERIODICAL(ShowUpdatePeriodicalCommand.INSTANCE),
+    SHOW_SUBSCRIBE(ShowSubscribeCommand.INSTANCE),
 
     DELETE_PERIODICAL(DeletePeriodicalCommand.INSTANCE),
     UPDATE_PERIODICAL(UpdatePeriodicalCommand.INSTANCE),

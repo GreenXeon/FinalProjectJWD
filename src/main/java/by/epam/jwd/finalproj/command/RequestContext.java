@@ -10,6 +10,7 @@ public interface RequestContext {
     void setSessionAttribute(String name, Object value);
     Object getSessionAttribute(String name);
     String getParameter(String name);
+    String[] getParameterValues(String name);
     Cookie[] getCookies();
     Optional<Cookie> getCookieByName(String name);
 }

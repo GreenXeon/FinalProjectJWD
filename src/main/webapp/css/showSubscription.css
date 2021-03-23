@@ -1,0 +1,75 @@
+body{
+    margin: 0;
+    background-color: lightblue;
+    text-align: center;
+}
+
+.main-info{
+    margin-top: 40px;
+    margin-left: 15%;
+    margin-right: 15%;
+    width: auto;
+    text-align: center;
+}
+
+.caption{
+    position: center;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+}
+
+.list{
+    margin-bottom: 35px;
+    list-style-type: none;
+    text-align: center;
+    padding: 0;
+}
+
+.list li{
+    font-size: 1.1em;
+    font-family: Arial, sans-serif;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: auto;
+    list-style-type: none;
+    background-color: lightcyan;
+}
+
+.periodical-name{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.item-cost{
+    font-weight: bold;
+}
+
+.total-cost{
+    text-align: left;
+    font-size: 1.3em;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: aliceblue;
+    padding-left: 15px;
+}
+
+.total-cost span{
+    font-weight: bold;
+}
+
+.errorMessage{
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: black;
+}
+
+.buttons button{
+    padding: 1%;
+    font-family: Arial, sans-serif;
+    font-style: inherit;
+    font-size: 1em;
+    width: 12%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}

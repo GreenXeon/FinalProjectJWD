@@ -47,6 +47,11 @@ public class WrappingRequestContext implements RequestContext{
     }
 
     @Override
+    public String[] getParameterValues(String name) {
+        return request.getParameterValues(name);
+    }
+
+    @Override
     public Cookie[] getCookies() {
         return request.getCookies();
     }
