@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.page.admin;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
@@ -22,7 +23,7 @@ public enum ShowUpdatePeriodicalCommand implements Command {
 
     private final Logger logger = LogManager.getLogger(ShowUpdatePeriodicalCommand.class);
 
-    private static final ResponseContext SHOW_UPDATE_PER_RESPONSE = new ResponseContext() {
+    private static final Route SHOW_UPDATE_PER_RESPONSE = new Route() {
         @Override
         public String getPage() {
             return "/WEB-INF/jsp/admin/updatePeriodicalPage.jsp";
@@ -35,7 +36,7 @@ public enum ShowUpdatePeriodicalCommand implements Command {
     };
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         String periodicalName = request.getParameter("periodicalName");
         logger.info(periodicalName);
         Optional<PeriodicalDto> periodical = periodicalService.findByName(periodicalName);
@@ -45,6 +46,6 @@ public enum ShowUpdatePeriodicalCommand implements Command {
             return SHOW_UPDATE_PER_RESPONSE;
         }
         logger.info("periodical " + periodicalName + " is not found");
-        return ShowErrorPageCommand.INSTANCE.execute(request);
+        return ShowErrorPageCommand.INSTANCE.execute(request, response);
     }
 }

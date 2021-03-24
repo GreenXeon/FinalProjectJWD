@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.page;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 
@@ -19,7 +20,7 @@ public enum ShowMainPageCommand implements Command {
     }
 
 
-    private static final ResponseContext MAIN_PAGE_RESPONSE = new ResponseContext() {
+    private static final Route MAIN_PAGE_RESPONSE = new Route() {
         @Override
         public String getPage() {
             return "/WEB-INF/jsp/user/mainUserPage.jsp";
@@ -32,7 +33,7 @@ public enum ShowMainPageCommand implements Command {
     };
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         request.setAttribute("periodicals", periodicals);
         return MAIN_PAGE_RESPONSE;

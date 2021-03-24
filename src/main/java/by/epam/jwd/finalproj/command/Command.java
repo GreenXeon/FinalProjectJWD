@@ -5,5 +5,5 @@ public interface Command {
         return CommandManager.retrieveCommand(name);
     }
 
-    ResponseContext execute(RequestContext request);
+    Route execute(RequestContext request, ResponseContext response);
 }

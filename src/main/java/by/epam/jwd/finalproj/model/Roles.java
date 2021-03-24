@@ -1,5 +1,7 @@
 package by.epam.jwd.finalproj.model;
 
+import by.epam.jwd.finalproj.command.CommandManager;
+
 public enum Roles {
     GUEST(0),
     USER(1),
@@ -22,5 +24,14 @@ public enum Roles {
             }
         }
         return null; //todo: logging error
+    }
+
+    public static Roles findRoleByName(String name){
+        for (Roles role: Roles.values()) {
+            if (role.name().equalsIgnoreCase(name)){
+                return role;
+            }
+        }
+        return GUEST;
     }
 }

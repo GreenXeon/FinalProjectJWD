@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.action;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowSignUpPageCommand;
 import by.epam.jwd.finalproj.model.Roles;
@@ -28,11 +29,11 @@ public enum SignUpCommand implements Command {
     }
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         final String login = request.getParameter("login").trim();
         final String password = request.getParameter("password").trim();
         final String passwordSecond = request.getParameter("passwordSecond").trim();
-        ResponseContext result = ShowSignUpPageCommand.INSTANCE.execute(request);
+        Route result = ShowSignUpPageCommand.INSTANCE.execute(request, response);
         if (login.isEmpty()) {
             request.setAttribute("errorMessage", "Login is empty!");
         } else if (password.isEmpty()) {
@@ -49,7 +50,7 @@ public enum SignUpCommand implements Command {
                     false, new Timestamp(System.currentTimeMillis())));
             if (user.isPresent()) {
                 logger.info("saved");
-                result = ShowLoginPageCommand.INSTANCE.execute(request);
+                result = ShowLoginPageCommand.INSTANCE.execute(request, response);
             }
         }
         return result;

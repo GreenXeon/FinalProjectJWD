@@ -3,8 +3,8 @@ package by.epam.jwd.finalproj.command.action.admin;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
-import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalType;
@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 public enum AddPeriodicalCommand implements Command {
@@ -30,7 +29,7 @@ public enum AddPeriodicalCommand implements Command {
     private final Logger logger = LogManager.getLogger(AddPeriodicalCommand.class);
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         final String name = String.valueOf(request.getParameter("name"));
         final String author = String.valueOf(request.getParameter("author"));
         final LocalDate publishDate = LocalDate.parse(request.getParameter("publishDate"));
@@ -40,16 +39,16 @@ public enum AddPeriodicalCommand implements Command {
 
         //todo: validation check
         logger.info(cost);
-        ResponseContext result;
+        Route result;
         PeriodicalDto periodicalToAdd = new PeriodicalDto(0, name, author, publishDate, type, cost, publisher);
         Optional<PeriodicalDto> newPeriodical = periodicalService.save(periodicalToAdd);
         if (newPeriodical.isPresent()){
             logger.info("Periodical is saved");
-            result = ShowMainAdminPageCommand.INSTANCE.execute(request);
+            result = ShowMainAdminPageCommand.INSTANCE.execute(request, response);
         }
         else {
             logger.error("Periodical is not saved");
-            result = ShowErrorPageCommand.INSTANCE.execute(request);
+            result = ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
         return result;
     }

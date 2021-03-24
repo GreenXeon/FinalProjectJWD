@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.action.admin;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
@@ -28,7 +29,7 @@ public enum UpdatePeriodicalCommand implements Command {
     private final Logger logger = LogManager.getLogger(UpdatePeriodicalCommand.class);
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         //todo: add server validation
         final int id = Integer.parseInt(request.getParameter("periodicalId"));
         final String name = String.valueOf(request.getParameter("name"));
@@ -44,9 +45,9 @@ public enum UpdatePeriodicalCommand implements Command {
         if (!updatedPeriodical.isPresent()){
             logger.error("Periodical with id " + id + " is not updated");
             //todo: set errorMessage
-            return ShowErrorPageCommand.INSTANCE.execute(request);
+            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
         logger.info("Periodical with id " + id + " is updated");
-        return ShowMainAdminPageCommand.INSTANCE.execute(request);
+        return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
     }
 }

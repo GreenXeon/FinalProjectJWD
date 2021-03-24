@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.page.admin;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,7 @@ public enum ShowMainAdminPageCommand implements Command {
         this.periodicalService = new PeriodicalService();
     }
 
-    private static final ResponseContext MAIN_ADMIN_RESPONSE = new ResponseContext() {
+    private static final Route MAIN_ADMIN_RESPONSE = new Route() {
         @Override
         public String getPage() {
             return "/WEB-INF/jsp/admin/mainAdminPage.jsp";
@@ -35,7 +36,7 @@ public enum ShowMainAdminPageCommand implements Command {
     };
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         request.setAttribute("periodicals", periodicals);
         return MAIN_ADMIN_RESPONSE;

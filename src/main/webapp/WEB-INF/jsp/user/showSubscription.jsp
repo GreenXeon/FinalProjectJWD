@@ -35,7 +35,12 @@
             </div>
             <hr>
             <div class="buttons">
-                <button type="submit" class="pay-button">Subscribe</button>
+                <c:if test="${totalCost > requestScope.user.cash}">
+                    <button type="submit" class="pay-button" disabled>Subscribe</button>
+                </c:if>
+                <c:if test="${totalCost <= requestScope.user.cash}">
+                    <button type="submit" class="pay-button">Subscribe</button>
+                </c:if>
                 <button type="submit" class="credit-button">Buy in credit</button>
             </div>
         </c:if>

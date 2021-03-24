@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command.page.user;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
+import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
 import by.epam.jwd.finalproj.model.UserDto;
@@ -29,7 +30,7 @@ public enum ShowSubscribeCommand implements Command {
         this.userService = new UserService();
     }
 
-    private static final ResponseContext SHOW_SUBSCRIBE_RESPONSE = new ResponseContext() {
+    private static final Route SHOW_SUBSCRIBE_RESPONSE = new Route() {
         @Override
         public String getPage() {
             return "/WEB-INF/jsp/user/showSubscription.jsp";
@@ -42,12 +43,12 @@ public enum ShowSubscribeCommand implements Command {
     };
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         logger.info("ShowSubscribe processing");
         if (request.getParameterValues("selected") == null){
             logger.info("array is empty");
             request.setAttribute("errorMessage", "Choose periodical!");
-            return ShowMainPageCommand.INSTANCE.execute(request);
+            return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
         String[] selectedIds = request.getParameterValues("selected");
         List<PeriodicalDto> periodicalsToSubscribe = new ArrayList<>();
@@ -71,7 +72,7 @@ public enum ShowSubscribeCommand implements Command {
             return SHOW_SUBSCRIBE_RESPONSE;
         } catch (Exception e){
             logger.error(e.getMessage());
-            return ShowErrorPageCommand.INSTANCE.execute(request);
+            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
     }
 }

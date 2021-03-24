@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>Add book</title>
-    <script src="${pageContext.request.contextPath}/js/todayPicker.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/todayPicker.js"></script>
     <link href="${pageContext.request.contextPath}/css/addPeriodicalPage.css" rel="stylesheet" type="text/css">
 </head>
 <jsp:include page="adminHeader.jsp"/>

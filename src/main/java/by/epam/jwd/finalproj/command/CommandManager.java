@@ -32,7 +32,7 @@ public enum CommandManager {
     DELETE_PERIODICAL(DeletePeriodicalCommand.INSTANCE),
     UPDATE_PERIODICAL(UpdatePeriodicalCommand.INSTANCE),
     ADD_PERIODICAL(AddPeriodicalCommand.INSTANCE),
-    DEFAULT(ShowGuestPageCommand.INSTANCE);
+    DEFAULT(ShowErrorPageCommand.INSTANCE);
 
     private final Command command;
 
@@ -40,7 +40,11 @@ public enum CommandManager {
         this.command = command;
     }
 
-    static Command retrieveCommand(String name){
+    public Command getCommand() {
+        return command;
+    }
+
+    public static Command retrieveCommand(String name){
         for(CommandManager command : values()){
             if (command.name().equalsIgnoreCase(name)){
                 return command.command;

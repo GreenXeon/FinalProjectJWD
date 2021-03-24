@@ -3,12 +3,12 @@ package by.epam.jwd.finalproj.command.page.admin;
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
+import by.epam.jwd.finalproj.command.Route;
 
 public enum ShowAddPeriodicalCommand implements Command {
     INSTANCE;
 
-    private static final ResponseContext ADD_PERIODICAL_RESPONSE = new ResponseContext() {
+    private static final Route ADD_PERIODICAL_RESPONSE = new Route() {
         @Override
         public String getPage() {
             return "/WEB-INF/jsp/admin/addPeriodicalPage.jsp";
@@ -21,7 +21,7 @@ public enum ShowAddPeriodicalCommand implements Command {
     };
 
     @Override
-    public ResponseContext execute(RequestContext request) {
+    public Route execute(RequestContext request, ResponseContext response) {
         return ADD_PERIODICAL_RESPONSE;
     }
 }
