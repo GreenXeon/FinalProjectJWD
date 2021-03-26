@@ -1,9 +1,9 @@
 package by.epam.jwd.finalproj.filter;
 
-import by.epam.jwd.finalproj.command.Command;
-import by.epam.jwd.finalproj.command.CommandManager;
-import by.epam.jwd.finalproj.command.WrappingRequestContext;
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.command.*;
+import by.epam.jwd.finalproj.command.page.ShowGuestPageCommand;
+import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
+import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,11 +12,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
-@WebFilter
+@WebFilter(filterName = "UserValidCommandFilter")
 public class UserValidCommandFilter implements Filter {
 
     private final Logger logger = LogManager.getLogger(UserValidCommandFilter.class);
@@ -26,66 +24,88 @@ public class UserValidCommandFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        /*Roles role = Roles.findRoleByName((String) request.getSession().getAttribute("role"));
-        Set<CommandManager> permittedCommands;
+        String path= request.getRequestURI();
+        if(path.endsWith(".css")){
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        String role = request.getSession().getAttribute("role").toString();
+        logger.info(role);
+        List<String> permittedCommands;
         switch (role){
-            case GUEST:
+            case "GUEST":
                 permittedCommands = guestCommands;
                 break;
-            case USER:
+            case "USER":
                 permittedCommands = userCommands;
                 break;
-            case ADMIN:
+            case "ADMIN":
                 permittedCommands = adminCommands;
                 break;
             default:
-                permittedCommands = Collections.emptySet();
+                permittedCommands = Collections.emptyList();
         }
-        logger.info(request.getContextPath());
         String commandName = request.getParameter("command");
         logger.info("command is " + commandName);
-        Command command;
+        String command;
+
         if (commandName != null){
-            command = CommandManager.retrieveCommand(commandName);
+            if (!(permittedCommands.contains(commandName) || permittedCommands.contains(commandName.toUpperCase()))){
+                logger.warn("Command " + commandName + " is not permitted for " + role);
+                String route;
+                if (role.equalsIgnoreCase("ADMIN")){
+                    route = CommandManager.SHOW_PER_ADMIN.name();
+                } else if (role.equalsIgnoreCase("USER")){
+                    route = CommandManager.SHOW_USER_MAIN.name();
+                } else {
+                    route = CommandManager.SHOWGUEST.name();
+                }
+                response.sendRedirect(request.getContextPath() + "/controller?command=" + route.toLowerCase());
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
         } else {
-            if (role.name().equalsIgnoreCase("ADMIN")){
-                command = CommandManager.SHOW_PER_ADMIN.getCommand();
-            } else if (role.name().equalsIgnoreCase("USER")){
-                command = CommandManager.SHOW_USER_MAIN.getCommand();
+            if (role.equalsIgnoreCase("ADMIN")){
+                command = CommandManager.SHOW_PER_ADMIN.name();
+                logger.info("show admin main");
+            } else if (role.equalsIgnoreCase("USER")){
+                command = CommandManager.SHOW_USER_MAIN.name();
+                logger.info("show user main");
             }
             else {
-                command = CommandManager.SHOWGUEST.getCommand();
+                command = CommandManager.SHOWGUEST.name();
+                logger.info("show guest main");
             }
-        }*/
-
-        filterChain.doFilter(servletRequest, servletResponse);
-
+            response.sendRedirect(request.getContextPath() + "/controller?command=" + command.toLowerCase());
+        }
     }
 
-    private final Set<CommandManager> guestCommands = EnumSet.of(
-            CommandManager.LOGIN,
-            CommandManager.SIGNUP,
-            CommandManager.SHOWLOGIN,
-            CommandManager.SHOWSIGNUP,
-            CommandManager.SHOWGUEST,
-            CommandManager.SHOW_ERROR
+    private final List<String> guestCommands = Arrays.asList(
+            CommandManager.LOGIN.name(),
+            CommandManager.SIGNUP.name(),
+            CommandManager.SHOWLOGIN.name(),
+            CommandManager.SHOWSIGNUP.name(),
+            CommandManager.SHOWGUEST.name(),
+            CommandManager.SHOW_ERROR.name()
     );
 
-    private final Set<CommandManager> adminCommands = EnumSet.of(
-            CommandManager.LOGOUT,
-            CommandManager.SHOW_ERROR,
-            CommandManager.SHOW_ADD_PER,
-            CommandManager.SHOW_PER_ADMIN,
-            CommandManager.SHOW_ALL_USERS,
-            CommandManager.SHOW_UPDATE_PERIODICAL,
-            CommandManager.DELETE_PERIODICAL,
-            CommandManager.UPDATE_PERIODICAL,
-            CommandManager.ADD_PERIODICAL
+    private final List<String> adminCommands = Arrays.asList(
+            CommandManager.LOGOUT.name(),
+            CommandManager.SHOW_ERROR.name(),
+            CommandManager.SHOW_ADD_PER.name(),
+            CommandManager.SHOW_PER_ADMIN.name(),
+            CommandManager.SHOW_ALL_USERS.name(),
+            CommandManager.SHOW_UPDATE_PERIODICAL.name(),
+            CommandManager.DELETE_PERIODICAL.name(),
+            CommandManager.UPDATE_PERIODICAL.name(),
+            CommandManager.ADD_PERIODICAL.name()
     );
 
-    private final Set<CommandManager> userCommands = EnumSet.of(
-            CommandManager.LOGOUT,
-            CommandManager.SHOW_ERROR,
-            CommandManager.SHOW_USER_MAIN
+    private final List<String> userCommands = Arrays.asList(
+            CommandManager.LOGOUT.name(),
+            CommandManager.SHOW_ERROR.name(),
+            CommandManager.SHOW_USER_MAIN.name(),
+            CommandManager.SHOW_SUBSCRIBE.name()
     );
 }

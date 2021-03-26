@@ -1,5 +1,6 @@
 package by.epam.jwd.finalproj.command;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 public class WrappingResponseContext implements ResponseContext{
@@ -9,9 +10,12 @@ public class WrappingResponseContext implements ResponseContext{
         this.response = response;
     }
 
-    
-
     public static ResponseContext of(HttpServletResponse response){
         return new WrappingResponseContext(response);
+    }
+
+    @Override
+    public void addCookie(Cookie cookie) {
+        response.addCookie(cookie);
     }
 }

@@ -4,7 +4,7 @@ body{
 }
 
 label{
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-size: 1.2em;
     margin-bottom: 2%;
     display:inline-block;
@@ -12,7 +12,7 @@ label{
 
 button{
     padding: 1%;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-style: inherit;
     font-size: 1em;
     width: 15%;
@@ -25,5 +25,9 @@ button{
     margin-right: 13%;
     padding: 10%;
     background-color: lightblue;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
+}
+
+.remember-me{
+    font-size: 1em;
 }

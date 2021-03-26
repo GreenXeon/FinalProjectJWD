@@ -12,7 +12,9 @@ import by.epam.jwd.finalproj.model.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 
+import javax.servlet.http.Cookie;
 import java.util.Optional;
 
 public enum LoginCommand implements Command {
@@ -28,9 +30,9 @@ public enum LoginCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        Route result = null;
         final String login = String.valueOf(request.getParameter("login")).trim();
         final String password = String.valueOf(request.getParameter("password")).trim();
+        final String rememberMe = request.getParameter("remember");
 
         if (login.isEmpty()){
             request.setAttribute("errorMessage", "Login is empty!");
@@ -42,21 +44,30 @@ public enum LoginCommand implements Command {
         }
 
         final Optional<UserDto> user = userService.login(login, password);
-        if (user.isPresent()){
-            request.setSessionAttribute("role", user.get().getRole().name());
-            request.setSessionAttribute("login", user.get().getLogin());
-            if (user.get().getRole().name().equalsIgnoreCase("user")){
-                result = ShowMainPageCommand.INSTANCE.execute(request, response);
-            }
-            else {
-                result = ShowMainAdminPageCommand.INSTANCE.execute(request, response);
-            }
-        }
-        else{
+        if (!user.isPresent()){
             request.setSessionAttribute("role", Roles.GUEST);
             request.setAttribute("errorMessage", "Wrong login or password!");
-            result = ShowLoginPageCommand.INSTANCE.execute(request, response);
+            return ShowLoginPageCommand.INSTANCE.execute(request, response);
         }
-        return result;
+        request.setSessionAttribute("login", user.get().getLogin());
+        request.setSessionAttribute("userId", user.get().getId());
+        request.setSessionAttribute("role", user.get().getRole());
+
+        if (rememberMe != null){
+            final String userData = user.get().getLogin() + ":" + user.get().getRegistrationDate().toString();
+            final String salt = BCrypt.gensalt(10);
+            final String hashedToken = BCrypt.hashpw(userData, salt) + ":" + user.get().getId();
+            Cookie userToken = new Cookie("userToken", hashedToken);
+            userToken.setMaxAge(60 * 60 * 24 * 30);
+            response.addCookie(userToken);
+        }
+
+        String userRoleName = user.get().getRole().name();
+        if (userRoleName.equalsIgnoreCase("user")){
+            return ShowMainPageCommand.INSTANCE.execute(request, response);
+        }
+        else {
+            return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
+        }
     }
 }

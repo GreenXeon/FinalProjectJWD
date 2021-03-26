@@ -11,6 +11,15 @@
     <request-character-encoding>UTF-8</request-character-encoding>
 
     <filter>
+        <filter-name>LoginByTokenFilter</filter-name>
+        <filter-class>by.epam.jwd.finalproj.filter.LoginByTokenFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginByTokenFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>UserValidCommandFilter</filter-name>
         <filter-class>by.epam.jwd.finalproj.filter.UserValidCommandFilter</filter-class>
     </filter>

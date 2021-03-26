@@ -46,6 +46,11 @@ public class UserService implements CommonService<UserDto> {
         return foundUser.map(this::convertToDto);
     }
 
+    public Optional<UserDto> findById(int id){
+        Optional<User> foundUser = userDao.findById(id);
+        return foundUser.map(this::convertToDto);
+    }
+
     @Override
     public Optional<UserDto> save(UserDto dto) {
         return Optional.of(convertToDto(userDao.save(convertToEntity(dto)).get()));

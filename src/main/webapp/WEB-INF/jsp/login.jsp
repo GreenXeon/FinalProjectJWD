@@ -23,6 +23,11 @@
         <br>
         <input type="password" name="password" size="30" />
         <br><br>
+        <label class="remember-me">
+            Remember me
+            <input type="checkbox" name="remember">
+        </label>
+        <br><br>
         <button type="submit">Sign in</button>
         <br>
         ${errorMessage}

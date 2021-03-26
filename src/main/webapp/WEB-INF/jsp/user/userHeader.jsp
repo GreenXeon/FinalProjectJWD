@@ -14,7 +14,7 @@
             <a href="#">Periodicals</a>
             <a href="#">Orders</a>
             <a href="#">Profile</a>
-            <a href="#">Log out</a>
+            <a href="${pageContext.request.contextPath}/controller?command=logout">Log out</a>
         </nav>
     </span>
 </header>

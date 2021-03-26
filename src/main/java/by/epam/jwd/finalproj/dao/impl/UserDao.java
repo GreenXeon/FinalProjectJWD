@@ -22,6 +22,7 @@ public class UserDao implements CommonDao<User> {
             "u_email, u_cash, u_registration, u_role)" +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private final String UPDATE_USER = "";
+    private final String GET_USER_BY_ID = "SELECT * FROM p_users WHERE id = (?)";
 
     @Override
     public Optional<List<User>> findAll() {
@@ -105,6 +106,31 @@ public class UserDao implements CommonDao<User> {
             }
         } catch (SQLException throwables) {
                 throwables.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public Optional<User> findById(int id) {
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BY_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                User user = new User(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        null, null, null,
+                        resultSet.getBigDecimal(7),
+                        resultSet.getTimestamp(8),
+                        resultSet.getBoolean(10),
+                        Roles.findRoleById(resultSet.getInt(9))
+                );
+                logger.info("User " + resultSet.getString(2) + " is read");
+                return Optional.of(user);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return Optional.empty();
     }

@@ -7,6 +7,7 @@ import by.epam.jwd.finalproj.command.WrappingResponseContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.*;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -35,12 +36,6 @@ public class HelloServlet extends HttpServlet {
         final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
         final Command businessCommand = Command.retrieveCommand(commandName);
         final Route result = businessCommand.execute(WrappingRequestContext.of(req), WrappingResponseContext.of(resp));
-
-        /*if ((commandName.equalsIgnoreCase("login") && result != null)){
-            Cookie userrole = new Cookie("role", String.valueOf(req.getSession().getAttribute("role")));
-            userrole.setMaxAge(60 * 60 * 24 * 30);
-            resp.addCookie(userrole);
-        }*/
 
         //todo: check result for null and make exception
         if (result.isRedirect()) {

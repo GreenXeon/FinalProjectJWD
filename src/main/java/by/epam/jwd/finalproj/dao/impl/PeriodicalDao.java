@@ -41,7 +41,6 @@ public class PeriodicalDao implements CommonDao<Periodical> {
                         resultSet.getBigDecimal(6),
                         resultSet.getString(7)
                 );
-                logger.info("Periodical " + resultSet.getString(1) + " is read");
                 periodicals.add(periodical);
             }
             return Optional.of(periodicals);
