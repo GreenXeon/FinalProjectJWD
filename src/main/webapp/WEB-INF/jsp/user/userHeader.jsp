@@ -6,14 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/img/subscription.ico" />
 <link href="${pageContext.request.contextPath}/css/userHeader.css" rel="stylesheet" type="text/css">
 <header class="site-header">
     <div class="page-title"><h2>Periodicals Subscription</h2></div>
     <span class="menu">
         <nav>
-            <a href="#">Periodicals</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_user_main">Periodicals</a>
             <a href="#">Orders</a>
-            <a href="#">Profile</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_profile_user">Profile</a>
             <a href="${pageContext.request.contextPath}/controller?command=logout">Log out</a>
         </nav>
     </span>

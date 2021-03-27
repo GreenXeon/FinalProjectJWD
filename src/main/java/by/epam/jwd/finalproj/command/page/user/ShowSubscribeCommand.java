@@ -60,9 +60,7 @@ public enum ShowSubscribeCommand implements Command {
                     throw new Exception("Periodical is not found");
                 }
                 periodicalsToSubscribe.add(periodical);
-                logger.info("Periodical " + periodical.getName() + " is added to list");
             }
-            logger.info(periodicalsToSubscribe);
             request.setAttribute("subscribePeriodicals", periodicalsToSubscribe);
             Optional<UserDto> user = userService.findByLogin((String)request.getSessionAttribute("login"));
             if (!user.isPresent()){

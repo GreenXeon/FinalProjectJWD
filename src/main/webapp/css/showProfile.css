@@ -1,0 +1,32 @@
+body{
+    margin: 0;
+    text-align: center;
+    background-color: lightblue;
+}
+
+.main-info{
+    margin-right: 35%;
+    margin-left: 35%;
+    width: auto;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+p{
+    font-size: 1.2em;
+}
+
+button{
+    padding: 1%;
+    font-family: Arial, sans-serif;
+    font-style: inherit;
+    font-size: 1em;
+    width: 40%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.caption{
+    margin-top: 30px;
+}

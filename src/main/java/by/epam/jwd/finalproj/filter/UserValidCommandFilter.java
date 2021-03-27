@@ -62,8 +62,10 @@ public class UserValidCommandFilter implements Filter {
                     route = CommandManager.SHOWGUEST.name();
                 }
                 response.sendRedirect(request.getContextPath() + "/controller?command=" + route.toLowerCase());
+                return;
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
+                return;
             }
         } else {
             if (role.equalsIgnoreCase("ADMIN")){
@@ -78,6 +80,7 @@ public class UserValidCommandFilter implements Filter {
                 logger.info("show guest main");
             }
             response.sendRedirect(request.getContextPath() + "/controller?command=" + command.toLowerCase());
+            return;
         }
     }
 
@@ -106,6 +109,8 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.LOGOUT.name(),
             CommandManager.SHOW_ERROR.name(),
             CommandManager.SHOW_USER_MAIN.name(),
-            CommandManager.SHOW_SUBSCRIBE.name()
+            CommandManager.SHOW_SUBSCRIBE.name(),
+            CommandManager.SHOW_PROFILE_USER.name(),
+            CommandManager.SHOW_UPDATE_USER.name()
     );
 }
