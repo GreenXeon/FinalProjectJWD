@@ -7,6 +7,7 @@ import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,12 @@ public class UserDao implements CommonDao<User> {
     private final String GET_ALL_USERS = "SELECT * FROM p_users";
     private final String GET_USER_BY_LOGIN = "SELECT * FROM p_users WHERE u_login = (?)";
     private final String REGISTER_USER = "INSERT INTO p_users (u_login, u_password, u_name, u_surname, " +
-            "u_email, u_cash, u_registration, u_role)" +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_USER = "";
+            "u_email, u_cash, u_registration, u_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String UPDATE_USER = "UPDATE p_users SET u_login = ?, u_name = ?, u_surname = ?," +
+            "u_email = ? WHERE id = ?";
     private final String GET_USER_BY_ID = "SELECT * FROM p_users WHERE id = (?)";
+    private final String GET_USER_BALANCE = "SELECT u_cash FROM p_users WHERE id = (?)";
+    private final String SET_USER_BALANCE = "UPDATE p_users SET u_cash = ? WHERE id = ?";
 
     @Override
     public Optional<List<User>> findAll() {
@@ -76,8 +79,25 @@ public class UserDao implements CommonDao<User> {
     }
 
     @Override
-    public Optional<User> update(User dto) {
-        return Optional.empty();
+    public Optional<User> update(User entity) {
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USER);
+            preparedStatement.setString(1, entity.getLogin());
+            preparedStatement.setString(2, entity.getName());
+            preparedStatement.setString(3, entity.getSurname());
+            preparedStatement.setString(4, entity.getEmail());
+            preparedStatement.setInt(5, entity.getId());
+            int updatedRows = preparedStatement.executeUpdate();
+            logger.info(updatedRows + " row(-s) were updated");
+            if (updatedRows == 0){
+                logger.error("User " + entity.getId() + " is not updated");
+                throw new SQLException("User is not updated");
+            }
+            return Optional.of(entity);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -112,7 +132,38 @@ public class UserDao implements CommonDao<User> {
         return Optional.empty();
     }
 
-    public Optional<User> findById(int id) {
+    public BigDecimal findUserBalance(int id){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BALANCE);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return BigDecimal.valueOf(resultSet.getDouble(1));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean setUserBalance(int id, BigDecimal newBalance) {
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_BALANCE);
+            preparedStatement.setBigDecimal(1, newBalance);
+            preparedStatement.setInt(2, id);
+            int updatedRows = preparedStatement.executeUpdate();
+            logger.info(updatedRows + " row(-s) were updated");
+            if (updatedRows == 0){
+                throw new SQLException("0 rows were updated");
+            }
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
+    }
+
+        public Optional<User> findById(int id) {
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BY_ID);
             preparedStatement.setInt(1, id);

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +59,7 @@ public class UserService implements CommonService<UserDto> {
 
     @Override
     public Optional<UserDto> update(UserDto dto) {
-        return Optional.empty();
+        return Optional.of(convertToDto(userDao.update(convertToEntity(dto)).get()));
     }
 
     @Override
@@ -85,6 +86,17 @@ public class UserService implements CommonService<UserDto> {
             logger.info("User is not found");
             return Optional.empty();
         }
+    }
+
+    public boolean topUpUserBalance(int id, BigDecimal sumOfMoney){
+        BigDecimal userBalance = userDao.findUserBalance(id);
+        if (userBalance == null){
+            logger.error("Error in getting user " + id + " balance");
+            return false;
+        }
+        BigDecimal newBalance = userBalance.add(sumOfMoney);
+        boolean result = userDao.setUserBalance(id, newBalance);
+        return result;
     }
 
     private UserDto convertToDto(User user){
