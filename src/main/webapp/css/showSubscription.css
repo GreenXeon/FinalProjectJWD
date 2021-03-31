@@ -63,13 +63,21 @@ body{
     color: black;
 }
 
+.buttons{
+    text-align: center;
+    margin-top: 25px;
+}
+
 .buttons button{
     padding: 1%;
     font-family: Arial, sans-serif;
     font-style: inherit;
     font-size: 1em;
     width: 12%;
-    margin-top: 15px;
-    margin-bottom: 20px;
-    margin-right: 20px;
+    margin-bottom: 40px;
+}
+
+.buttons p{
+    font-size: 1.1em;
+    font-family: Helvetica, sans-serif;
 }

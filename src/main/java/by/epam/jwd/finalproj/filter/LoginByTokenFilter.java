@@ -55,7 +55,7 @@ public class LoginByTokenFilter implements Filter {
                             }
 
                             request.getSession().setAttribute("login", user.get().getLogin());
-                            request.getSession().setAttribute("id", user.get().getId());
+                            request.getSession().setAttribute("userId", user.get().getId());
                             request.getSession().setAttribute("role", user.get().getRole().name());
                             filterChain.doFilter(servletRequest, servletResponse);
                             return;

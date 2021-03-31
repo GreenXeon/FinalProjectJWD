@@ -52,8 +52,20 @@
             <p>Your balance is
                 <strong>${requestScope.user.cash} BYN</strong>
             </p>
+            <br>
             <hr>
             <button>Change profile</button>
+        </form>
+        <hr>
+        <form action="controller">
+            <input type="hidden" name="command" value="top_up_balance">
+            <div class="cash-button">
+                <label>
+                    <input type="number" step="0.1" name="balancer">
+                </label>
+                <br>
+                <button>Top up balance</button>
+            </div>
         </form>
     </c:if>
 </div>

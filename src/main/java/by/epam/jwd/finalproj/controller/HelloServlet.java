@@ -40,6 +40,7 @@ public class HelloServlet extends HttpServlet {
         //todo: check result for null and make exception
         if (result.isRedirect()) {
             resp.sendRedirect(req.getContextPath() + req.getServletPath() + result.getPage());
+            resp.sendRedirect(req.getContextPath() + "/controller?command=" + "");
         } else {
             final RequestDispatcher dispatcher = req.getRequestDispatcher(result.getPage());
             dispatcher.forward(req, resp);

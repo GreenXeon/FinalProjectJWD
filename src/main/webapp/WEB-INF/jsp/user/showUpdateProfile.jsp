@@ -18,7 +18,6 @@
 <c:if test="${not empty requestScope.user}">
     <form action="controller" method="post">
         <input type="hidden" name="command" value="update_user" />
-        <input type="hidden" name="userId" value="${requestScope.user.id}">
         <label>Login</label>
         <input name="login" size="30" value="${requestScope.user.login}" required pattern="^[a-zA-Z0-9]{5,30}$"/>
         <br>
@@ -29,7 +28,9 @@
         <input name="surname" size="30" value="${requestScope.user.surname}" required pattern="^[a-zA-Z-]{1,20}$"/>
         <br>
         <label>E-mail</label>
-        <input type="email" name="email" size="30" value="${requestScope.user.surname}" required pattern=""/>
+        <input type="email" name="email" size="30" value="${requestScope.user.email}" required />
+        <br>
+        <button>Update info</button>
         <br>
             ${errorMessage}
     </form>

@@ -23,10 +23,18 @@ button{
     font-style: inherit;
     font-size: 1em;
     width: 40%;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 .caption{
     margin-top: 30px;
+}
+
+.cash-button{
+    font-size: 1em;
+}
+
+.cash-button input{
+    margin: 10px;
 }

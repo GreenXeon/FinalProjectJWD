@@ -111,6 +111,8 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.SHOW_USER_MAIN.name(),
             CommandManager.SHOW_SUBSCRIBE.name(),
             CommandManager.SHOW_PROFILE_USER.name(),
-            CommandManager.SHOW_UPDATE_USER.name()
+            CommandManager.SHOW_UPDATE_USER.name(),
+            CommandManager.TOP_UP_BALANCE.name(),
+            CommandManager.UPDATE_USER.name()
     );
 }

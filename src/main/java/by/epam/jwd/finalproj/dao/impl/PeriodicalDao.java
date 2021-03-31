@@ -83,7 +83,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             preparedStatement.setString(6, entity.getPublisher());
             preparedStatement.setInt(7, entity.getId());
             int updatedRows = preparedStatement.executeUpdate();
-            logger.info(updatedRows + " rows were updated");
+            logger.info(updatedRows + " row(-s) were updated");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();

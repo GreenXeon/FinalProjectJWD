@@ -36,12 +36,15 @@
             <hr>
             <div class="buttons">
                 <c:if test="${totalCost > requestScope.user.cash}">
-                    <button type="submit" class="pay-button" disabled>Subscribe</button>
+                    <p><input type="radio" name="payment" disabled value="online">Pay online</p>
+                    <p><input type="radio" name="payment" value="credit" checked>Buy in credit</p>
                 </c:if>
                 <c:if test="${totalCost <= requestScope.user.cash}">
-                    <button type="submit" class="pay-button">Subscribe</button>
+                    <p><input type="radio" name="payment" value="online" checked>Pay online</p>
+                    <p><input type="radio" name="payment" value="credit">Buy in credit</p>
                 </c:if>
-                <button type="submit" class="credit-button">Buy in credit</button>
+                <br>
+                <button type="submit" class="pay-button">Subscribe</button>
             </div>
         </c:if>
 </div>
