@@ -49,10 +49,10 @@ public enum LoginCommand implements Command {
             request.setAttribute("errorMessage", "Wrong login or password!");
             return ShowLoginPageCommand.INSTANCE.execute(request, response);
         }
+
         request.setSessionAttribute("login", user.get().getLogin());
         request.setSessionAttribute("userId", user.get().getId());
-        request.setSessionAttribute("role", user.get().getRole());
-
+        request.setSessionAttribute("role", user.get().getRole().name());
         if (rememberMe != null){
             final String userData = user.get().getLogin() + ":" + user.get().getRegistrationDate().toString();
             final String salt = BCrypt.gensalt(10);

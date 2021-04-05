@@ -35,7 +35,7 @@
                         <td>${periodical.author}</td>
                         <td>${periodical.publishDate}</td>
                         <td>${periodical.type}</td>
-                        <td>${periodical.subCost}</td>
+                        <td>${periodical.subCost} BYN</td>
                         <td>${periodical.publisher}</td>
                         <td>
                             <label>

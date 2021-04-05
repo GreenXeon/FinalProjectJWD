@@ -3,6 +3,7 @@ package by.epam.jwd.finalproj.command;
 import by.epam.jwd.finalproj.command.action.admin.AddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.action.admin.DeletePeriodicalCommand;
 import by.epam.jwd.finalproj.command.action.admin.UpdatePeriodicalCommand;
+import by.epam.jwd.finalproj.command.action.user.SubscribeCommand;
 import by.epam.jwd.finalproj.command.action.user.TopUpBalanceCommand;
 import by.epam.jwd.finalproj.command.action.user.UpdateUserCommand;
 import by.epam.jwd.finalproj.command.page.user.ShowProfilePageCommand;
@@ -35,6 +36,7 @@ public enum CommandManager {
     SHOW_UPDATE_USER(ShowUpdatePageCommand.INSTANCE),
     SHOW_SUBSCRIBE(ShowSubscribeCommand.INSTANCE),
     TOP_UP_BALANCE(TopUpBalanceCommand.INSTANCE),
+    SUBSCRIBE(SubscribeCommand.INSTANCE),
 
     UPDATE_USER(UpdateUserCommand.INSTANCE),
 

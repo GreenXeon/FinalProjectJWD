@@ -44,7 +44,7 @@ public enum ShowSubscribeCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        logger.info("ShowSubscribe processing");
+        logger.info("ShowSubscribe processing...");
         if (request.getParameterValues("selected") == null){
             logger.info("array is empty");
             request.setAttribute("errorMessage", "Choose periodical!");
@@ -61,7 +61,7 @@ public enum ShowSubscribeCommand implements Command {
                 }
                 periodicalsToSubscribe.add(periodical);
             }
-            request.setAttribute("subscribePeriodicals", periodicalsToSubscribe);
+            request.setSessionAttribute("subscribePeriodicals", periodicalsToSubscribe);
             Optional<UserDto> user = userService.findByLogin((String)request.getSessionAttribute("login"));
             if (!user.isPresent()){
                 throw new Exception("User is not found");
