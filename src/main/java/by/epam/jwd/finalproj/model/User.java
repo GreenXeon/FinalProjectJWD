@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class User {
-    int id;
-    String login;
-    String password;
-    String name;
-    String surname;
-    String email;
-    BigDecimal cash;
-    Timestamp registrationDate;
-    boolean isBlocked;
-    Roles role;
+    private int id;
+    private String login;
+    private String password;
+    private String name;
+    private String surname;
+    private String email;
+    private BigDecimal cash;
+    private Timestamp registrationDate;
+    private boolean isBlocked;
+    private Roles role;
 
     public User(int id, String login, String password, String name, String surname, String email, BigDecimal cash, Timestamp registrationDate, boolean isBlocked, Roles role) {
         this.id = id;

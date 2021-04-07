@@ -12,7 +12,7 @@ public class PaymentService implements CommonService<PaymentDto> {
 
     private final PaymentDao paymentDao;
 
-    PaymentService(){
+    public PaymentService(){
         this.paymentDao = new PaymentDao();
     }
 

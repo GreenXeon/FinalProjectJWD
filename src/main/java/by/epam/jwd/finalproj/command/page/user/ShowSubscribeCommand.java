@@ -13,6 +13,7 @@ import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +63,11 @@ public enum ShowSubscribeCommand implements Command {
                 periodicalsToSubscribe.add(periodical);
             }
             request.setSessionAttribute("subscribePeriodicals", periodicalsToSubscribe);
+            BigDecimal totalCost = BigDecimal.ZERO;
+            for(PeriodicalDto periodical : periodicalsToSubscribe){
+                totalCost = totalCost.add(periodical.getSubCost());
+            }
+            request.setSessionAttribute("totalCost", totalCost);
             Optional<UserDto> user = userService.findByLogin((String)request.getSessionAttribute("login"));
             if (!user.isPresent()){
                 throw new Exception("User is not found");

@@ -1,6 +1,8 @@
 package by.epam.jwd.finalproj.model.subscription;
 
 import java.math.BigDecimal;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Subscription {
@@ -10,7 +12,7 @@ public class Subscription {
     private int periodicalId;
     private String paymentId;
     private BigDecimal subscriptionCost;
-    private LocalDateTime subscriptionDate;
+    private Timestamp subscriptionDate;
 
     public static class Builder{
         private Subscription subscription;
@@ -49,7 +51,7 @@ public class Subscription {
             return this;
         }
 
-        public Builder withSubscriptionDate(LocalDateTime subscriptionDate){
+        public Builder withSubscriptionDate(Timestamp subscriptionDate){
             subscription.subscriptionDate = subscriptionDate;
             return this;
         }
@@ -83,7 +85,7 @@ public class Subscription {
         return subscriptionCost;
     }
 
-    public LocalDateTime getSubscriptionDate() {
+    public Timestamp getSubscriptionDate() {
         return subscriptionDate;
     }
 }

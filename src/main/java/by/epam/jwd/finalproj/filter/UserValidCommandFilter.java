@@ -25,7 +25,7 @@ public class UserValidCommandFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String path= request.getRequestURI();
-        if(path.endsWith(".css")){
+        if (path.endsWith(".css")){
             filterChain.doFilter(request,response);
             return;
         }
@@ -47,7 +47,7 @@ public class UserValidCommandFilter implements Filter {
                 permittedCommands = Collections.emptyList();
         }
         String commandName = request.getParameter("command");
-        logger.info("command is " + commandName);
+        //logger.info("command is " + commandName);
         String command;
 
         if (commandName != null){
@@ -70,14 +70,14 @@ public class UserValidCommandFilter implements Filter {
         } else {
             if (role.equalsIgnoreCase("ADMIN")){
                 command = CommandManager.SHOW_PER_ADMIN.name();
-                logger.info("show admin main");
+                //logger.info("show admin main");
             } else if (role.equalsIgnoreCase("USER")){
                 command = CommandManager.SHOW_USER_MAIN.name();
-                logger.info("show user main");
+                //logger.info("show user main");
             }
             else {
                 command = CommandManager.SHOWGUEST.name();
-                logger.info("show guest main");
+                //logger.info("show guest main");
             }
             response.sendRedirect(request.getContextPath() + "/controller?command=" + command.toLowerCase());
             return;

@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Periodical {
-    int id;
-    PeriodicalType type;
-    String name;
-    String publisher;
-    String author;
-    LocalDate publishDate;
-    BigDecimal subCost;
+    private int id;
+    private PeriodicalType type;
+    private String name;
+    private String publisher;
+    private String author;
+    private LocalDate publishDate;
+    private BigDecimal subCost;
 
     public Periodical(int id, String name, String author, LocalDate publishDate, PeriodicalType type, BigDecimal subCost, String publisher) {
         this.id = id;
