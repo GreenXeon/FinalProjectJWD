@@ -6,6 +6,9 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
+import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
+import by.epam.jwd.finalproj.model.subscription.SubscriptionDto;
+import by.epam.jwd.finalproj.service.impl.SubscriptionService;
 import by.epam.jwd.finalproj.strategy.CommonStrategy;
 import by.epam.jwd.finalproj.strategy.StrategyManager;
 import org.apache.logging.log4j.LogManager;
@@ -13,15 +16,21 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 public enum SubscribeCommand implements Command {
     INSTANCE;
 
     private CommonStrategy paymentStrategy;
+    private SubscriptionService subscriptionService;
 
     public void setPaymentStrategy(CommonStrategy paymentStrategy) {
         this.paymentStrategy = paymentStrategy;
+    }
+
+    SubscribeCommand(){
+        this.subscriptionService = new SubscriptionService();
     }
 
     private final Logger logger = LogManager.getLogger(SubscribeCommand.class);
@@ -39,11 +48,21 @@ public enum SubscribeCommand implements Command {
         final Timestamp paymentTime = new Timestamp(System.currentTimeMillis());
         final BigDecimal paymentCost = (BigDecimal) request.getSessionAttribute("totalCost");
         final boolean payment = paymentStrategy.submitPayment(paymentId, userId, paymentTime, paymentCost);
-        logger.info("Cost is " + paymentCost);
         if (!payment){
             return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
-
+        List<PeriodicalDto> periodicalsToSubscribe = (List<PeriodicalDto>) request.getSessionAttribute("subscribePeriodicals");
+        SubscriptionDto subscriptionDto;
+        for (PeriodicalDto periodical : periodicalsToSubscribe){
+            subscriptionDto = new SubscriptionDto.Builder()
+                    .withUserId(userId)
+                    .withPaymentId(paymentId)
+                    .withSubscriptionDate(paymentTime)
+                    .withSubscriptionCost(periodical.getSubCost())
+                    .withPeriodicalId(periodical.getId())
+                    .build();
+            subscriptionService.save(subscriptionDto);
+        }
         return ShowMainPageCommand.INSTANCE.execute(request, response);
     }
 

@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class Subscription {
     private int id;
     private int userId;
-    private String userLogin;
     private int periodicalId;
     private String paymentId;
     private BigDecimal subscriptionCost;
@@ -28,11 +27,6 @@ public class Subscription {
 
         public Builder withUserId(int userId){
             subscription.userId = userId;
-            return this;
-        }
-
-        public Builder withUserLogin(String userLogin){
-            subscription.userLogin = userLogin;
             return this;
         }
 
@@ -67,10 +61,6 @@ public class Subscription {
 
     public int getUserId() {
         return userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
     }
 
     public int getPeriodicalId() {
