@@ -17,10 +17,12 @@ public enum LogoutCommand implements Command {
         request.invalidateSession();
         Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies){
-                cookie.setMaxAge(0);
-                cookie.setValue("");
-                response.addCookie(cookie);
+                if(!cookie.getName().equals("locale")) {
+                    cookie.setMaxAge(0);
+                    cookie.setValue("");
+                    response.addCookie(cookie);
+                }
             }
-        return ShowLoginPageCommand.INSTANCE.execute(request, response);
+        return ShowGuestPageCommand.INSTANCE.execute(request, response);
     }
 }

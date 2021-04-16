@@ -1,9 +1,6 @@
 package by.epam.jwd.finalproj.controller;
 
-import by.epam.jwd.finalproj.command.Command;
-import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.WrappingRequestContext;
-import by.epam.jwd.finalproj.command.WrappingResponseContext;
+import by.epam.jwd.finalproj.command.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.io.*;
@@ -32,15 +29,11 @@ public class HelloServlet extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        logger.info("Request is processing");
         final String commandName = req.getParameter(COMMAND_PARAMETER_NAME);
         final Command businessCommand = Command.retrieveCommand(commandName);
         final Route result = businessCommand.execute(WrappingRequestContext.of(req), WrappingResponseContext.of(resp));
-
-        //todo: check result for null and make exception
         if (result.isRedirect()) {
-            resp.sendRedirect(req.getContextPath() + req.getServletPath() + result.getPage());
-            resp.sendRedirect(req.getContextPath() + "/controller?command=" + "");
+            resp.sendRedirect(req.getContextPath() + "/controller?command=" + result.getPage());
         } else {
             final RequestDispatcher dispatcher = req.getRequestDispatcher(result.getPage());
             dispatcher.forward(req, resp);

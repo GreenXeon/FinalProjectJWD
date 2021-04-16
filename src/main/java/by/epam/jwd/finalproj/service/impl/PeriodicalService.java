@@ -7,17 +7,16 @@ import by.epam.jwd.finalproj.service.CommonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class PeriodicalService implements CommonService<PeriodicalDto> {
+public enum PeriodicalService implements CommonService<PeriodicalDto> {
+    INSTANCE;
 
     private final PeriodicalDao periodicalDao;
 
-    public PeriodicalService(){
+    PeriodicalService(){
         this.periodicalDao = new PeriodicalDao();
     }
 
@@ -26,17 +25,49 @@ public class PeriodicalService implements CommonService<PeriodicalDto> {
     @Override
     public Optional<List<PeriodicalDto>> findAll() {
         Optional<List<Periodical>> allPeriodicals = periodicalDao.findAll();
-        if (!allPeriodicals.isPresent()){
-            return Optional.empty();
-        }
-        return Optional.of(
-                allPeriodicals.get()
-                    .stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList())
-        );
+        return allPeriodicals.map(periodicals -> periodicals
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList()));
     }
 
+    public Optional<List<PeriodicalDto>> findForCurrentUser(int userId){
+        Optional<List<Periodical>> periodicals = periodicalDao.findForCurrentUser(userId);
+        return periodicals.map(periodical -> periodical
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList()));
+    }
+
+    public List<PeriodicalDto> findPeriodicalByPhrase(int userId, String phrase) {
+        List<PeriodicalDto> periodicals = this.findForCurrentUser(userId).orElse(Collections.emptyList());
+        if(periodicals.isEmpty()){
+            logger.error("Periodicals are not read");
+        }
+        List<PeriodicalDto> foundPeriodicals = new ArrayList<>();
+        for (PeriodicalDto periodical : periodicals){
+            if (periodical.getName().toLowerCase().contains(phrase.toLowerCase())){
+                logger.info(periodical.getName() + " contains " + phrase);
+                foundPeriodicals.add(periodical);
+            }
+        }
+        return foundPeriodicals;
+    }
+
+    public List<PeriodicalDto> findPeriodicalByPhrase(String phrase) {
+        List<PeriodicalDto> periodicals = this.findAll().orElse(Collections.emptyList());
+        if (periodicals.isEmpty()){
+            logger.error("Periodicals are not read");
+        }
+        List<PeriodicalDto> foundPeriodicals = new ArrayList<>();
+        for (PeriodicalDto periodical : periodicals){
+            if (periodical.getName().toLowerCase().contains(phrase.toLowerCase())){
+                logger.info(periodical.getName() + " contains " + phrase);
+                foundPeriodicals.add(periodical);
+            }
+        }
+        return foundPeriodicals;
+    }
     public Optional<PeriodicalDto> findByName(String name){
         Optional<Periodical> foundPeriodical = periodicalDao.findByName(name);
         return foundPeriodical.map(this::convertToDto);

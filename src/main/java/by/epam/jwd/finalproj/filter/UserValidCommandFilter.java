@@ -29,9 +29,7 @@ public class UserValidCommandFilter implements Filter {
             filterChain.doFilter(request,response);
             return;
         }
-
         String role = request.getSession().getAttribute("role").toString();
-        logger.info(role);
         List<String> permittedCommands;
         switch (role){
             case "GUEST":
@@ -47,7 +45,6 @@ public class UserValidCommandFilter implements Filter {
                 permittedCommands = Collections.emptyList();
         }
         String commandName = request.getParameter("command");
-        //logger.info("command is " + commandName);
         String command;
 
         if (commandName != null){
@@ -70,14 +67,11 @@ public class UserValidCommandFilter implements Filter {
         } else {
             if (role.equalsIgnoreCase("ADMIN")){
                 command = CommandManager.SHOW_PER_ADMIN.name();
-                //logger.info("show admin main");
             } else if (role.equalsIgnoreCase("USER")){
                 command = CommandManager.SHOW_USER_MAIN.name();
-                //logger.info("show user main");
             }
             else {
                 command = CommandManager.SHOWGUEST.name();
-                //logger.info("show guest main");
             }
             response.sendRedirect(request.getContextPath() + "/controller?command=" + command.toLowerCase());
             return;
@@ -102,7 +96,20 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.SHOW_UPDATE_PERIODICAL.name(),
             CommandManager.DELETE_PERIODICAL.name(),
             CommandManager.UPDATE_PERIODICAL.name(),
-            CommandManager.ADD_PERIODICAL.name()
+            CommandManager.ADD_PERIODICAL.name(),
+            CommandManager.BAN_USER.name(),
+            CommandManager.UNBAN_USER.name(),
+            CommandManager.MAKE_ADMIN.name(),
+            CommandManager.MAKE_USER.name(),
+            CommandManager.SHOW_CHANGE_PASSWORD.name(),
+            CommandManager.CHANGE_PASSWORD.name(),
+            CommandManager.SHOW_UPDATE_USER.name(),
+            CommandManager.UPDATE_USER.name(),
+            CommandManager.SHOW_PROFILE_USER.name(),
+            CommandManager.TOP_UP_BALANCE.name(),
+            CommandManager.FIND_PHRASE_PERIODICALS.name(),
+            CommandManager.CHANGE_LANGUAGE.name(),
+            CommandManager.SHOW_SUCCESS_PAGE.name()
     );
 
     private final List<String> userCommands = Arrays.asList(
@@ -114,6 +121,13 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.SHOW_UPDATE_USER.name(),
             CommandManager.TOP_UP_BALANCE.name(),
             CommandManager.UPDATE_USER.name(),
-            CommandManager.SUBSCRIBE.name()
+            CommandManager.SUBSCRIBE.name(),
+            CommandManager.SHOW_ORDERS.name(),
+            CommandManager.SHOW_ERROR.name(),
+            CommandManager.SHOW_CHANGE_PASSWORD.name(),
+            CommandManager.CHANGE_PASSWORD.name(),
+            CommandManager.FIND_PHRASE_PERIODICALS.name(),
+            CommandManager.CHANGE_LANGUAGE.name(),
+            CommandManager.SHOW_SUCCESS_PAGE.name()
     );
 }

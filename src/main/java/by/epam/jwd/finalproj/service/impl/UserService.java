@@ -1,10 +1,8 @@
 package by.epam.jwd.finalproj.service.impl;
 
-import by.epam.jwd.finalproj.dao.impl.PeriodicalDao;
 import by.epam.jwd.finalproj.dao.impl.UserDao;
-import by.epam.jwd.finalproj.model.Roles;
-import by.epam.jwd.finalproj.model.User;
-import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.model.user.User;
+import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.CommonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,11 +10,13 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class UserService implements CommonService<UserDto> {
+public enum UserService implements CommonService<UserDto> {
+    INSTANCE;
 
     private static final String SILLY_PASSWORD = "HelloWorld123";
 
@@ -24,27 +24,62 @@ public class UserService implements CommonService<UserDto> {
 
     private final Logger logger = LogManager.getLogger(UserService.class);
 
-    public UserService() {
+    UserService() {
         this.userDao = new UserDao();
     }
 
     @Override
     public Optional<List<UserDto>> findAll() {
         Optional<List<User>> allUsers = userDao.findAll();
-        if (!allUsers.isPresent()){
-            return Optional.empty();
+        return allUsers.map(users -> users
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList()));
+    }
+
+    public List<UserDto> findByPhraseLogin(String phrase){
+        List<UserDto> users = this.findAll().orElse(Collections.emptyList());
+        if(users.isEmpty()){
+            logger.error("Users are not read");
         }
-        return Optional.of(
-                allUsers.get()
-                        .stream()
-                        .map(this::convertToDto)
-                        .collect(Collectors.toList())
-        );
+        List<UserDto> foundUsers = new ArrayList<>();
+        for(UserDto user : users){
+            if(user.getLogin().toLowerCase().contains(phrase.toLowerCase())){
+                foundUsers.add(user);
+            }
+        }
+        return foundUsers;
     }
 
     public Optional<UserDto> findByLogin(String login){
         Optional<User> foundUser = userDao.findByLogin(login);
         return foundUser.map(this::convertToDto);
+    }
+
+    public void setUserRole(int userId, int userRole){
+        userDao.setUserRole(userId, userRole);
+        logger.info("Status is changed to " + userRole);
+    }
+
+    public void setUserStatus(int userId, int status){
+        boolean result = userDao.setUserBanStatus(userId, status);
+        if (!result){
+            logger.warn("User's status was not set");
+        } else {
+            logger.info("Status of user " + userId + " is changed");
+        }
+    }
+
+    public boolean userExists(String login){
+        return userDao.userExists(login);
+    }
+
+    public void changeUserPassword(int userId, String passwordHash){
+        userDao.changeUserPassword(userId, passwordHash);
+    }
+
+    public boolean getUserStatus(int userId){
+        return userDao.getUserBanStatus(userId);
     }
 
     public Optional<UserDto> findById(int id){
@@ -88,15 +123,46 @@ public class UserService implements CommonService<UserDto> {
         }
     }
 
-    public boolean topUpUserBalance(int id, BigDecimal sumOfMoney){
-        BigDecimal userBalance = userDao.findUserBalance(id);
+    public boolean topUpUserBalance(int userId, BigDecimal sumOfMoney){
+        BigDecimal userBalance = userDao.findUserBalance(userId);
         if (userBalance == null){
-            logger.error("Error in getting user " + id + " balance");
+            logger.error("Error in getting user " + userId + " balance");
             return false;
         }
         BigDecimal newBalance = userBalance.add(sumOfMoney);
-        boolean result = userDao.setUserBalance(id, newBalance);
-        return result;
+        if (newBalance.compareTo(BigDecimal.ZERO) == -1){
+            logger.warn("User balance can't be less than zero");
+            return userDao.setUserBalance(userId, BigDecimal.ZERO);
+        } else if (newBalance.compareTo(BigDecimal.valueOf(9999.99)) == 1){
+            logger.warn("User balance can't be more than 9999.99");
+            return userDao.setUserBalance(userId, BigDecimal.valueOf(9999.99));
+        }
+        return userDao.setUserBalance(userId, newBalance);
+    }
+
+    public boolean lowerUserBalance(int userId, BigDecimal sumToLower){
+        BigDecimal userBalance = userDao.findUserBalance(userId);
+        if (userBalance == null){
+            logger.error("Error in getting user " + userId + " balance");
+            return false;
+        }
+        BigDecimal newBalance = userBalance.subtract(sumToLower);
+        try {
+            if (newBalance.compareTo(BigDecimal.ZERO) == -1) {
+                throw new Exception("User " + userId + " has not enough funds on balance");
+            }
+            return userDao.setUserBalance(userId, newBalance);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return false;
+        }
+    }
+
+    public BigDecimal getUserBalance(int id){
+        if (userDao.findUserBalance(id) == null){
+            logger.error("Balance is not found");
+        }
+        return userDao.findUserBalance(id);
     }
 
     private UserDto convertToDto(User user){

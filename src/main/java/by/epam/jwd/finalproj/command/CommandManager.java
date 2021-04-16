@@ -1,22 +1,19 @@
 package by.epam.jwd.finalproj.command;
 
-import by.epam.jwd.finalproj.command.action.admin.AddPeriodicalCommand;
-import by.epam.jwd.finalproj.command.action.admin.DeletePeriodicalCommand;
-import by.epam.jwd.finalproj.command.action.admin.UpdatePeriodicalCommand;
+import by.epam.jwd.finalproj.command.action.*;
+import by.epam.jwd.finalproj.command.action.admin.*;
 import by.epam.jwd.finalproj.command.action.user.SubscribeCommand;
 import by.epam.jwd.finalproj.command.action.user.TopUpBalanceCommand;
-import by.epam.jwd.finalproj.command.action.user.UpdateUserCommand;
-import by.epam.jwd.finalproj.command.page.user.ShowProfilePageCommand;
+import by.epam.jwd.finalproj.command.action.UpdateUserCommand;
+import by.epam.jwd.finalproj.command.page.user.ShowOrdersCommand;
+import by.epam.jwd.finalproj.command.page.ShowProfilePageCommand;
 import by.epam.jwd.finalproj.command.page.user.ShowSubscribeCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowUpdatePeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.*;
 import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowAllUsersCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
-import by.epam.jwd.finalproj.command.action.LoginCommand;
-import by.epam.jwd.finalproj.command.action.LogoutCommand;
-import by.epam.jwd.finalproj.command.action.SignUpCommand;
-import by.epam.jwd.finalproj.command.page.user.ShowUpdatePageCommand;
+import by.epam.jwd.finalproj.command.page.ShowUpdatePageCommand;
 
 public enum CommandManager {
     LOGIN(LoginCommand.INSTANCE),
@@ -35,8 +32,21 @@ public enum CommandManager {
     SHOW_PROFILE_USER(ShowProfilePageCommand.INSTANCE),
     SHOW_UPDATE_USER(ShowUpdatePageCommand.INSTANCE),
     SHOW_SUBSCRIBE(ShowSubscribeCommand.INSTANCE),
+    SHOW_ORDERS(ShowOrdersCommand.INSTANCE),
     TOP_UP_BALANCE(TopUpBalanceCommand.INSTANCE),
     SUBSCRIBE(SubscribeCommand.INSTANCE),
+    SHOW_CHANGE_PASSWORD(ShowChangePasswordCommand.INSTANCE),
+    CHANGE_PASSWORD(ChangePasswordCommand.INSTANCE),
+    FIND_PHRASE_PERIODICALS(FindPeriodicalCommand.INSTANCE),
+
+    CHANGE_LANGUAGE(ChangeLanguageCommand.INSTANCE),
+
+    SHOW_SUCCESS_PAGE(ShowSuccessPageCommand.INSTANCE),
+
+    BAN_USER(BanUserCommand.INSTANCE),
+    UNBAN_USER(UnbanUserCommand.INSTANCE),
+    MAKE_ADMIN(MakeUserAdminCommand.INSTANCE),
+    MAKE_USER(MakeAdminUserCommand.INSTANCE),
 
     UPDATE_USER(UpdateUserCommand.INSTANCE),
 
@@ -62,5 +72,14 @@ public enum CommandManager {
             }
         }
         return DEFAULT.command;
+    }
+
+    public static String retrieveCommandName(Command command){
+        for (CommandManager commandWrap : values()){
+            if (commandWrap.getCommand().equals(command)){
+                return commandWrap.name();
+            }
+        }
+        return DEFAULT.name();
     }
 }

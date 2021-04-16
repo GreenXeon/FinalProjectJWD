@@ -1,17 +1,18 @@
 package by.epam.jwd.finalproj.model.periodicals;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class PeriodicalDto {
-    int id;
-    PeriodicalType type;
-    String name;
-    String publisher;
-    String author;
-    LocalDate publishDate;
-    BigDecimal subCost;
+public class PeriodicalDto implements Serializable {
+    private int id;
+    private PeriodicalType type;
+    private String name;
+    private String publisher;
+    private String author;
+    private LocalDate publishDate;
+    private BigDecimal subCost;
 
     public PeriodicalDto(int id, String name, String author, LocalDate publishDate, PeriodicalType type, BigDecimal subCost, String publisher) {
         this.id = id;

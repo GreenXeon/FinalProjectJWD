@@ -20,7 +20,7 @@ public enum ShowMainAdminPageCommand implements Command {
     private final Logger logger = LogManager.getLogger(ShowMainAdminPageCommand.class);
 
     ShowMainAdminPageCommand(){
-        this.periodicalService = new PeriodicalService();
+        this.periodicalService = PeriodicalService.INSTANCE;
     }
 
     private static final Route MAIN_ADMIN_RESPONSE = new Route() {
@@ -37,8 +37,15 @@ public enum ShowMainAdminPageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
-        request.setAttribute("periodicals", periodicals);
+        String phraseToFind = request.getParameter("finder");
+        if (phraseToFind == null || phraseToFind.isEmpty()){
+            final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
+            request.setAttribute("periodicals", periodicals);
+            return MAIN_ADMIN_RESPONSE;
+        }
+        PeriodicalService periodicalService = PeriodicalService.INSTANCE;
+        List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(phraseToFind);
+        request.setAttribute("periodicals", foundPeriodicals);
         return MAIN_ADMIN_RESPONSE;
     }
 }

@@ -6,7 +6,7 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
-import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 import by.epam.jwd.finalproj.service.impl.UserService;
@@ -27,8 +27,8 @@ public enum ShowSubscribeCommand implements Command {
     private final UserService userService;
 
     ShowSubscribeCommand(){
-        this.periodicalService = new PeriodicalService();
-        this.userService = new UserService();
+        this.periodicalService = PeriodicalService.INSTANCE;
+        this.userService = UserService.INSTANCE;
     }
 
     private static final Route SHOW_SUBSCRIBE_RESPONSE = new Route() {
@@ -47,7 +47,7 @@ public enum ShowSubscribeCommand implements Command {
     public Route execute(RequestContext request, ResponseContext response) {
         logger.info("ShowSubscribe processing...");
         if (request.getParameterValues("selected") == null){
-            logger.info("array is empty");
+            logger.warn("Array of periodicals is empty!");
             request.setAttribute("errorMessage", "Choose periodical!");
             return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
@@ -58,13 +58,15 @@ public enum ShowSubscribeCommand implements Command {
                 int id = Integer.parseInt(selectedPeriodical);
                 PeriodicalDto periodical = periodicalService.findById(id).orElse(null);
                 if (periodical == null) {
-                    throw new Exception("Periodical is not found");
+                    logger.warn("Periodical is not available");
+                    request.setAttribute("errorMessage", "Periodical is not available");
+                    return ShowMainPageCommand.INSTANCE.execute(request, response);
                 }
                 periodicalsToSubscribe.add(periodical);
             }
             request.setSessionAttribute("subscribePeriodicals", periodicalsToSubscribe);
             BigDecimal totalCost = BigDecimal.ZERO;
-            for(PeriodicalDto periodical : periodicalsToSubscribe){
+            for (PeriodicalDto periodical : periodicalsToSubscribe){
                 totalCost = totalCost.add(periodical.getSubCost());
             }
             request.setSessionAttribute("totalCost", totalCost);

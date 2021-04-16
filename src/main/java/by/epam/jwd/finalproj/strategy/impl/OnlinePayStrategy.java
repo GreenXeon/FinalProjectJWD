@@ -5,6 +5,7 @@ import by.epam.jwd.finalproj.model.payment.Payment;
 import by.epam.jwd.finalproj.model.payment.PaymentDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PaymentService;
+import by.epam.jwd.finalproj.service.impl.UserService;
 import by.epam.jwd.finalproj.strategy.CommonStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +18,11 @@ public class OnlinePayStrategy implements CommonStrategy {
 
     private final PaymentService paymentService;
 
+    private final UserService userService;
+
     public OnlinePayStrategy(){
-        this.paymentService = new PaymentService();
+        this.paymentService = PaymentService.INSTANCE;
+        this.userService = UserService.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(OnlinePayStrategy.class);
@@ -37,5 +41,10 @@ public class OnlinePayStrategy implements CommonStrategy {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void lowerUserBalance(int userId, BigDecimal paymentCost) {
+        userService.lowerUserBalance(userId, paymentCost);
     }
 }

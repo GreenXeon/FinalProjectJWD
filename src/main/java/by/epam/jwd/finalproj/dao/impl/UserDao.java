@@ -2,7 +2,7 @@ package by.epam.jwd.finalproj.dao.impl;
 
 import by.epam.jwd.finalproj.dao.CommonDao;
 import by.epam.jwd.finalproj.model.Roles;
-import by.epam.jwd.finalproj.model.User;
+import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +26,11 @@ public class UserDao implements CommonDao<User> {
     private final String GET_USER_BY_ID = "SELECT * FROM p_users WHERE id = (?)";
     private final String GET_USER_BALANCE = "SELECT u_cash FROM p_users WHERE id = (?)";
     private final String SET_USER_BALANCE = "UPDATE p_users SET u_cash = ? WHERE id = ?";
+    private final String SET_USER_STATUS = "UPDATE p_users SET u_blocked = ? WHERE id = ?";
+    private final String GET_USER_STATUS = "SELECT u_blocked FROM p_users WHERE id = ?";
+    private final String SET_USER_ROLE = "UPDATE p_users SET u_role = ? WHERE id = ?";
+    private final String UPDATE_PASSWORD = "UPDATE p_users SET u_password = ? WHERE id = ?";
+    private final String CHECK_EXISTING_USER = "SELECT * FROM p_users WHERE u_login = ?";
 
     @Override
     public Optional<List<User>> findAll() {
@@ -46,7 +51,6 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBoolean(10),
                         Roles.findRoleById(resultSet.getInt(9))
                 );
-                logger.info("User " + resultSet.getString(2) + " is read");
                 users.add(user);
             }
             return Optional.of(users);
@@ -123,13 +127,78 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBoolean(10),
                         Roles.findRoleById(resultSet.getInt(9))
                 );
-                logger.info("User " + resultSet.getString(2) + " is read");
                 return Optional.of(user);
             }
         } catch (SQLException throwables) {
                 throwables.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public boolean setUserBanStatus(int userId, int status){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_STATUS);
+            preparedStatement.setInt(1, status);
+            preparedStatement.setInt(2, userId);
+            int updatedRows = preparedStatement.executeUpdate();
+            if (updatedRows == 0){
+                throw new SQLException("No users were updated");
+            }
+            logger.info(updatedRows + " row(-s) were updated");
+            return true;
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+            return false;
+        }
+    }
+
+    public boolean changeUserPassword(int userId, String passwordHash){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PASSWORD);
+            preparedStatement.setString(1, passwordHash);
+            preparedStatement.setInt(2, userId);
+            int updatedRows = preparedStatement.executeUpdate();
+            if (updatedRows == 0){
+                throw new SQLException("No users were updated");
+            }
+            logger.info(updatedRows + " row(-s) were updated");
+            return true;
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+            return false;
+        }
+    }
+
+    public boolean setUserRole(int userId, int userRole){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_ROLE);
+            preparedStatement.setInt(1, userRole);
+            preparedStatement.setInt(2, userId);
+            int updatedRows = preparedStatement.executeUpdate();
+            if (updatedRows == 0){
+                throw new SQLException("No users were updated");
+            }
+            logger.info("New status is " + userRole);
+            logger.info(updatedRows + " row(-s) were updated");
+            return true;
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+            return false;
+        }
+    }
+
+    public Boolean getUserBanStatus(int userId){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_STATUS);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return resultSet.getBoolean(1);
+            }
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+        }
+            return null;
     }
 
     public BigDecimal findUserBalance(int id){
@@ -144,6 +213,18 @@ public class UserDao implements CommonDao<User> {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    public boolean userExists(String login){
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(CHECK_EXISTING_USER);
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
     }
 
     public boolean setUserBalance(int id, BigDecimal newBalance) {
@@ -181,7 +262,6 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBoolean(10),
                         Roles.findRoleById(resultSet.getInt(9))
                 );
-                logger.info("User " + resultSet.getString(2) + " is read");
                 return Optional.of(user);
             }
         } catch (SQLException throwables) {

@@ -13,7 +13,6 @@ public class SubscribeCommandTest {
     @Test
     public void createPaymentId() {
         String testId = SubscribeCommand.INSTANCE.createPaymentId();
-        logger.info(testId);
         assertNotEquals(testId, null);
     }
 }

@@ -1,30 +1,29 @@
-package by.epam.jwd.finalproj.command.page.user;
+package by.epam.jwd.finalproj.command.page;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
-import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public enum ShowProfilePageCommand implements Command {
+public enum ShowUpdatePageCommand implements Command {
     INSTANCE;
 
     private final Logger logger = LogManager.getLogger(ShowProfilePageCommand.class);
 
     private final UserService userService;
 
-    ShowProfilePageCommand(){
-        this.userService = new UserService();
+    ShowUpdatePageCommand(){
+        this.userService = UserService.INSTANCE;
     }
 
-    private static final Route SHOW_PROFILE_RESPONSE = new Route() {
+    private static final Route SHOW_UPDATE_RESPONSE = new Route() {
         @Override
         public String getPage() {
-            return "/WEB-INF/jsp/user/showProfile.jsp";
+            return "/WEB-INF/jsp/showUpdateProfile.jsp";
         }
 
         @Override
@@ -32,6 +31,7 @@ public enum ShowProfilePageCommand implements Command {
             return false;
         }
     };
+
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
@@ -41,8 +41,7 @@ public enum ShowProfilePageCommand implements Command {
             logger.error("User with id " + userId + " is not found");
             return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
-        logger.info(user.getEmail());
         request.setAttribute("user", user);
-        return SHOW_PROFILE_RESPONSE;
+        return SHOW_UPDATE_RESPONSE;
     }
 }

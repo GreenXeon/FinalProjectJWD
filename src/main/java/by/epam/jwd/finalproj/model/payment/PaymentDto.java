@@ -1,11 +1,12 @@
 package by.epam.jwd.finalproj.model.payment;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class PaymentDto {
+public class PaymentDto implements Serializable {
     private String paymentId;
     private int userId;
     private Timestamp paymentTime;

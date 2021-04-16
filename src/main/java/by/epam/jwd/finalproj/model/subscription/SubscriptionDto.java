@@ -1,13 +1,16 @@
 package by.epam.jwd.finalproj.model.subscription;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class SubscriptionDto {
+public class SubscriptionDto implements Serializable {
+    private int id;
     private int userId;
     private int periodicalId;
     private String paymentId;
+    private String periodicalName;
     private BigDecimal subscriptionCost;
     private Timestamp subscriptionDate;
 
@@ -23,6 +26,11 @@ public class SubscriptionDto {
             return this;
         }
 
+        public Builder withId(int id){
+            subscriptionDto.id = id;
+            return this;
+        }
+
         public Builder withPeriodicalId(int periodicalId){
             subscriptionDto.periodicalId = periodicalId;
             return this;
@@ -30,6 +38,11 @@ public class SubscriptionDto {
 
         public Builder withPaymentId(String paymentId){
             subscriptionDto.paymentId = paymentId;
+            return this;
+        }
+
+        public Builder withPeriodicalName(String periodicalName){
+            subscriptionDto.periodicalName = periodicalName;
             return this;
         }
 
@@ -58,6 +71,14 @@ public class SubscriptionDto {
 
     public String getPaymentId() {
         return paymentId;
+    }
+
+    public String getPeriodicalName() {
+        return periodicalName;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public BigDecimal getSubscriptionCost() {

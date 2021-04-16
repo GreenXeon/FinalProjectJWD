@@ -1,14 +1,14 @@
 package by.epam.jwd.finalproj.dao.impl;
 
 import by.epam.jwd.finalproj.dao.CommonDao;
+import by.epam.jwd.finalproj.model.periodicals.Periodical;
 import by.epam.jwd.finalproj.model.subscription.Subscription;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +16,9 @@ public class SubscriptionDao implements CommonDao<Subscription> {
 
     private final String CREATE_SUBSCRIPTION = "INSERT INTO subscriptions (user_id, periodical_id, sub_date, payment_id, sub_cost) " +
             "VALUES (?, ?, ?, ?, ?)";
+
+    private final String GET_SUBSCRIPTIONS_BY_ID = "SELECT s_id, p_name, payment_id, sub_date, sub_cost FROM subscriptions" +
+            " INNER JOIN periodicals p ON subscriptions.periodical_id = p.id WHERE user_id = ?";
 
     private final Logger logger = LogManager.getLogger(SubscriptionDao.class);
 
@@ -41,6 +44,31 @@ public class SubscriptionDao implements CommonDao<Subscription> {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             logger.error(throwables.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public Optional<List<Subscription>> findByUserId(int userId) {
+        List<Subscription> subscriptions = new ArrayList<>();
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_SUBSCRIPTIONS_BY_ID);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Subscription subscription;
+            while (resultSet.next()){
+                subscription = new Subscription.Builder()
+                        .withId(resultSet.getInt(1))
+                        .withPeriodicalName(resultSet.getString(2))
+                        .withPaymentId(resultSet.getString(3))
+                        .withSubscriptionDate(resultSet.getTimestamp(4))
+                        .withSubscriptionCost(resultSet.getBigDecimal(5))
+                        .build();
+                subscriptions.add(subscription);
+            }
+            return Optional.of(subscriptions);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            logger.error("SQL exception raised");
             return Optional.empty();
         }
     }

@@ -4,6 +4,7 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
+import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 
@@ -16,7 +17,7 @@ public enum ShowMainPageCommand implements Command {
     private final PeriodicalService periodicalService;
 
     ShowMainPageCommand(){
-        this.periodicalService = new PeriodicalService();
+        this.periodicalService = PeriodicalService.INSTANCE;
     }
 
 
@@ -34,8 +35,16 @@ public enum ShowMainPageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
-        request.setAttribute("periodicals", periodicals);
+        int userId = (int) request.getSessionAttribute("userId");
+        String phraseToFind = request.getParameter("finder");
+        if (phraseToFind == null || phraseToFind.isEmpty()){
+            final List<PeriodicalDto> periodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());
+            request.setAttribute("periodicals", periodicals);
+            return MAIN_PAGE_RESPONSE;
+        }
+        PeriodicalService periodicalService = PeriodicalService.INSTANCE;
+        List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
+        request.setAttribute("periodicals", foundPeriodicals);
         return MAIN_PAGE_RESPONSE;
     }
 }

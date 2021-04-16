@@ -16,7 +16,7 @@ public enum ShowGuestPageCommand implements Command {
     private final PeriodicalService periodicalService;
 
     ShowGuestPageCommand(){
-        this.periodicalService = new PeriodicalService();
+        this.periodicalService = PeriodicalService.INSTANCE;
     }
 
     private static final Route GUEST_PAGE_RESPONSE = new Route() {
@@ -33,8 +33,15 @@ public enum ShowGuestPageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
-        request.setAttribute("periodicals", periodicals);
+        String phraseToFind = request.getParameter("finder");
+        if (phraseToFind == null || phraseToFind.isEmpty()){
+            final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
+            request.setAttribute("periodicals", periodicals);
+            return GUEST_PAGE_RESPONSE;
+        }
+        PeriodicalService periodicalService = PeriodicalService.INSTANCE;
+        List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(phraseToFind);
+        request.setAttribute("periodicals", foundPeriodicals);
         return GUEST_PAGE_RESPONSE;
     }
 }

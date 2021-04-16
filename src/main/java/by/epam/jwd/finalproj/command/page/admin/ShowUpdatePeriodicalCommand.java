@@ -18,7 +18,7 @@ public enum ShowUpdatePeriodicalCommand implements Command {
     private final PeriodicalService periodicalService;
 
     ShowUpdatePeriodicalCommand(){
-        this.periodicalService = new PeriodicalService();
+        this.periodicalService = PeriodicalService.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(ShowUpdatePeriodicalCommand.class);
@@ -37,11 +37,15 @@ public enum ShowUpdatePeriodicalCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        String periodicalName = request.getParameter("periodicalName");
+        String periodicalName;
+        if(request.getParameter("periodicalName") == null){
+            periodicalName = (String) request.getAttribute("periodicalName");
+        } else {
+            periodicalName = request.getParameter("periodicalName");
+        }
         logger.info(periodicalName);
         Optional<PeriodicalDto> periodical = periodicalService.findByName(periodicalName);
         if (periodical.isPresent()){
-            logger.info(periodicalName + " - " + periodical.get().getName());
             request.setAttribute("periodical", periodical.get());
             return SHOW_UPDATE_PER_RESPONSE;
         }

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class PeriodicalDao implements CommonDao<Periodical> {
     private final String UPDATE_PERIODICAL = "UPDATE periodicals SET p_name = ?, p_author = ?," +
             "publish_date = ?, type_id = ?, p_cost = ?, p_publisher = ? WHERE id = ?";
     private final String DELETE_PERIODICAL_BY_ID = "DELETE FROM periodicals WHERE id = ?";
+    private final String GET_PERIODICALS_FOR_USER = "SELECT * FROM periodicals WHERE id" +
+            " NOT IN (SELECT periodical_id FROM subscriptions WHERE user_id = ?)";
+    private final String GET_ALL_NAMES = "SELECT p_name FROM periodicals";
 
     @Override
     public Optional<List<Periodical>> findAll() {
@@ -45,10 +49,49 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             }
             return Optional.of(periodicals);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            logger.error("SQL Exception is raised: " + throwables.getMessage());
+            return Optional.empty();
         }
-        logger.info("No periodicals are read");
-        return Optional.empty();
+    }
+
+    public List<String> findAllNames(){
+        List<String> periodicalNames = new ArrayList<>();
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(GET_ALL_NAMES);
+            while (resultSet.next()) {
+                periodicalNames.add(resultSet.getString(1));
+            }
+            return periodicalNames;
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    public Optional<List<Periodical>> findForCurrentUser(int userId){
+        List<Periodical> periodicals = new ArrayList<>();
+        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
+            final PreparedStatement preparedStatement = conn.prepareStatement(GET_PERIODICALS_FOR_USER);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Periodical periodical = new Periodical(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getDate(4).toLocalDate(),
+                        PeriodicalType.findById(resultSet.getInt(5)),
+                        resultSet.getBigDecimal(6),
+                        resultSet.getString(7)
+                );
+                periodicals.add(periodical);
+            }
+            return Optional.of(periodicals);
+        } catch (SQLException throwables) {
+            logger.error("SQL exception is raised:" + throwables.getMessage());
+            return Optional.empty();
+        }
     }
 
     @Override

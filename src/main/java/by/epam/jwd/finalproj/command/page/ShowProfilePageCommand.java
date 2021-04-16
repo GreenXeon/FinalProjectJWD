@@ -1,30 +1,29 @@
-package by.epam.jwd.finalproj.command.page.user;
+package by.epam.jwd.finalproj.command.page;
 
 import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
-import by.epam.jwd.finalproj.model.UserDto;
+import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public enum ShowUpdatePageCommand implements Command {
+public enum ShowProfilePageCommand implements Command {
     INSTANCE;
 
     private final Logger logger = LogManager.getLogger(ShowProfilePageCommand.class);
 
     private final UserService userService;
 
-    ShowUpdatePageCommand(){
-        this.userService = new UserService();
+    ShowProfilePageCommand(){
+        this.userService = UserService.INSTANCE;
     }
 
-    private static final Route SHOW_UPDATE_RESPONSE = new Route() {
+    private static final Route SHOW_PROFILE_RESPONSE = new Route() {
         @Override
         public String getPage() {
-            return "/WEB-INF/jsp/user/showUpdateProfile.jsp";
+            return "/WEB-INF/jsp/showProfile.jsp";
         }
 
         @Override
@@ -32,7 +31,6 @@ public enum ShowUpdatePageCommand implements Command {
             return false;
         }
     };
-
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
@@ -43,6 +41,6 @@ public enum ShowUpdatePageCommand implements Command {
             return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
         request.setAttribute("user", user);
-        return SHOW_UPDATE_RESPONSE;
+        return SHOW_PROFILE_RESPONSE;
     }
 }
