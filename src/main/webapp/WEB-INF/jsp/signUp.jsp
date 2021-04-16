@@ -6,31 +6,40 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${cookie['locale'].value}"/>
+<fmt:setBundle basename="localization"/>
 <html>
 <head>
-    <title>Sign Up</title>
-    <link href="${pageContext.request.contextPath}css/signUpPage.css" rel="stylesheet" type="text/css">
+    <title><fmt:message key="pagetitle.signup"/></title>
+    <link href="${pageContext.request.contextPath}/css/signUpPage.css" rel="stylesheet" type="text/css">
 </head>
+<jsp:include page="indexHeader.jsp"/>
 <body>
 <div class="main">
     <form action="controller" method="post">
         <input type="hidden" name="command" value="signup" />
-        <label>Enter login</label>
+        <label><fmt:message key="form.signup.login"/></label>
         <br>
-        <input name="login" size="30" />
+        <input name="login" size="30" required pattern="^[a-zA-Z0-9]{5,50}$"/>
         <br><br>
-        <label>Enter password</label>
+        <label><fmt:message key="form.signup.email"/></label>
         <br>
-        <input type="password" name="password" size="30" />
+        <input type="email" name="email" size="30" required pattern="^[([a-zA-Z0-9_.-]+)@([a-zA-Z0-9.-]{4,})]{6,45}$"/>
         <br><br>
-        <label>Repeat password</label>
+        <label><fmt:message key="form.signup.password"/></label>
         <br>
-        <input type="password" name="passwordSecond" size="30" />
+        <input type="password" name="password" size="30" required pattern="^[a-zA-Z0-9#№.,-=:;!?&]{6,50}$"/>
         <br><br>
-        <button type="submit">Sign in</button>
+        <label><fmt:message key="form.signup.repeatpassword"/></label>
+        <br>
+        <input type="password" name="passwordSecond" size="30" required pattern="^[a-zA-Z0-9#№.,-=:;!?&]{6,50}$"/>
+        <br><br>
+        <button type="submit"><fmt:message key="button.signup"/></button>
         <br>
         ${errorMessage}
     </form>
 </div>
 </body>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>
 </html>

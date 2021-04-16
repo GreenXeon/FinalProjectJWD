@@ -1,5 +1,6 @@
 body{
     text-align: center;
+    padding-bottom: 10%;
     margin: 0;
 }
 
@@ -7,6 +8,7 @@ label{
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     margin-bottom: 2%;
+    font-weight: bold;
     display:inline-block;
 }
 

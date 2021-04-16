@@ -1,9 +1,37 @@
 input, select{
+    margin-top: 8px;
     margin-bottom: 15px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+}
+
+label{
+    font-size: 1.1em;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+body h3{
+    color: #ac0319;
 }
 
 body{
     margin: 0;
     text-align: center;
+    padding-bottom: 10%;
     background-color: lightblue;
+}
+
+.main button{
+    font-size: 1.1em;
+    margin-top: 15px;
+    padding: 7px;
+    width: 10%;
+}
+
+.change-password{
+    font-size: 1em;
+    margin-top: 15px;
+    padding: 7px;
+    width: 15%;
 }

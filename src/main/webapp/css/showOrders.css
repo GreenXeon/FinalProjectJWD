@@ -1,14 +1,23 @@
-table{
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
 body{
     margin: 0;
     background-color: lightblue;
     padding-bottom: 10%;
     text-align: center;
+}
+
+table{
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin-top: 25px;
+}
+
+.orders{
+    margin-top: 40px;
+    text-align: center;
+    margin-right: 5%;
+    margin-left: 5%;
+    width: auto;
 }
 
 th, td, tr{
@@ -18,6 +27,15 @@ th, td, tr{
     border-style: solid;
     border-color: black;
     border-width: 1px;
+}
+
+.find-div button{
+    padding: 5px 10px 5px 10px;
+    font-family: Arial, sans-serif;
+    font-style: inherit;
+    font-size: 1.1em;
+    width: 10%;
+    margin: 0 15px 0 15px;
 }
 
 td{
@@ -32,37 +50,17 @@ th{
     padding: 8px;
 }
 
-a{
-    color: black;
-}
-
-.users{
-    padding-top: 25px;
-    margin-right: 5%;
-    margin-left: 5%;
-    width: auto;
-}
-
-.caption{
-    margin: 0;
-    padding-top: 10px;
+.orders table tr td:first-child{
+    font-weight: bold;
 }
 
 .find-div button{
     padding: 5px 10px 5px 10px;
     font-family: Arial, sans-serif;
     font-style: inherit;
-    font-size: 1.1em;
+    font-size: 0.9em;
     width: 10%;
     margin: 0 15px 0 15px;
-}
-
-h1{
-    margin: 0;
-}
-
-.users table tr td:first-child{
-    font-weight: bold;
 }
 
 .find-div form{

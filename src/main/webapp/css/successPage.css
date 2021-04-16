@@ -1,0 +1,19 @@
+body{
+    margin: 0;
+    background-color: lightblue;
+}
+
+.page-text{
+    text-align: center;
+    font-family: Georgia, sans-serif;
+    margin-top: 80px;
+
+}
+
+.main-text{
+    font-size: 2em;
+}
+
+.request-text{
+    font-size: 1.6em;
+}

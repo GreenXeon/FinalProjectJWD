@@ -7,50 +7,64 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${cookie['locale'].value}"/>
+<fmt:setBundle basename="localization"/>
 <html>
 <head>
-    <title>Main user page</title>
+    <title><fmt:message key="pagetitle.user.main"/></title>
     <link href="${pageContext.request.contextPath}/css/mainUserPage.css" rel="stylesheet" type="text/css">
 </head>
 <jsp:include page="userHeader.jsp"/>
 <body>
-<c:if test="${not empty requestScope.periodicals}">
-    <form action="controller" method="post">
-        <input type="hidden" name="command" value="show_subscribe" />
-        <div class="periodicals">
-            <h2 class="caption">Periodicals</h2>
-            <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Author</th>
-                    <th>Publish date</th>
-                    <th>Type</th>
-                    <th>Cost</th>
-                    <th>Publisher</th>
-                    <th>Choose</th>
-                </tr>
-                <c:forEach var="periodical" items="${requestScope.periodicals}">
+    <h1 class="caption"><fmt:message key="caption.periodicals"/></h1>
+    <div class="find-div">
+        <form action="controller" method="post">
+            <input type="hidden" name="command" value="show_user_main" />
+            <input name="finder" size="30" required/>
+            <br><br>
+            <button><fmt:message key="button.find"/></button>
+            <br>
+        </form>
+    </div>
+    <hr>
+    <c:if test="${not empty requestScope.periodicals}">
+        <form action="controller" method="post">
+            <input type="hidden" name="command" value="show_subscribe" />
+            <div class="periodicals">
+                <table>
                     <tr>
-                        <td>${periodical.name}</td>
-                        <td>${periodical.author}</td>
-                        <td>${periodical.publishDate}</td>
-                        <td>${periodical.type}</td>
-                        <td>${periodical.subCost} BYN</td>
-                        <td>${periodical.publisher}</td>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="selected" value="${periodical.id}">
-                            </label>
-                        </td>
+                        <th><fmt:message key="periodical.name"/></th>
+                        <th><fmt:message key="periodical.author"/></th>
+                        <th><fmt:message key="periodical.publishDate"/></th>
+                        <th><fmt:message key="periodical.type"/></th>
+                        <th><fmt:message key="periodical.cost"/></th>
+                        <th><fmt:message key="periodical.publisher"/></th>
+                        <th><fmt:message key="periodical.choose"/></th>
                     </tr>
-                </c:forEach>
-            </table>
-            <div class="errorMessage">
-                    ${errorMessage}
+                    <c:forEach var="periodical" items="${requestScope.periodicals}">
+                        <tr>
+                            <td>${periodical.name}</td>
+                            <td>${periodical.author}</td>
+                            <td>${periodical.publishDate}</td>
+                            <td>${periodical.type}</td>
+                            <td>${periodical.subCost} BYN</td>
+                            <td>${periodical.publisher}</td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="selected" value="${periodical.id}">
+                                </label>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <div class="errorMessage">
+                        ${errorMessage}
+                </div>
+                <button type="submit" class="submit-button"><fmt:message key="button.subscribe"/></button>
             </div>
-            <button type="submit" class="submit-button">Subscribe</button>
-        </div>
-    </form>
-</c:if>
+        </form>
+    </c:if>
 </body>
+<jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>
 </html>

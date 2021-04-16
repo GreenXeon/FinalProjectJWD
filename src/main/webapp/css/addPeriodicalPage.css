@@ -1,9 +1,43 @@
 input, select{
+    margin-top: 8px;
     margin-bottom: 15px;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+}
+
+label{
+    font-size: 1.1em;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
 }
 
 body{
     margin: 0;
     text-align: center;
+    padding-bottom: 10%;
     background-color: lightblue;
+}
+
+.main{
+    margin-top: 5%;
+}
+
+.main button{
+    font-size: 1.1em;
+    margin-top: 15px;
+    padding: 7px;
+    width: 10%;
+}
+
+form{
+    margin-top: 40px;
+}
+
+form button{
+    padding: 8px;
+    font-family: Arial, sans-serif;
+    font-style: inherit;
+    font-size: 1em;
+    width: 12%;
+    margin-bottom: 40px;
 }
