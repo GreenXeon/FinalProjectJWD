@@ -11,8 +11,9 @@ public class ValidatorTest {
         String[] logins = new String[]{
                 "",
                 " ",
+                null,
                 "test",
-                "test1",
+                "s123",
                 "sample123+",
                 "epam_guest",
                 "qwertyuiop[]asdfghjkl;'zxcvbnm,./1234567890"
@@ -52,7 +53,7 @@ public class ValidatorTest {
                 " ",
                 "@",
                 "samplemail#mail.ru",
-                "qwertyuiop123456asdfghjkcvncvncxvnv55474lzxcvbnm@mail.ru"
+                "qwertyuiop123456asddfgsdgfsdgsgsdfgsdfghjkcvncvncxvnv55474lzxcvbnm@mail.ru"
         };
         int wrongEmails = 0;
         for(String email : emails){
@@ -61,6 +62,7 @@ public class ValidatorTest {
             }
         }
         assertEquals(wrongEmails, emails.length);
+        assertTrue(Validator.isValidEmail("zahar.shishkin.2001@mail.ru"));
     }
 
     @Test
@@ -153,6 +155,7 @@ public class ValidatorTest {
             }
         }
         assertEquals(wrongCosts, costs.length);
+        assertTrue(Validator.isValidPeriodicalCost("35.67"));
     }
 
     @Test

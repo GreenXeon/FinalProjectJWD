@@ -1,9 +1,9 @@
 package by.epam.jwd.finalproj.validator;
 
 public class Validator {
-    private static final String LOGIN_PATTERN = "^[a-zA-Z0-9]{6,50}$";
+    private static final String LOGIN_PATTERN = "^[a-zA-Z0-9]{5,50}$";
     private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9#№.,-=:;!?&]{6,50}$";
-    private static final String EMAIL_PATTERN = "^((.+)@(.+)){6,45}$";
+    private static final String EMAIL_PATTERN = "^[([a-zA-Z0-9_.-]+)@([a-zA-Z0-9.-]{4,})]{6,45}$";
     private static final String NAME_PATTERN = "^[a-zA-Z-]{1,20}$";
     private static final String SURNAME_PATTERN = "^[a-zA-Z-]{1,20}$";
     private static final String PERIODICAL_NAME_PATTERN = "^[a-zA-Z0-9#№.,-=:;!?& ]{1,50}$";
