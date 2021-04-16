@@ -9,6 +9,7 @@ public class Subscription {
     private int id;
     private int userId;
     private int periodicalId;
+    private String periodicalName;
     private String paymentId;
     private BigDecimal subscriptionCost;
     private Timestamp subscriptionDate;
@@ -27,6 +28,11 @@ public class Subscription {
 
         public Builder withUserId(int userId){
             subscription.userId = userId;
+            return this;
+        }
+
+        public Builder withPeriodicalName(String periodicalName){
+            subscription.periodicalName = periodicalName;
             return this;
         }
 
@@ -65,6 +71,10 @@ public class Subscription {
 
     public int getPeriodicalId() {
         return periodicalId;
+    }
+
+    public String getPeriodicalName() {
+        return periodicalName;
     }
 
     public String getPaymentId() {

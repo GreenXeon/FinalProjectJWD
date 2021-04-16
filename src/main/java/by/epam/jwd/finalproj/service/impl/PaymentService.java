@@ -8,11 +8,12 @@ import by.epam.jwd.finalproj.service.CommonService;
 import java.util.List;
 import java.util.Optional;
 
-public class PaymentService implements CommonService<PaymentDto> {
+public enum PaymentService implements CommonService<PaymentDto> {
+    INSTANCE;
 
     private final PaymentDao paymentDao;
 
-    public PaymentService(){
+    PaymentService(){
         this.paymentDao = new PaymentDao();
     }
 

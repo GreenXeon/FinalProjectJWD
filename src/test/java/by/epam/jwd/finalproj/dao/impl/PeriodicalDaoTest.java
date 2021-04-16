@@ -1,9 +1,7 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.model.User;
 import by.epam.jwd.finalproj.model.periodicals.Periodical;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalType;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;

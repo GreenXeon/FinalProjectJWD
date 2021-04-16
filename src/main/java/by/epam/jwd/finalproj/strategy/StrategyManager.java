@@ -21,4 +21,13 @@ public enum StrategyManager {
         }
         return CREDIT.strategy;
     }
+
+    public static String findNameByStrategy(CommonStrategy commonStrategy){
+        for(StrategyManager strategy : StrategyManager.values()){
+            if (strategy.strategy.equals(commonStrategy)){
+                return strategy.name();
+            }
+        }
+        return CREDIT.name();
+    }
 }

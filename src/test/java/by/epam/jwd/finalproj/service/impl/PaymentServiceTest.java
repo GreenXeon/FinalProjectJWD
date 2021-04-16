@@ -19,7 +19,7 @@ public class PaymentServiceTest {
                 .withPaymentTime(new Timestamp(System.currentTimeMillis()))
                 .withUserId(6)
                 .build();
-        Optional<PaymentDto> result = new PaymentService().save(dto);
+        Optional<PaymentDto> result = PaymentService.INSTANCE.save(dto);
         assertNotEquals(result, Optional.empty());
     }
 }
