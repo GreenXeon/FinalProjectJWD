@@ -27,6 +27,18 @@ public class ConnectionPool {
     private static final int INCREMENT_SIZE = 4;
     private static final int MAX_POOL_SIZE = 32;
 
+    private final String PROPERTY_FILE = "db.properties";
+    private final String URL_PROPERTY_NAME = "url";
+    private final String USER_PROPERTY_NAME = "user";
+    private final String PASSWORD_PROPERTY_NAME = "password";
+    private final String URLX_PROPERTY_NAME = "urlExtended";
+    private String user;
+    private String password;
+    private String url;
+    private String urlExtended;
+
+    private final Properties dbProperties;
+
     private static final ReentrantLock lock = new ReentrantLock();
 
     private static ConnectionPool instance;
@@ -34,6 +46,8 @@ public class ConnectionPool {
     private ConnectionPool(){
         availableConnections = new ArrayDeque<>(INITIAL_POOL_SIZE);
         takenConnections = new ArrayDeque<>();
+        dbProperties = new Properties();
+        initProperties();
         init();
     }
 
@@ -52,17 +66,40 @@ public class ConnectionPool {
         return instance;
     }
 
+    private void initProperties(){
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE)) {
+            dbProperties.load(inputStream);
+            if (dbProperties.isEmpty()) {
+                throw new Exception("DB properties has not been loaded");
+            }
+            url = dbProperties.getProperty(URL_PROPERTY_NAME);
+            urlExtended = dbProperties.getProperty(URLX_PROPERTY_NAME);
+            user = dbProperties.getProperty(USER_PROPERTY_NAME);
+            password = dbProperties.getProperty(PASSWORD_PROPERTY_NAME);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
     public Connection retrieveConnection(){
         lock.lock();
-        try{
-            //todo: pool extension
+        try {
+            if (availableConnections.isEmpty() && takenConnections.size() < MAX_POOL_SIZE) {
+                for (int i = 0; i < INCREMENT_SIZE; i++) {
+                    final Connection conn = DriverManager.getConnection(urlExtended, user, password);
+                    final ProxyConnection proxyConnection = new ProxyConnection(conn);
+                    availableConnections.add(proxyConnection);
+                }
+            }
             Connection connection = availableConnections.peek();
             takenConnections.add((ProxyConnection) connection);
             return connection;
-        }
-        finally {
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
             lock.unlock();
         }
+        return null;
     }
 
     public void returnConnection(Connection connection){
@@ -81,9 +118,7 @@ public class ConnectionPool {
         registerDrivers();
         try {
             for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
-                final Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb_model?serverTimezone=Europe/Minsk&allowPublicKeyRetrieval=true&useSSL=false",
-                        "root", "root");
-                //todo: take info from properties
+                final Connection conn = DriverManager.getConnection(urlExtended, user, password);
                 final ProxyConnection proxyConnection = new ProxyConnection(conn);
                 availableConnections.add(proxyConnection);
             }
@@ -95,7 +130,7 @@ public class ConnectionPool {
     private void registerDrivers(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            DriverManager.registerDriver(DriverManager.getDriver("jdbc:mysql://localhost:3306/mydb_model"));
+            DriverManager.registerDriver(DriverManager.getDriver(url));
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
