@@ -13,7 +13,7 @@
 <html>
 <head>
     <title><fmt:message key="pagetitle.guest"/></title>
-    <link rel="icon" type="image/ico" href="${pageContext.request.contextPath}/img/favicon.ico" />
+    <link rel="icon" type="image/ico" href="${pageContext.request.contextPath}/img/subscription.ico" />
     <link href="${pageContext.request.contextPath}/css/guestPage.css" rel="stylesheet" type="text/css">
 </head>
 <jsp:include page="indexHeader.jsp"/>

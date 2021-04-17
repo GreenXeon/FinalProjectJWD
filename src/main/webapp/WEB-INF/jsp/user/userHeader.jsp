@@ -9,8 +9,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${cookie['locale'].value}"/>
 <fmt:setBundle basename="localization"/>
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/subscription.ico" />
-<link href="${pageContext.request.contextPath}/css/userHeader.css" rel="stylesheet" type="text/css">
+<head>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/subscription.ico" />
+    <link href="${pageContext.request.contextPath}/css/userHeader.css" rel="stylesheet" type="text/css">
+</head>
 <header class="site-header">
     <div class="page-title"><h2><fmt:message key="userheader.title"/></h2></div>
     <span class="menu">

@@ -17,11 +17,15 @@ public enum LogoutCommand implements Command {
     public Route execute(RequestContext request, ResponseContext response) {
         Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies){
+                if(!cookie.getName().equals(LOCALE_COOKIE_NAME)) {
                     cookie.setMaxAge(0);
                     cookie.setValue("");
                     cookie.setPath("/");
                     response.addCookie(cookie);
-
+                } else {
+                    cookie.setValue(Language.en.name());
+                    response.addCookie(cookie);
+                }
             }
         request.invalidateSession();
         return ShowGuestPageCommand.INSTANCE.execute(request, response);
