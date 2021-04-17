@@ -1,7 +1,7 @@
 package by.epam.jwd.finalproj.dao.impl;
 
 import by.epam.jwd.finalproj.dao.CommonDao;
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -49,7 +49,7 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBigDecimal(7),
                         resultSet.getTimestamp(8),
                         resultSet.getBoolean(10),
-                        Roles.findRoleById(resultSet.getInt(9))
+                        Role.findRoleById(resultSet.getInt(9))
                 );
                 users.add(user);
             }
@@ -125,7 +125,7 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBigDecimal(7),
                         resultSet.getTimestamp(8),
                         resultSet.getBoolean(10),
-                        Roles.findRoleById(resultSet.getInt(9))
+                        Role.findRoleById(resultSet.getInt(9))
                 );
                 return Optional.of(user);
             }
@@ -260,7 +260,7 @@ public class UserDao implements CommonDao<User> {
                         resultSet.getBigDecimal(7),
                         resultSet.getTimestamp(8),
                         resultSet.getBoolean(10),
-                        Roles.findRoleById(resultSet.getInt(9))
+                        Role.findRoleById(resultSet.getInt(9))
                 );
                 return Optional.of(user);
             }

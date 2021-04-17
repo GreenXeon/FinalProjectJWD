@@ -1,6 +1,6 @@
 package by.epam.jwd.finalproj.model.user;
 
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -15,9 +15,9 @@ public class User {
     private BigDecimal cash;
     private Timestamp registrationDate;
     private boolean isBlocked;
-    private Roles role;
+    private Role role;
 
-    public User(int id, String login, String password, String name, String surname, String email, BigDecimal cash, Timestamp registrationDate, boolean isBlocked, Roles role) {
+    public User(int id, String login, String password, String name, String surname, String email, BigDecimal cash, Timestamp registrationDate, boolean isBlocked, Role role) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -84,7 +84,7 @@ public class User {
             return this;
         }
 
-        public Builder withRole(Roles role){
+        public Builder withRole(Role role){
             user.role = role;
             return this;
         }
@@ -130,7 +130,58 @@ public class User {
         return isBlocked;
     }
 
-    public Roles getRole() {
+    public Role getRole() {
         return role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (isBlocked != user.isBlocked) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (cash != null ? !cash.equals(user.cash) : user.cash != null) return false;
+        if (registrationDate != null ? !registrationDate.equals(user.registrationDate) : user.registrationDate != null)
+            return false;
+        return role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (cash != null ? cash.hashCode() : 0);
+        result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
+        result = 31 * result + (isBlocked ? 1 : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", cash=" + cash +
+                ", registrationDate=" + registrationDate +
+                ", isBlocked=" + isBlocked +
+                ", role=" + role +
+                '}';
     }
 }

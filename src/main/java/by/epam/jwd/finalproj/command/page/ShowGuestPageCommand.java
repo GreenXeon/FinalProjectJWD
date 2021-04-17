@@ -9,6 +9,7 @@ import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 
 import java.util.Collections;
 import java.util.List;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowGuestPageCommand implements Command {
     INSTANCE;
@@ -33,15 +34,15 @@ public enum ShowGuestPageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        String phraseToFind = request.getParameter("finder");
+        String phraseToFind = request.getParameter(FINDER);
         if (phraseToFind == null || phraseToFind.isEmpty()){
             final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
-            request.setAttribute("periodicals", periodicals);
+            request.setAttribute(PERIODICALS, periodicals);
             return GUEST_PAGE_RESPONSE;
         }
         PeriodicalService periodicalService = PeriodicalService.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(phraseToFind);
-        request.setAttribute("periodicals", foundPeriodicals);
+        request.setAttribute(PERIODICALS, foundPeriodicals);
         return GUEST_PAGE_RESPONSE;
     }
 }

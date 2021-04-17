@@ -34,7 +34,7 @@
         <br><br>
         <button type="submit"><fmt:message key="button.signin"/></button>
         <br>
-        ${errorMessage}
+        <h3>${errorMessage}</h3>
     </form>
 </div>
 </body>

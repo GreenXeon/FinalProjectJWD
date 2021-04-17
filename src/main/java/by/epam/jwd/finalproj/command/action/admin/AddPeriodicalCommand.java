@@ -7,9 +7,11 @@ import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowAddPeriodicalCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
+import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalType;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
+import by.epam.jwd.finalproj.util.ParameterNames;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum AddPeriodicalCommand implements Command {
     INSTANCE;
@@ -34,38 +37,43 @@ public enum AddPeriodicalCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final String name = String.valueOf(request.getParameter("name"));
-            final String author = request.getParameter("author");
-            final LocalDate publishDate = LocalDate.parse(request.getParameter("publishDate"));
-            final PeriodicalType type = PeriodicalType.findById(Integer.parseInt(request.getParameter("type")));
-            final BigDecimal cost = new BigDecimal(request.getParameter("cost")).setScale(2, RoundingMode.UNNECESSARY);
-            final String publisher = request.getParameter("publisher");
-
+            final String name = String.valueOf(request.getParameter(PERIODICAL_NAME));
+            final String author = request.getParameter(PERIODICAL_AUTHOR);
+            final LocalDate publishDate = LocalDate.parse(request.getParameter(PERIODICAL_PUBLISH_DATE));
+            final PeriodicalType type = PeriodicalType.findById(Integer.parseInt(request.getParameter(PERIODICAL_TYPE)));
+            final BigDecimal cost = new BigDecimal(request.getParameter(PERIODICAL_COST)).setScale(2, RoundingMode.UNNECESSARY);
+            final String publisher = request.getParameter(PERIODICAL_PUBLISHER);
+            Route addPeriodicalPage = ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
             if(!isValidPeriodicalName(name) || !isValidPeriodicalAuthor(author) || !isValidPeriodicalCost(cost.toString()) ||
                 !isValidPeriodicalPublisher(publisher)){
-                request.setAttribute("errorMessage", "Check input data!");
-                return ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
+                request.setAttribute(ERROR, "Check input data!");
+                return addPeriodicalPage;
             }
-
             if (periodicalService.findByName(name).isPresent()) {
-                request.setAttribute("errorMessage", "Periodical with this name exists!");
-                return ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
+                request.setAttribute(ERROR, "Periodical with this name exists!");
+                return addPeriodicalPage;
             }
-
-            Route result;
-            PeriodicalDto periodicalToAdd = new PeriodicalDto(0, name, author, publishDate, type, cost, publisher);
+            PeriodicalDto periodicalToAdd = new PeriodicalDto.Builder()
+                    .withName(name)
+                    .withAuthor(author)
+                    .withPublishDate(publishDate)
+                    .withType(type)
+                    .withCost(cost)
+                    .withPublisher(publisher)
+                    .build();
             Optional<PeriodicalDto> newPeriodical = periodicalService.save(periodicalToAdd);
             if (newPeriodical.isPresent()) {
-                logger.info("Periodical is saved");
-                result = ShowMainAdminPageCommand.INSTANCE.execute(request, response);
+                return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
             } else {
-                logger.error("Periodical is not saved");
-                result = ShowErrorPageCommand.INSTANCE.execute(request, response);
+                throw new CommandException("Periodical was not saved!");
             }
-            return result;
         } catch (NumberFormatException | NullPointerException e){
             logger.error(e.getMessage());
-            request.setAttribute("errorMessage", "Check input data!");
+            request.setAttribute(ERROR, "Check input data!");
+            return ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
+        } catch (CommandException e){
+            logger.error(e.getMessage());
+            request.setAttribute(ERROR, e.getMessage());
             return ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
         }
     }

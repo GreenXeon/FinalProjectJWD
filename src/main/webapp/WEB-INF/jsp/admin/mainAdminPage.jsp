@@ -22,6 +22,7 @@
         <a href="${pageContext.request.contextPath}/controller?command=show_add_per"><fmt:message key="button.add.periodical"/></a>
     </div>
     <hr>
+    <h3>${errorMessage}</h3>
     <div class="find-div">
         <form action="controller" method="post">
             <input type="hidden" name="command" value="show_per_admin" />

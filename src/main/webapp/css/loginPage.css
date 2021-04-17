@@ -12,6 +12,10 @@ label{
     display:inline-block;
 }
 
+body h3{
+    color: #ac0319;
+}
+
 button{
     padding: 1%;
     font-family: Arial, sans-serif;

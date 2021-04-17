@@ -28,6 +28,9 @@
         </form>
     </div>
     <hr>
+    <div class="errorMessage">
+        ${errorMessage}
+    </div>
     <c:if test="${not empty requestScope.periodicals}">
         <form action="controller" method="post">
             <input type="hidden" name="command" value="show_subscribe" />
@@ -58,9 +61,7 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <div class="errorMessage">
-                        ${errorMessage}
-                </div>
+
                 <button type="submit" class="submit-button"><fmt:message key="button.subscribe"/></button>
             </div>
         </form>

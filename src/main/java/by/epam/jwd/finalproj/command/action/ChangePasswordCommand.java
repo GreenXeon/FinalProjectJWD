@@ -9,29 +9,33 @@ import by.epam.jwd.finalproj.service.impl.UserService;
 import org.mindrot.jbcrypt.BCrypt;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ChangePasswordCommand implements Command {
     INSTANCE;
 
+    private final int SALT_ROUNDS = 15;
+
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        if(request.getParameter("pass") == null || request.getParameter("rep_pass") == null){
-            request.setAttribute("errorMessage", "Check your data!");
-            return ShowChangePasswordCommand.INSTANCE.execute(request, response);
+        Route result = ShowChangePasswordCommand.INSTANCE.execute(request, response);
+        if(request.getParameter(PASSWORD) == null || request.getParameter(REPEAT_PASSWORD) == null){
+            request.setAttribute(ERROR, "Check your data!");
+            return result;
         }
-        String password = request.getParameter("pass");
-        String repeatPassword = request.getParameter("rep_pass");
+        String password = request.getParameter(PASSWORD);
+        String repeatPassword = request.getParameter(REPEAT_PASSWORD);
         if(!isValidPassword(password) || !isValidPassword(repeatPassword)){
-            request.setAttribute("errorMessage", "Check your data!");
-            return ShowChangePasswordCommand.INSTANCE.execute(request, response);
+            request.setAttribute(ERROR, "Check your data!");
+            return result;
         }
-        int userId = (int) request.getSessionAttribute("userId");
+        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
         UserService userService = UserService.INSTANCE;
         if (!password.equals(repeatPassword)){
-            request.setAttribute("errorMessage", "Passwords are not equal!");
-            return ShowChangePasswordCommand.INSTANCE.execute(request, response);
+            request.setAttribute(ERROR, "Passwords are not equal!");
+            return result;
         }
-        String salt = BCrypt.gensalt(15);
+        String salt = BCrypt.gensalt(SALT_ROUNDS);
         String passwordHash = BCrypt.hashpw(password, salt);
         userService.changeUserPassword(userId, passwordHash);
         return LogoutCommand.INSTANCE.execute(request, response);

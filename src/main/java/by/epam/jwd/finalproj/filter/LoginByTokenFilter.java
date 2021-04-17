@@ -3,7 +3,7 @@ package by.epam.jwd.finalproj.filter;
 import by.epam.jwd.finalproj.command.CommandManager;
 import by.epam.jwd.finalproj.command.WrappingRequestContext;
 import by.epam.jwd.finalproj.command.WrappingResponseContext;
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 @WebFilter
 public class LoginByTokenFilter implements Filter {
@@ -32,18 +33,18 @@ public class LoginByTokenFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String userRole;
-        if (request.getSession().getAttribute("role") == null){
-            userRole = Roles.GUEST.name();
-            request.getSession().setAttribute("role", Roles.GUEST.name());
+        if (request.getSession().getAttribute(SESSION_USER_ROLE) == null){
+            userRole = Role.GUEST.name();
+            request.getSession().setAttribute(SESSION_USER_ROLE, Role.GUEST.name());
         } else {
-            userRole = request.getSession().getAttribute("role").toString();
+            userRole = request.getSession().getAttribute(SESSION_USER_ROLE).toString();
         }
         checkCookieForLocale(request, response);
-        if (userRole.equalsIgnoreCase(Roles.GUEST.name())) {
+        if (userRole.equalsIgnoreCase(Role.GUEST.name())) {
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
                 for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("userToken")) {
+                    if (cookie.getName().equals(USER_TOKEN_COOKIE)) {
                         String rawToken = cookie.getValue();
                         try {
                             String[] splittedToken = rawToken.split(":");
@@ -59,12 +60,11 @@ public class LoginByTokenFilter implements Filter {
                                 throw new Exception("Cookie is not validated");
                             }
                             if (user.get().isBlocked()){
-                                logger.info("banned user");
                                 request.getSession().invalidate();
                                 cookie.setMaxAge(0);
                                 cookie.setValue("");
                                 response.addCookie(cookie);
-                                request.setAttribute("errorMessage", "User is banned");
+                                request.setAttribute(ERROR, "User is banned");
                                 String route = CommandManager.SHOWLOGIN.getCommand().execute(
                                         WrappingRequestContext.of(request), WrappingResponseContext.of(response)
                                 ).getPage();
@@ -72,13 +72,13 @@ public class LoginByTokenFilter implements Filter {
                                 dispatcher.forward(request, response);
                                 return;
                             }
-                            request.getSession().setAttribute("login", user.get().getLogin());
-                            request.getSession().setAttribute("userId", user.get().getId());
-                            request.getSession().setAttribute("role", user.get().getRole().name());
+                            request.getSession().setAttribute(SESSION_USER_LOGIN, user.get().getLogin());
+                            request.getSession().setAttribute(SESSION_USER_ID, user.get().getId());
+                            request.getSession().setAttribute(SESSION_USER_ROLE, user.get().getRole().name());
                             filterChain.doFilter(servletRequest, servletResponse);
                             return;
                         } catch (Exception e) {
-                            request.getSession().setAttribute("role", Roles.GUEST.name());
+                            request.getSession().setAttribute(SESSION_USER_ROLE, Role.GUEST.name());
                             logger.error(e.getMessage());
                             cookie.setMaxAge(0);
                             cookie.setValue("");
@@ -88,11 +88,11 @@ public class LoginByTokenFilter implements Filter {
                 }
             }
         } else {
-            int userId = (int) request.getSession().getAttribute("userId");
+            int userId = (int) request.getSession().getAttribute(SESSION_USER_ID);
             Optional<UserDto> currentUser = userService.findById(userId);
             if (currentUser.get().isBlocked()){
                 request.getSession().invalidate();
-                request.setAttribute("errorMessage", "User is banned");
+                request.setAttribute(ERROR, "User is banned");
                 String route = CommandManager.SHOWLOGIN.getCommand().execute(
                         WrappingRequestContext.of(request), WrappingResponseContext.of(response))
                         .getPage();
@@ -104,7 +104,7 @@ public class LoginByTokenFilter implements Filter {
             if (!userDtoRole.equalsIgnoreCase(userRole)){
                 request.getSession().invalidate();
                 for (Cookie cookie : request.getCookies()) {
-                    if (cookie.getName().equals("userToken")) {
+                    if (cookie.getName().equals(USER_TOKEN_COOKIE)) {
                         cookie.setMaxAge(0);
                         cookie.setValue("");
                         response.addCookie(cookie);
@@ -122,18 +122,18 @@ public class LoginByTokenFilter implements Filter {
     }
 
     private void checkCookieForLocale(HttpServletRequest request, HttpServletResponse response){
-        Cookie localeCookie = null;
+        boolean cookieExists = false;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("locale")) {
-                    localeCookie = cookie;
+                if (cookie.getName().equals(LOCALE_COOKIE_NAME)) {
+                    cookieExists = true;
                     break;
                 }
             }
         }
-        if(localeCookie == null){
-            localeCookie = new Cookie("locale", "en");
+        if(!cookieExists){
+            Cookie localeCookie = new Cookie(LOCALE_COOKIE_NAME, "en");
             localeCookie.setMaxAge(COOKIE_FOR_MONTH);
             response.addCookie(localeCookie);
         }

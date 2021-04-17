@@ -18,6 +18,7 @@
 <jsp:include page="adminHeader.jsp"/>
 <body>
 <c:if test="${not empty requestScope.periodical}">
+    <h3>${errorMessage}</h3>
     <div class="main">
         <form action="controller" method="post">
             <input type="hidden" name="command" value="update_periodical" />
@@ -48,11 +49,10 @@
             <br>
             <label><fmt:message key="periodical.publisher"/></label>
             <br>
-            <input name="publisher" size="30" value="${requestScope.periodical.publisher}" required pattern="^[a-zA-Z0-9 ]{1,50}$"/>
+            <input name="publisher" size="30" value="${requestScope.periodical.publisher}" required pattern="^[a-zA-Z0-9., ]{1,50}$"/>
             <br>
             <button type="submit"><fmt:message key="button.change.periodical"/></button>
             <br>
-                ${errorMessage}
         </form>
     </div>
 </c:if>

@@ -10,6 +10,7 @@ import by.epam.jwd.finalproj.service.impl.PeriodicalService;
 
 import java.util.Collections;
 import java.util.List;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowMainPageCommand implements Command {
     INSTANCE;
@@ -35,16 +36,16 @@ public enum ShowMainPageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        int userId = (int) request.getSessionAttribute("userId");
-        String phraseToFind = request.getParameter("finder");
+        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
+        String phraseToFind = request.getParameter(FINDER);
         if (phraseToFind == null || phraseToFind.isEmpty()){
             final List<PeriodicalDto> periodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());
-            request.setAttribute("periodicals", periodicals);
+            request.setAttribute(PERIODICALS, periodicals);
             return MAIN_PAGE_RESPONSE;
         }
         PeriodicalService periodicalService = PeriodicalService.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
-        request.setAttribute("periodicals", foundPeriodicals);
+        request.setAttribute(PERIODICALS, foundPeriodicals);
         return MAIN_PAGE_RESPONSE;
     }
 }

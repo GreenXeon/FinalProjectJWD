@@ -45,11 +45,11 @@
     <br>
     <label><fmt:message key="periodical.publisher"/></label>
     <br>
-        <input name="publisher" size="30" required pattern="^[a-zA-Z0-9 ]{1,50}$"/>
+        <input name="publisher" size="30" required pattern="^[a-zA-Z0-9., ]{1,50}$"/>
     <br>
     <button type="submit"><fmt:message key="button.add.periodical"/></button>
     <br>
-    ${errorMessage}
+    <h3>${errorMessage}</h3>
 </form>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>

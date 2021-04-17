@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowUpdatePeriodicalCommand implements Command {
     INSTANCE;
@@ -38,18 +39,17 @@ public enum ShowUpdatePeriodicalCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         String periodicalName;
-        if(request.getParameter("periodicalName") == null){
-            periodicalName = (String) request.getAttribute("periodicalName");
+        if(request.getParameter(PERIODICAL_NAME_REQUEST) == null){
+            periodicalName = (String) request.getAttribute(PERIODICAL_NAME_REQUEST);
         } else {
-            periodicalName = request.getParameter("periodicalName");
+            periodicalName = request.getParameter(PERIODICAL_NAME_REQUEST);
         }
-        logger.info(periodicalName);
         Optional<PeriodicalDto> periodical = periodicalService.findByName(periodicalName);
         if (periodical.isPresent()){
-            request.setAttribute("periodical", periodical.get());
+            request.setAttribute(PERIODICAL, periodical.get());
             return SHOW_UPDATE_PER_RESPONSE;
         }
-        logger.info("periodical " + periodicalName + " is not found");
-        return ShowErrorPageCommand.INSTANCE.execute(request, response);
+        logger.info("Periodical " + periodicalName + " is not found");
+        return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
     }
 }

@@ -29,7 +29,6 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             " NOT IN (SELECT periodical_id FROM subscriptions WHERE user_id = ?)";
     private final String GET_ALL_NAMES = "SELECT p_name FROM periodicals";
 
-    @Override
     public Optional<List<Periodical>> findAll() {
         List<Periodical> periodicals = new ArrayList<>();
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){

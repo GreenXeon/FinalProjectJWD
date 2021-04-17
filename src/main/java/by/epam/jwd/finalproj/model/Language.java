@@ -1,6 +1,6 @@
 package by.epam.jwd.finalproj.model;
 
-public enum Languages {
+public enum Language {
     en(1),
     ru(2),
     iw(3);
@@ -11,12 +11,12 @@ public enum Languages {
         return i;
     }
 
-    Languages(int i) {
+    Language(int i) {
         this.i = i;
     }
 
     public static String getLangById(int id){
-        for(Languages lang : values()){
+        for(Language lang : values()){
             if(lang.i == id){
                 return lang.name();
             }

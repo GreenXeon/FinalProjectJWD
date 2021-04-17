@@ -58,7 +58,6 @@ public enum UserService implements CommonService<UserDto> {
 
     public void setUserRole(int userId, int userRole){
         userDao.setUserRole(userId, userRole);
-        logger.info("Status is changed to " + userRole);
     }
 
     public void setUserStatus(int userId, int status){

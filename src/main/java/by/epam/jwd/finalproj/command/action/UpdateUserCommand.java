@@ -7,6 +7,7 @@ import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowProfilePageCommand;
 import by.epam.jwd.finalproj.command.page.ShowUpdatePageCommand;
+import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum UpdateUserCommand implements Command {
     INSTANCE;
@@ -31,35 +33,41 @@ public enum UpdateUserCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            String login = request.getParameter("login");
-            String name = request.getParameter("name");
-            String surname = request.getParameter("surname");
-            String email = request.getParameter("email");
-            int id = (int) request.getSessionAttribute("userId");
-            String sessionLogin = (String) request.getSessionAttribute("login");
-
+            String login = request.getParameter(USER_LOGIN);
+            String name = request.getParameter(USER_NAME);
+            String surname = request.getParameter(USER_SURNAME);
+            String email = request.getParameter(USER_EMAIL);
+            int id = (int) request.getSessionAttribute(SESSION_USER_ID);
+            String sessionLogin = (String) request.getSessionAttribute(SESSION_USER_LOGIN);
             if (!isValidLogin(login) || !isValidUserName(name) || !isValidUserSurname(surname) || !isValidEmail(email)) {
-                request.setAttribute("errorMessage", "Check your data!");
+                request.setAttribute(ERROR, "Check your data!");
                 return ShowUpdatePageCommand.INSTANCE.execute(request, response);
             }
-
             if (userService.userExists(login) && !login.equalsIgnoreCase(sessionLogin)) {
-                request.setAttribute("errorMessage", "User with this login exists!");
+                request.setAttribute(ERROR, "User with this login exists!");
                 return ShowUpdatePageCommand.INSTANCE.execute(request, response);
             }
-            UserDto newUser = new UserDto(id, login, "", name, surname, email, BigDecimal.ZERO, null, false, null);
+            //UserDto newUser = new UserDto(id, login, "", name, surname, email, BigDecimal.ZERO, null, false, null);
+            UserDto newUser = new UserDto.Builder()
+                    .withId(id)
+                    .withLogin(login)
+                    .withName(name)
+                    .withSurname(surname)
+                    .withEmail(email)
+                    .withCash(BigDecimal.ZERO)
+                    .build();
             Optional<UserDto> updatedUser = userService.update(newUser);
             if (!updatedUser.isPresent()) {
                 logger.error("User is not updated");
-                throw new Exception("User is not updated");
+                throw new CommandException("User is not updated");
             }
-            return ShowProfilePageCommand.INSTANCE.execute(request, response);
         } catch (NullPointerException e) {
-            request.setAttribute("errorMessage", "Check your data!");
+            request.setAttribute(ERROR, "Check your data!");
             return ShowUpdatePageCommand.INSTANCE.execute(request, response);
-        } catch (Exception e) {
+        } catch (CommandException e) {
+            request.setAttribute(ERROR, e.getMessage());
             logger.error(e.getMessage());
-            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
+        return ShowProfilePageCommand.INSTANCE.execute(request, response);
     }
 }

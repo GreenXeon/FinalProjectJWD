@@ -1,11 +1,10 @@
 package by.epam.jwd.finalproj.model.user;
 
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 public class UserDto implements Serializable {
     private int id;
@@ -16,10 +15,10 @@ public class UserDto implements Serializable {
     private String email;
     private BigDecimal cash;
     private boolean isBlocked;
-    private Roles role;
+    private Role role;
     private Timestamp registrationDate;
 
-    public UserDto(int id, String login, String password, String name, String surname, String email, BigDecimal cash, Roles role, boolean isBlocked, Timestamp registrationDate) {
+    public UserDto(int id, String login, String password, String name, String surname, String email, BigDecimal cash, Role role, boolean isBlocked, Timestamp registrationDate) {
         this.id = id;
         this.login = login;
         this.password  = password;
@@ -86,7 +85,7 @@ public class UserDto implements Serializable {
             return this;
         }
 
-        public Builder withRole(Roles role){
+        public Builder withRole(Role role){
             userDto.role = role;
             return this;
         }
@@ -132,7 +131,7 @@ public class UserDto implements Serializable {
         return isBlocked;
     }
 
-    public Roles getRole() {
+    public Role getRole() {
         return role;
     }
 
@@ -140,13 +139,34 @@ public class UserDto implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         UserDto userDto = (UserDto) o;
-        return id == userDto.id && isBlocked == userDto.isBlocked && Objects.equals(login, userDto.login) && Objects.equals(password, userDto.password) && Objects.equals(name, userDto.name) && Objects.equals(surname, userDto.surname) && Objects.equals(email, userDto.email) && Objects.equals(cash, userDto.cash) && role == userDto.role && Objects.equals(registrationDate, userDto.registrationDate);
+
+        if (id != userDto.id) return false;
+        if (isBlocked != userDto.isBlocked) return false;
+        if (login != null ? !login.equals(userDto.login) : userDto.login != null) return false;
+        if (password != null ? !password.equals(userDto.password) : userDto.password != null) return false;
+        if (name != null ? !name.equals(userDto.name) : userDto.name != null) return false;
+        if (surname != null ? !surname.equals(userDto.surname) : userDto.surname != null) return false;
+        if (email != null ? !email.equals(userDto.email) : userDto.email != null) return false;
+        if (cash != null ? !cash.equals(userDto.cash) : userDto.cash != null) return false;
+        if (role != userDto.role) return false;
+        return registrationDate != null ? registrationDate.equals(userDto.registrationDate) : userDto.registrationDate == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, name, surname, email, cash, isBlocked, role, registrationDate);
+        int result = id;
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (cash != null ? cash.hashCode() : 0);
+        result = 31 * result + (isBlocked ? 1 : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
+        return result;
     }
 
     @Override

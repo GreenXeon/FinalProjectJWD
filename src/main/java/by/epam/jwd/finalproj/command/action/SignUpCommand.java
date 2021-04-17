@@ -7,7 +7,7 @@ import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowSignUpPageCommand;
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum SignUpCommand implements Command {
     INSTANCE;
@@ -31,28 +32,29 @@ public enum SignUpCommand implements Command {
         this.userService = UserService.INSTANCE;
     }
 
+    private final int SALT_ROUNDS = 15;
+
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final String login = request.getParameter("login").trim();
-            final String password = request.getParameter("password").trim();
-            final String passwordSecond = request.getParameter("passwordSecond").trim();
-            final String userEmail = request.getParameter("email").trim();
-
+            final String login = request.getParameter(USER_LOGIN).trim();
+            final String password = request.getParameter(USER_PASSWORD).trim();
+            final String passwordSecond = request.getParameter(SECOND_PASSWORD).trim();
+            final String userEmail = request.getParameter(USER_EMAIL).trim();
             Route errorResult = ShowSignUpPageCommand.INSTANCE.execute(request, response);
             if(!isValidLogin(login) || !isValidPassword(password) || !isValidPassword(passwordSecond) || !isValidEmail(userEmail)) {
-                request.setAttribute("errorMessage", "Check your data!");
+                request.setAttribute(ERROR, "Check your data!");
                 return errorResult;
             }
             if(!password.equals(passwordSecond)){
-                request.setAttribute("errorMessage", "Passwords differ!");
+                request.setAttribute(ERROR, "Passwords differ!");
                 return errorResult;
             }
             if (userService.userExists(login)){
-                request.setAttribute("errorMessage", "User with this login exists!");
+                request.setAttribute(ERROR, "User with this login exists!");
                 return errorResult;
             }
-            String salt = BCrypt.gensalt(15);
+            String salt = BCrypt.gensalt(SALT_ROUNDS);
             String passwordHash = BCrypt.hashpw(password, salt);
             Optional<UserDto> user = userService.save(new UserDto.Builder()
                     .withLogin(login)
@@ -60,23 +62,18 @@ public enum SignUpCommand implements Command {
                     .withEmail(userEmail)
                     .withCash(BigDecimal.ZERO)
                     .withRegistrationDate(new Timestamp(System.currentTimeMillis()))
-                    .withRole(Roles.USER)
+                    .withRole(Role.USER)
                     .build());
             if (user.isPresent()) {
-                logger.info("saved");
                 return ShowLoginPageCommand.INSTANCE.execute(request, response);
             } else {
-                logger.error("User is not signed up");
-                request.setAttribute("errorMessage", "User is not signed up");
+                request.setAttribute(ERROR, "User is not signed up");
                 return errorResult;
             }
         } catch (NullPointerException e) {
             logger.error("Incorrect data for sign up");
-            request.setAttribute("errorMessage", "Check your data!");
+            request.setAttribute(ERROR, "Check your data!");
             return ShowSignUpPageCommand.INSTANCE.execute(request, response);
-        } catch (Exception e){
-            logger.error(e.getMessage());
-            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
     }
 }

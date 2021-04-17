@@ -4,10 +4,12 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
+import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowProfilePageCommand implements Command {
     INSTANCE;
@@ -34,13 +36,18 @@ public enum ShowProfilePageCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        int userId = (int) request.getSessionAttribute("userId");
+        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
         UserDto user = userService.findById(userId).orElse(null);
-        if (user == null){
+        try {
+            if (user == null) {
+                throw new CommandException("User is not found");
+            }
+            request.setAttribute(USER, user);
+            return SHOW_PROFILE_RESPONSE;
+        } catch (CommandException e){
             logger.error("User with id " + userId + " is not found");
+            request.setAttribute(ERROR, e.getMessage());
             return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
-        request.setAttribute("user", user);
-        return SHOW_PROFILE_RESPONSE;
     }
 }

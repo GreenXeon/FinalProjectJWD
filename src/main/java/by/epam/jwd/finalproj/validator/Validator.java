@@ -9,7 +9,7 @@ public class Validator {
     private static final String PERIODICAL_NAME_PATTERN = "^[a-zA-Z0-9#№.,-=:;!?& ]{1,50}$";
     private static final String PERIODICAL_AUTHOR_PATTERN = "^[a-zA-Z ]{1,50}$";
     private static final String PERIODICAL_COST_PATTERN = "\\d{1,4}(\\.\\d{1,2})?";
-    private static final String PERIODICAL_PUBLISHER_PATTERN = "^[a-zA-Z0-9 ]{1,50}$";
+    private static final String PERIODICAL_PUBLISHER_PATTERN = "^[a-zA-Z0-9., ]{1,50}$";
 
     public static boolean isValidLogin(String login){
         return !login.isEmpty() && login.matches(LOGIN_PATTERN);

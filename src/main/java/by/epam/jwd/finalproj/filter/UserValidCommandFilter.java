@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 @WebFilter(filterName = "UserValidCommandFilter")
 public class UserValidCommandFilter implements Filter {
@@ -29,7 +30,7 @@ public class UserValidCommandFilter implements Filter {
             filterChain.doFilter(request,response);
             return;
         }
-        String role = request.getSession().getAttribute("role").toString();
+        String role = request.getSession().getAttribute(SESSION_USER_ROLE).toString();
         List<String> permittedCommands;
         switch (role){
             case "GUEST":
@@ -44,7 +45,7 @@ public class UserValidCommandFilter implements Filter {
             default:
                 permittedCommands = Collections.emptyList();
         }
-        String commandName = request.getParameter("command");
+        String commandName = request.getParameter(COMMAND);
         String command;
 
         if (commandName != null){

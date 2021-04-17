@@ -11,7 +11,6 @@ public class ValidatorTest {
         String[] logins = new String[]{
                 "",
                 " ",
-                null,
                 "test",
                 "s123",
                 "sample123+",

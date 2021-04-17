@@ -6,6 +6,7 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
+import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.service.impl.PeriodicalService;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowSubscribeCommand implements Command {
     INSTANCE;
@@ -45,40 +47,37 @@ public enum ShowSubscribeCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        logger.info("ShowSubscribe processing...");
-        if (request.getParameterValues("selected") == null){
-            logger.warn("Array of periodicals is empty!");
-            request.setAttribute("errorMessage", "Choose periodical!");
+        if (request.getParameterValues(SELECTED) == null){
+            request.setAttribute(ERROR, "Choose periodical!");
             return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
-        String[] selectedIds = request.getParameterValues("selected");
+        String[] selectedIds = request.getParameterValues(SELECTED);
         List<PeriodicalDto> periodicalsToSubscribe = new ArrayList<>();
         try{
             for(String selectedPeriodical : selectedIds){
                 int id = Integer.parseInt(selectedPeriodical);
                 PeriodicalDto periodical = periodicalService.findById(id).orElse(null);
                 if (periodical == null) {
-                    logger.warn("Periodical is not available");
-                    request.setAttribute("errorMessage", "Periodical is not available");
+                    request.setAttribute(ERROR, "Periodical is not available");
                     return ShowMainPageCommand.INSTANCE.execute(request, response);
                 }
                 periodicalsToSubscribe.add(periodical);
             }
-            request.setSessionAttribute("subscribePeriodicals", periodicalsToSubscribe);
+            request.setSessionAttribute(SUBSCRIBE_PERIODICALS, periodicalsToSubscribe);
             BigDecimal totalCost = BigDecimal.ZERO;
             for (PeriodicalDto periodical : periodicalsToSubscribe){
                 totalCost = totalCost.add(periodical.getSubCost());
             }
-            request.setSessionAttribute("totalCost", totalCost);
-            Optional<UserDto> user = userService.findByLogin((String)request.getSessionAttribute("login"));
+            request.setSessionAttribute(TOTAL_COST, totalCost);
+            Optional<UserDto> user = userService.findByLogin((String)request.getSessionAttribute(SESSION_USER_LOGIN));
             if (!user.isPresent()){
-                throw new Exception("User is not found");
+                throw new CommandException("User is not found");
             }
-            request.setAttribute("user", user.get());
+            request.setAttribute(USER, user.get());
             return SHOW_SUBSCRIBE_RESPONSE;
-        } catch (Exception e){
+        } catch (CommandException e){
             logger.error(e.getMessage());
-            return ShowErrorPageCommand.INSTANCE.execute(request, response);
+            return ShowMainPageCommand.INSTANCE.execute(request, response);
         }
     }
 }

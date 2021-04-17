@@ -45,7 +45,7 @@ public enum SubscriptionService implements CommonService<SubscriptionDto> {
         }
         List<SubscriptionDto> foundSubscriptions = new ArrayList<>();
         for (SubscriptionDto subscription : subscriptions){
-           if (subscription.getPeriodicalName().toLowerCase().contains(phrase.toLowerCase())){
+           if(subscription.getPeriodicalName().toLowerCase().contains(phrase.toLowerCase())){
                 logger.info(subscription.getPeriodicalName() + " contains " + phrase);
                 foundSubscriptions.add(subscription);
             }

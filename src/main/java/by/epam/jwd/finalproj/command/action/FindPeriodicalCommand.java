@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum FindPeriodicalCommand implements Command {
     INSTANCE;
@@ -20,14 +21,12 @@ public enum FindPeriodicalCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        String phraseToFind = request.getParameter("finder");
-        String userRole = (String) request.getSessionAttribute("role");
-        int userId = (int) request.getSessionAttribute("userId");
-        //todo validation
+        String phraseToFind = request.getParameter(FINDER);
+        String userRole = (String) request.getSessionAttribute(SESSION_USER_ROLE);
+        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
         PeriodicalService periodicalService = PeriodicalService.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
-        logger.info(foundPeriodicals.size());
-        request.setAttribute("periodicals", foundPeriodicals);
+        request.setAttribute(PERIODICALS, foundPeriodicals);
         if (userRole.equalsIgnoreCase("ADMIN")){
             return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
         }

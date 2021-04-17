@@ -8,7 +8,7 @@ import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
-import by.epam.jwd.finalproj.model.Roles;
+import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.impl.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +19,8 @@ import javax.servlet.http.Cookie;
 import java.util.Optional;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum LoginCommand implements Command {
     INSTANCE;
@@ -31,42 +33,41 @@ public enum LoginCommand implements Command {
         userService = UserService.INSTANCE;
     }
 
+    private final int SALT_ROUNDS = 15;
+    private final int COOKIE_FOR_MONTH = 60 * 60 * 24 * 30;
+
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final String login = String.valueOf(request.getParameter("login")).trim();
-            final String password = String.valueOf(request.getParameter("password")).trim();
-            final String rememberMe = request.getParameter("remember");
-
+            Route loginPage = ShowLoginPageCommand.INSTANCE.execute(request, response);
+            final String login = String.valueOf(request.getParameter(USER_LOGIN)).trim();
+            final String password = String.valueOf(request.getParameter(USER_PASSWORD)).trim();
+            final String rememberMe = request.getParameter(REMEMBER_ME);
             if (!isValidLogin(login) || !isValidPassword(password)) {
-                request.setAttribute("errorMessage", "Check your data!");
-                return ShowLoginPageCommand.INSTANCE.execute(request, response);
+                request.setAttribute(ERROR, "Check your data!");
+                return loginPage;
             }
-
             final Optional<UserDto> user = userService.login(login, password);
             if (!user.isPresent()) {
-                request.setSessionAttribute("role", Roles.GUEST);
-                request.setAttribute("errorMessage", "Wrong login or password!");
-                return ShowLoginPageCommand.INSTANCE.execute(request, response);
+                request.setSessionAttribute(SESSION_USER_ROLE, Role.GUEST);
+                request.setAttribute(ERROR, "Wrong login or password!");
+                return loginPage;
             }
-
             if (user.get().isBlocked()) {
-                request.setAttribute("errorMessage", "User is banned");
-                return ShowLoginPageCommand.INSTANCE.execute(request, response);
+                request.setAttribute(ERROR, "User is banned");
+                return loginPage;
             }
-
-            request.setSessionAttribute("login", user.get().getLogin());
-            request.setSessionAttribute("userId", user.get().getId());
-            request.setSessionAttribute("role", user.get().getRole().name());
+            request.setSessionAttribute(SESSION_USER_LOGIN, user.get().getLogin());
+            request.setSessionAttribute(SESSION_USER_ID, user.get().getId());
+            request.setSessionAttribute(SESSION_USER_ROLE, user.get().getRole().name());
             if (rememberMe != null) {
                 final String userData = user.get().getLogin() + ":" + user.get().getRegistrationDate().toString();
-                final String salt = BCrypt.gensalt(10);
+                final String salt = BCrypt.gensalt(SALT_ROUNDS);
                 final String hashedToken = BCrypt.hashpw(userData, salt) + ":" + user.get().getId();
-                Cookie userToken = new Cookie("userToken", hashedToken);
-                userToken.setMaxAge(60 * 60 * 24 * 30);
+                Cookie userToken = new Cookie(USER_TOKEN_COOKIE, hashedToken);
+                userToken.setMaxAge(COOKIE_FOR_MONTH);
                 response.addCookie(userToken);
             }
-
             String userRoleName = user.get().getRole().name();
             if (userRoleName.equalsIgnoreCase("user")) {
                 return ShowMainPageCommand.INSTANCE.execute(request, response);
@@ -75,11 +76,8 @@ public enum LoginCommand implements Command {
             }
         } catch (NullPointerException e){
             logger.error("Incorrect data for login");
-            request.setAttribute("errorMessage", "Check your data!");
+            request.setAttribute(ERROR, "Check your data!");
             return ShowLoginPageCommand.INSTANCE.execute(request, response);
-        } catch (Exception e){
-            logger.error(e.getMessage());
-            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
     }
 }

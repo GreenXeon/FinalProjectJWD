@@ -18,6 +18,10 @@ body{
     background-color: lightblue;
 }
 
+body h3{
+    color: #ac0319;
+}
+
 .main{
     margin-top: 5%;
 }

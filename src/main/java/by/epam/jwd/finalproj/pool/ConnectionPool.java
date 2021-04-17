@@ -1,5 +1,6 @@
 package by.epam.jwd.finalproj.pool;
 
+import by.epam.jwd.finalproj.exception.PropertyReaderException;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,13 +71,13 @@ public class ConnectionPool {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE)) {
             dbProperties.load(inputStream);
             if (dbProperties.isEmpty()) {
-                throw new Exception("DB properties has not been loaded");
+                throw new PropertyReaderException("DB properties has not been loaded");
             }
             url = dbProperties.getProperty(URL_PROPERTY_NAME);
             urlExtended = dbProperties.getProperty(URLX_PROPERTY_NAME);
             user = dbProperties.getProperty(USER_PROPERTY_NAME);
             password = dbProperties.getProperty(PASSWORD_PROPERTY_NAME);
-        } catch (Exception e) {
+        } catch (PropertyReaderException | IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -154,7 +155,6 @@ public class ConnectionPool {
             try {
                 DriverManager.deregisterDriver(drivers.nextElement());
             } catch (SQLException e) {
-                //logging
                 e.printStackTrace();
             }
         }

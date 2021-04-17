@@ -14,5 +14,6 @@ public class SubscribeCommandTest {
     public void createPaymentId() {
         String testId = SubscribeCommand.INSTANCE.createPaymentId();
         assertNotEquals(testId, null);
+        assertNotEquals(testId, "");
     }
 }

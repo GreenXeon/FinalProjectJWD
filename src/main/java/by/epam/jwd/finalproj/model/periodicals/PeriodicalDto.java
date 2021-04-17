@@ -3,7 +3,6 @@ package by.epam.jwd.finalproj.model.periodicals;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class PeriodicalDto implements Serializable {
     private int id;
@@ -22,6 +21,56 @@ public class PeriodicalDto implements Serializable {
         this.author = author;
         this.publishDate = publishDate;
         this.subCost = subCost;
+    }
+
+    public PeriodicalDto() {
+    }
+
+    public static class Builder{
+        private PeriodicalDto periodicalDto;
+
+        public Builder(){
+            periodicalDto = new PeriodicalDto();
+        }
+
+        public Builder withId(int id){
+            periodicalDto.id = id;
+            return this;
+        }
+
+        public Builder withType(PeriodicalType type){
+            periodicalDto.type = type;
+            return this;
+        }
+
+        public Builder withName(String name){
+            periodicalDto.name = name;
+            return this;
+        }
+
+        public Builder withPublisher(String publisher){
+            periodicalDto.publisher = publisher;
+            return this;
+        }
+
+        public Builder withAuthor(String author){
+            periodicalDto.author = author;
+            return this;
+        }
+
+        public Builder withPublishDate(LocalDate publishDate){
+            periodicalDto.publishDate = publishDate;
+            return this;
+        }
+
+        public Builder withCost(BigDecimal cost){
+            periodicalDto.subCost = cost;
+            return this;
+        }
+
+        public PeriodicalDto build(){
+            return periodicalDto;
+        }
     }
 
     public int getId() {
@@ -56,23 +105,39 @@ public class PeriodicalDto implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         PeriodicalDto that = (PeriodicalDto) o;
-        return id == that.id && type == that.type && Objects.equals(name, that.name) && Objects.equals(publisher, that.publisher) && Objects.equals(author, that.author) && Objects.equals(publishDate, that.publishDate) && Objects.equals(subCost, that.subCost);
+
+        if (id != that.id) return false;
+        if (type != that.type) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (publisher != null ? !publisher.equals(that.publisher) : that.publisher != null) return false;
+        if (author != null ? !author.equals(that.author) : that.author != null) return false;
+        if (publishDate != null ? !publishDate.equals(that.publishDate) : that.publishDate != null) return false;
+        return subCost != null ? subCost.equals(that.subCost) : that.subCost == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, name, publisher, author, publishDate, subCost);
+        int result = id;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (publisher != null ? publisher.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
+        result = 31 * result + (subCost != null ? subCost.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return "PeriodicalDTO{" +
-                "type=" + type +
+        return "PeriodicalDto{" +
+                "id=" + id +
+                ", type=" + type +
                 ", name='" + name + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", author='" + author + '\'' +
-                ", publishYear=" + publishDate +
+                ", publishDate=" + publishDate +
                 ", subCost=" + subCost +
                 '}';
     }

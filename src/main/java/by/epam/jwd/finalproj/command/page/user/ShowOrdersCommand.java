@@ -5,12 +5,14 @@ import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
+import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.model.subscription.SubscriptionDto;
 import by.epam.jwd.finalproj.service.impl.SubscriptionService;
 import jdk.nashorn.internal.ir.Optimistic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 import javax.swing.text.html.Option;
 import java.util.Collections;
@@ -42,23 +44,24 @@ public enum ShowOrdersCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        int userId = (int) request.getSessionAttribute("userId");
-        String phraseToFind = request.getParameter("finder");
+        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
+        String phraseToFind = request.getParameter(FINDER);
         if (phraseToFind == null || phraseToFind.isEmpty()){
             Optional<List<SubscriptionDto>> subscriptionsOfUser = subscriptionService.findByUserId(userId);
             try {
                 if (!subscriptionsOfUser.isPresent()){
-                    throw new Exception("Subscriptions are not found");
+                    throw new CommandException("Subscriptions are not found");
                 }
-            } catch (Exception e) {
+            } catch (CommandException e) {
                 logger.error(e.getMessage());
+                request.setAttribute(ERROR, e.getMessage());
                 return ShowErrorPageCommand.INSTANCE.execute(request, response);
             }
-            request.setAttribute("userSubscriptions", subscriptionsOfUser.get());
+            request.setAttribute(USER_SUBSCRIPTIONS, subscriptionsOfUser.get());
             return SHOW_ORDERS_RESPONSE;
         }
         final List<SubscriptionDto> subscriptions = subscriptionService.findByPhrase(userId, phraseToFind);
-        request.setAttribute("userSubscriptions", subscriptions);
+        request.setAttribute(USER_SUBSCRIPTIONS, subscriptions);
         return SHOW_ORDERS_RESPONSE;
     }
 }

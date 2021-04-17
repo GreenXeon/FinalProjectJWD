@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum SubscribeCommand implements Command {
     INSTANCE;
@@ -65,19 +66,19 @@ public enum SubscribeCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        if(request.getParameter("payment-type") == null){
+        if(request.getParameter(PAYMENT_TYPE) == null){
             return ShowSubscribeCommand.INSTANCE.execute(request, response);
         }
-        final String strategyName = request.getParameter("payment-type");
+        final String strategyName = request.getParameter(PAYMENT_TYPE);
 
         final CommonStrategy chosenStrategy = StrategyManager.findStrategyByName(strategyName);
         this.setPaymentStrategy(chosenStrategy);
 
         final String paymentId = createPaymentId();
-        final int userId = (int) request.getSessionAttribute("userId");
+        final int userId = (int) request.getSessionAttribute(USER_ID);
         final Timestamp paymentTime = new Timestamp(System.currentTimeMillis());
         final UserDto currentUser = userService.findById(userId).get();
-        final BigDecimal paymentCost = (BigDecimal) request.getSessionAttribute("totalCost");
+        final BigDecimal paymentCost = (BigDecimal) request.getSessionAttribute(TOTAL_COST);
         if(strategyName.equalsIgnoreCase("online") && paymentCost.compareTo(currentUser.getCash()) == 1){
             logger.warn("Attempt to subscribe online without money");
             return ShowSubscribeCommand.INSTANCE.execute(request, response);
@@ -85,7 +86,7 @@ public enum SubscribeCommand implements Command {
         List<PeriodicalDto> periodicalsToSubscribe = (List<PeriodicalDto>) request.getSessionAttribute("subscribePeriodicals");
         for (PeriodicalDto periodical : periodicalsToSubscribe){
             if (!periodicalService.findById(periodical.getId()).isPresent()){
-                request.setAttribute("errorMessage", "Periodical is not available");
+                request.setAttribute(ERROR, "Periodical is not available");
                 return ShowMainPageCommand.INSTANCE.execute(request, response);
             }
         }

@@ -1,0 +1,41 @@
+package by.epam.jwd.finalproj.util;
+
+public abstract class ParameterNames {
+    public static final String PERIODICAL_ID = "periodicalId";
+    public static final String PERIODICAL_NAME = "name";
+    public static final String PERIODICAL_NAME_REQUEST = "periodicalName";
+    public static final String PERIODICAL_AUTHOR = "author";
+    public static final String PERIODICAL_PUBLISH_DATE = "publishDate";
+    public static final String PERIODICAL_TYPE = "type";
+    public static final String PERIODICAL_COST = "cost";
+    public static final String PERIODICAL_PUBLISHER = "publisher";
+    public static final String ERROR = "errorMessage";
+    public static final String USER_ID = "userId";
+    public static final String PAYMENT_TYPE = "payment-type";
+    public static final String TOTAL_COST = "totalCost";
+    public static final String BALANCER = "balancer";
+    public static final String LANGUAGE = "lang";
+    public static final String PASSWORD = "pass";
+    public static final String REPEAT_PASSWORD = "rep_pass";
+    public static final String SESSION_USER_ID = "userId";
+    public static final String SESSION_USER_ROLE = "role";
+    public static final String SESSION_USER_LOGIN = "login";
+    public static final String FINDER = "finder";
+    public static final String PERIODICALS = "periodicals";
+    public static final String PERIODICAL = "periodical";
+    public static final String USER_LOGIN = "login";
+    public static final String USER_PASSWORD = "password";
+    public static final String REMEMBER_ME = "remember";
+    public static final String LOCALE_COOKIE_NAME = "locale";
+    public static final String USER_TOKEN_COOKIE = "userToken";
+    public static final String SECOND_PASSWORD = "passwordSecond";
+    public static final String USER_EMAIL = "email";
+    public static final String USER_NAME = "name";
+    public static final String USER_SURNAME = "surname";
+    public static final String REQUEST_USERS = "users";
+    public static final String USER = "user";
+    public static final String COMMAND = "command";
+    public static final String SELECTED = "selected";
+    public static final String SUBSCRIBE_PERIODICALS = "subscribePeriodicals";
+    public static final String USER_SUBSCRIPTIONS = "userSubscriptions";
+}

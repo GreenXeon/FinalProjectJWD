@@ -7,6 +7,10 @@ import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.admin.ShowAllUsersCommand;
 import by.epam.jwd.finalproj.model.UserBanStatus;
 import by.epam.jwd.finalproj.service.impl.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum UnbanUserCommand implements Command {
     INSTANCE;
@@ -17,11 +21,19 @@ public enum UnbanUserCommand implements Command {
         this.userService = UserService.INSTANCE;
     }
 
+    private final Logger logger = LogManager.getLogger(UnbanUserCommand.class);
+
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        int userStatus = UserBanStatus.UNBANNED.getI();
-        userService.setUserStatus(userId, userStatus);
-        return ShowAllUsersCommand.INSTANCE.execute(request, response);
+        try {
+            int userId = Integer.parseInt(request.getParameter(USER_ID));
+            int userStatus = UserBanStatus.UNBANNED.getI();
+            userService.setUserStatus(userId, userStatus);
+            return ShowAllUsersCommand.INSTANCE.execute(request, response);
+        } catch (NumberFormatException e){
+            logger.error(e.getMessage());
+            request.setAttribute(ERROR, "Check user id!");
+            return ShowAllUsersCommand.INSTANCE.execute(request, response);
+        }
     }
 }

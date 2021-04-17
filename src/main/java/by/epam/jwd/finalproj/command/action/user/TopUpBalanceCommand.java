@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum TopUpBalanceCommand implements Command {
     INSTANCE;
@@ -25,13 +26,13 @@ public enum TopUpBalanceCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        if(request.getSessionAttribute("userId") == null){
-            request.setAttribute("errorMessage", "Enter balance to top up!");
+        if(request.getSessionAttribute(SESSION_USER_ID) == null){
+            request.setAttribute(ERROR, "Enter balance to top up!");
             return ShowProfilePageCommand.INSTANCE.execute(request, response);
         }
-        final int userId = (int) request.getSessionAttribute("userId");
+        final int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
         try {
-            BigDecimal sumToTopUp = new BigDecimal(request.getParameter("balancer"));
+            BigDecimal sumToTopUp = new BigDecimal(request.getParameter(BALANCER));
             boolean result = userService.topUpUserBalance(userId, sumToTopUp);
             if (!result){
                 logger.error("Balance is not updated");
@@ -39,7 +40,7 @@ public enum TopUpBalanceCommand implements Command {
             }
             return ShowProfilePageCommand.INSTANCE.execute(request, response);
         } catch (NumberFormatException e){
-            request.setAttribute("errorMessage", "Enter correct value!");
+            request.setAttribute(ERROR, "Enter correct value!");
             return ShowProfilePageCommand.INSTANCE.execute(request, response);
         }
     }
