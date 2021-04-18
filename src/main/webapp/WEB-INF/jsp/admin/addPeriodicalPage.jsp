@@ -12,7 +12,6 @@
 <html>
 <head>
     <title><fmt:message key="pagetitle.add.periodical"/></title>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/todayPicker.js"></script>
     <link href="${pageContext.request.contextPath}/css/addPeriodicalPage.css" rel="stylesheet" type="text/css">
 </head>
 <jsp:include page="adminHeader.jsp"/>
@@ -53,4 +52,5 @@
 </form>
 </body>
 <jsp:include page="${pageContext.request.contextPath}/WEB-INF/jsp/footer.jsp"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/todayPicker.js"></script>
 </html>

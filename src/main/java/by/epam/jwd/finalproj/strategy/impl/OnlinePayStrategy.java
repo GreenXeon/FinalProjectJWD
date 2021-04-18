@@ -1,11 +1,8 @@
 package by.epam.jwd.finalproj.strategy.impl;
 
-import by.epam.jwd.finalproj.dao.impl.PaymentDao;
-import by.epam.jwd.finalproj.model.payment.Payment;
 import by.epam.jwd.finalproj.model.payment.PaymentDto;
-import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
-import by.epam.jwd.finalproj.service.impl.PaymentService;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.PaymentServiceImpl;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import by.epam.jwd.finalproj.strategy.CommonStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,13 +13,13 @@ import java.util.Optional;
 
 public class OnlinePayStrategy implements CommonStrategy {
 
-    private final PaymentService paymentService;
+    private final PaymentServiceImpl paymentService;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     public OnlinePayStrategy(){
-        this.paymentService = PaymentService.INSTANCE;
-        this.userService = UserService.INSTANCE;
+        this.paymentService = PaymentServiceImpl.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(OnlinePayStrategy.class);

@@ -1,8 +1,7 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.dao.CommonDao;
+import by.epam.jwd.finalproj.dao.PaymentDao;
 import by.epam.jwd.finalproj.model.payment.Payment;
-import by.epam.jwd.finalproj.model.payment.PaymentDto;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,20 +9,14 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
-public class PaymentDao implements CommonDao<Payment> {
+public class PaymentDaoImpl implements PaymentDao {
 
     private final String CREATE_PAYMENT = "INSERT INTO payments (p_id, user_id, payment_time, payment_cost)" +
             "VALUES (?, ?, ?, ?)";
 
-    private final Logger logger = LogManager.getLogger(PaymentDao.class);
-
-    @Override
-    public Optional<List<Payment>> findAll() {
-        return Optional.empty();
-    }
+    private final Logger logger = LogManager.getLogger(PaymentDaoImpl.class);
 
     @Override
     public Optional<Payment> save(Payment entity) {
@@ -37,22 +30,11 @@ public class PaymentDao implements CommonDao<Payment> {
             if (insertedRows == 0){
                 throw new SQLException("Payment " + entity.getPaymentId() + " was not inserted");
             }
-            logger.info("Payment " + entity.getPaymentId() + " was successfully inserted");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             logger.error(throwables.getMessage());
             return Optional.empty();
         }
-    }
-
-    @Override
-    public Optional<Payment> update(Payment entity) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(int id) {
-        return false;
     }
 }

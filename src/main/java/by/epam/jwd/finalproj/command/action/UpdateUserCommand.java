@@ -4,12 +4,11 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowProfilePageCommand;
 import by.epam.jwd.finalproj.command.page.ShowUpdatePageCommand;
 import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,10 +21,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum UpdateUserCommand implements Command {
     INSTANCE;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     UpdateUserCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(UpdateUserCommand.class);
@@ -47,7 +46,6 @@ public enum UpdateUserCommand implements Command {
                 request.setAttribute(ERROR, "User with this login exists!");
                 return ShowUpdatePageCommand.INSTANCE.execute(request, response);
             }
-            //UserDto newUser = new UserDto(id, login, "", name, surname, email, BigDecimal.ZERO, null, false, null);
             UserDto newUser = new UserDto.Builder()
                     .withId(id)
                     .withLogin(login)
@@ -61,6 +59,7 @@ public enum UpdateUserCommand implements Command {
                 logger.error("User is not updated");
                 throw new CommandException("User is not updated");
             }
+            request.setSessionAttribute(SESSION_USER_LOGIN, login);
         } catch (NullPointerException e) {
             request.setAttribute(ERROR, "Check your data!");
             return ShowUpdatePageCommand.INSTANCE.execute(request, response);

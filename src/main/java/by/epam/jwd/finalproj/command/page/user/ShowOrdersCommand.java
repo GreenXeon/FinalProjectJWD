@@ -6,26 +6,22 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.exception.CommandException;
-import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.model.subscription.SubscriptionDto;
-import by.epam.jwd.finalproj.service.impl.SubscriptionService;
-import jdk.nashorn.internal.ir.Optimistic;
+import by.epam.jwd.finalproj.service.impl.SubscriptionServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
-import javax.swing.text.html.Option;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public enum ShowOrdersCommand implements Command {
     INSTANCE;
 
-    private final SubscriptionService subscriptionService;
+    private final SubscriptionServiceImpl subscriptionService;
 
     ShowOrdersCommand(){
-        this.subscriptionService = SubscriptionService.INSTANCE;
+        this.subscriptionService = SubscriptionServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(ShowOrdersCommand.class);

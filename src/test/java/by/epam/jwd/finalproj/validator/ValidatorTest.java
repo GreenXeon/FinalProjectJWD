@@ -67,8 +67,6 @@ public class ValidatorTest {
     @Test
     public void isValidUserName() {
         String[] usernames = new String[]{
-                "",
-                " ",
                 "@",
                 "DJ_Arbuz",
                 "ValeriyAlbertovichZhmyshenko"
@@ -85,8 +83,6 @@ public class ValidatorTest {
     @Test
     public void isValidUserSurname() {
         String[] userSurnames = new String[]{
-                "",
-                " ",
                 "@",
                 "DJ_Arbuz",
                 "ValeriyAlbertovichZhmyshenko"

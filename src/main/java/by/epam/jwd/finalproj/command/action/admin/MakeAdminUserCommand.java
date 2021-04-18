@@ -6,7 +6,7 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.admin.ShowAllUsersCommand;
 import by.epam.jwd.finalproj.model.Role;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
@@ -19,7 +19,7 @@ public enum MakeAdminUserCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        UserService userService = UserService.INSTANCE;
+        UserServiceImpl userService = UserServiceImpl.INSTANCE;
         try {
             int userId = Integer.parseInt(request.getParameter(USER_ID));
             int userRole = Role.USER.getI();

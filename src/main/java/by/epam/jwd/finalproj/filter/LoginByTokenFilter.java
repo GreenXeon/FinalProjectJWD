@@ -5,7 +5,7 @@ import by.epam.jwd.finalproj.command.WrappingRequestContext;
 import by.epam.jwd.finalproj.command.WrappingResponseContext;
 import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -22,7 +22,7 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 @WebFilter
 public class LoginByTokenFilter implements Filter {
 
-    private final UserService userService = UserService.INSTANCE;
+    private final UserServiceImpl userService = UserServiceImpl.INSTANCE;
 
     private final Logger logger = LogManager.getLogger(LoginByTokenFilter.class);
 

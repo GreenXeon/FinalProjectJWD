@@ -1,25 +1,19 @@
 package by.epam.jwd.finalproj.service.impl;
 
-import by.epam.jwd.finalproj.dao.impl.PaymentDao;
+import by.epam.jwd.finalproj.dao.impl.PaymentDaoImpl;
 import by.epam.jwd.finalproj.model.payment.Payment;
 import by.epam.jwd.finalproj.model.payment.PaymentDto;
-import by.epam.jwd.finalproj.service.CommonService;
+import by.epam.jwd.finalproj.service.PaymentService;
 
-import java.util.List;
 import java.util.Optional;
 
-public enum PaymentService implements CommonService<PaymentDto> {
+public enum PaymentServiceImpl implements PaymentService {
     INSTANCE;
 
-    private final PaymentDao paymentDao;
+    private final PaymentDaoImpl paymentDao;
 
-    PaymentService(){
-        this.paymentDao = new PaymentDao();
-    }
-
-    @Override
-    public Optional<List<PaymentDto>> findAll() {
-        return Optional.empty();
+    PaymentServiceImpl(){
+        this.paymentDao = new PaymentDaoImpl();
     }
 
     @Override
@@ -28,16 +22,7 @@ public enum PaymentService implements CommonService<PaymentDto> {
     }
 
     @Override
-    public Optional<PaymentDto> update(PaymentDto dto) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(int id) {
-        return false;
-    }
-
-    private Payment convertToEntity(PaymentDto dto){
+    public Payment convertToEntity(PaymentDto dto){
         return new Payment.Builder()
                 .withId(dto.getPaymentId())
                 .withPaymentCost(dto.getPaymentCost())
@@ -46,7 +31,8 @@ public enum PaymentService implements CommonService<PaymentDto> {
                 .build();
     }
 
-    private PaymentDto convertToDto(Payment payment){
+    @Override
+    public PaymentDto convertToDto(Payment payment){
         return new PaymentDto.Builder()
                 .withId(payment.getPaymentId())
                 .withPaymentCost(payment.getPaymentCost())

@@ -1,6 +1,6 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.dao.CommonDao;
+import by.epam.jwd.finalproj.dao.PeriodicalDao;
 import by.epam.jwd.finalproj.model.periodicals.Periodical;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalType;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
@@ -9,13 +9,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class PeriodicalDao implements CommonDao<Periodical> {
+public class PeriodicalDaoImpl implements PeriodicalDao {
 
-    private final Logger logger = LogManager.getLogger(PeriodicalDao.class);
+    private final Logger logger = LogManager.getLogger(PeriodicalDaoImpl.class);
 
     private final String GET_ALL_PERIODICALS = "SELECT * FROM periodicals";
     private final String GET_PERIODICAL_BY_NAME = "SELECT * FROM periodicals WHERE p_name = (?)";
@@ -27,8 +26,8 @@ public class PeriodicalDao implements CommonDao<Periodical> {
     private final String DELETE_PERIODICAL_BY_ID = "DELETE FROM periodicals WHERE id = ?";
     private final String GET_PERIODICALS_FOR_USER = "SELECT * FROM periodicals WHERE id" +
             " NOT IN (SELECT periodical_id FROM subscriptions WHERE user_id = ?)";
-    private final String GET_ALL_NAMES = "SELECT p_name FROM periodicals";
 
+    @Override
     public Optional<List<Periodical>> findAll() {
         List<Periodical> periodicals = new ArrayList<>();
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
@@ -53,21 +52,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
         }
     }
 
-    public List<String> findAllNames(){
-        List<String> periodicalNames = new ArrayList<>();
-        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
-            final Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(GET_ALL_NAMES);
-            while (resultSet.next()) {
-                periodicalNames.add(resultSet.getString(1));
-            }
-            return periodicalNames;
-        } catch (SQLException throwables) {
-            logger.error(throwables.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
+    @Override
     public Optional<List<Periodical>> findForCurrentUser(int userId){
         List<Periodical> periodicals = new ArrayList<>();
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
@@ -95,7 +80,6 @@ public class PeriodicalDao implements CommonDao<Periodical> {
 
     @Override
     public Optional<Periodical> save(Periodical entity) {
-        logger.info("saving started");
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(ADD_PERIODICAL);
             preparedStatement.setString(1, entity.getName());
@@ -105,7 +89,6 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             preparedStatement.setBigDecimal(5, entity.getSubCost());
             preparedStatement.setString(6, entity.getPublisher());
             int addedRows = preparedStatement.executeUpdate();
-            logger.info(addedRows + " rows were added");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -125,7 +108,6 @@ public class PeriodicalDao implements CommonDao<Periodical> {
             preparedStatement.setString(6, entity.getPublisher());
             preparedStatement.setInt(7, entity.getId());
             int updatedRows = preparedStatement.executeUpdate();
-            logger.info(updatedRows + " row(-s) were updated");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -153,6 +135,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
         }
     }
 
+    @Override
     public Optional<Periodical> findById(int id){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_PERIODICAL_BY_ID);
@@ -177,6 +160,7 @@ public class PeriodicalDao implements CommonDao<Periodical> {
         }
     }
 
+    @Override
     public Optional<Periodical> findByName(String name){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_PERIODICAL_BY_NAME);

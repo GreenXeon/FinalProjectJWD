@@ -4,9 +4,8 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
-import by.epam.jwd.finalproj.service.impl.PeriodicalService;
+import by.epam.jwd.finalproj.service.impl.PeriodicalServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,10 +15,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum ShowUpdatePeriodicalCommand implements Command {
     INSTANCE;
 
-    private final PeriodicalService periodicalService;
+    private final PeriodicalServiceImpl periodicalService;
 
     ShowUpdatePeriodicalCommand(){
-        this.periodicalService = PeriodicalService.INSTANCE;
+        this.periodicalService = PeriodicalServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(ShowUpdatePeriodicalCommand.class);

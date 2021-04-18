@@ -1,18 +1,20 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.dao.CommonDao;
-import by.epam.jwd.finalproj.model.periodicals.Periodical;
+import by.epam.jwd.finalproj.dao.SubscriptionDao;
 import by.epam.jwd.finalproj.model.subscription.Subscription;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SubscriptionDao implements CommonDao<Subscription> {
+public class SubscriptionDaoImpl implements SubscriptionDao {
 
     private final String CREATE_SUBSCRIPTION = "INSERT INTO subscriptions (user_id, periodical_id, sub_date, payment_id, sub_cost) " +
             "VALUES (?, ?, ?, ?, ?)";
@@ -20,12 +22,7 @@ public class SubscriptionDao implements CommonDao<Subscription> {
     private final String GET_SUBSCRIPTIONS_BY_ID = "SELECT s_id, p_name, payment_id, sub_date, sub_cost FROM subscriptions" +
             " INNER JOIN periodicals p ON subscriptions.periodical_id = p.id WHERE user_id = ?";
 
-    private final Logger logger = LogManager.getLogger(SubscriptionDao.class);
-
-    @Override
-    public Optional<List<Subscription>> findAll() {
-        return Optional.empty();
-    }
+    private final Logger logger = LogManager.getLogger(SubscriptionDaoImpl.class);
 
     @Override
     public Optional<Subscription> save(Subscription entity) {
@@ -48,6 +45,7 @@ public class SubscriptionDao implements CommonDao<Subscription> {
         }
     }
 
+    @Override
     public Optional<List<Subscription>> findByUserId(int userId) {
         List<Subscription> subscriptions = new ArrayList<>();
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
@@ -68,18 +66,8 @@ public class SubscriptionDao implements CommonDao<Subscription> {
             return Optional.of(subscriptions);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            logger.error("SQL exception raised");
+            logger.error(throwables.getMessage());
             return Optional.empty();
         }
-    }
-
-    @Override
-    public Optional<Subscription> update(Subscription entity) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(int id) {
-        return false;
     }
 }

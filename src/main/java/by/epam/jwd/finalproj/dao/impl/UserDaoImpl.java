@@ -1,6 +1,6 @@
 package by.epam.jwd.finalproj.dao.impl;
 
-import by.epam.jwd.finalproj.dao.CommonDao;
+import by.epam.jwd.finalproj.dao.UserDao;
 import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.pool.ConnectionPool;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDao implements CommonDao<User> {
+public class UserDaoImpl implements UserDao {
 
-    private final Logger logger = LogManager.getLogger(UserDao.class);
+    private final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
     private final String GET_ALL_USERS = "SELECT * FROM p_users";
     private final String GET_USER_BY_LOGIN = "SELECT * FROM p_users WHERE u_login = (?)";
@@ -74,7 +74,6 @@ public class UserDao implements CommonDao<User> {
             preparedStatement.setTimestamp(7, entity.getRegistrationDate());
             preparedStatement.setInt(8, entity.getRole().getI());
             int rows = preparedStatement.executeUpdate();
-            logger.info(rows + " rows were updated");
             return Optional.of(entity);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -92,7 +91,6 @@ public class UserDao implements CommonDao<User> {
             preparedStatement.setString(4, entity.getEmail());
             preparedStatement.setInt(5, entity.getId());
             int updatedRows = preparedStatement.executeUpdate();
-            logger.info(updatedRows + " row(-s) were updated");
             if (updatedRows == 0){
                 logger.error("User " + entity.getId() + " is not updated");
                 throw new SQLException("User is not updated");
@@ -105,10 +103,6 @@ public class UserDao implements CommonDao<User> {
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
-    }
-
     public Optional<User> findByLogin(String login) {
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BY_LOGIN);
@@ -135,6 +129,7 @@ public class UserDao implements CommonDao<User> {
         return Optional.empty();
     }
 
+    @Override
     public boolean setUserBanStatus(int userId, int status){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_STATUS);
@@ -144,7 +139,6 @@ public class UserDao implements CommonDao<User> {
             if (updatedRows == 0){
                 throw new SQLException("No users were updated");
             }
-            logger.info(updatedRows + " row(-s) were updated");
             return true;
         } catch (SQLException throwables) {
             logger.error(throwables.getMessage());
@@ -152,6 +146,7 @@ public class UserDao implements CommonDao<User> {
         }
     }
 
+    @Override
     public boolean changeUserPassword(int userId, String passwordHash){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PASSWORD);
@@ -161,7 +156,6 @@ public class UserDao implements CommonDao<User> {
             if (updatedRows == 0){
                 throw new SQLException("No users were updated");
             }
-            logger.info(updatedRows + " row(-s) were updated");
             return true;
         } catch (SQLException throwables) {
             logger.error(throwables.getMessage());
@@ -169,6 +163,7 @@ public class UserDao implements CommonDao<User> {
         }
     }
 
+    @Override
     public boolean setUserRole(int userId, int userRole){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_ROLE);
@@ -178,8 +173,6 @@ public class UserDao implements CommonDao<User> {
             if (updatedRows == 0){
                 throw new SQLException("No users were updated");
             }
-            logger.info("New status is " + userRole);
-            logger.info(updatedRows + " row(-s) were updated");
             return true;
         } catch (SQLException throwables) {
             logger.error(throwables.getMessage());
@@ -187,20 +180,7 @@ public class UserDao implements CommonDao<User> {
         }
     }
 
-    public Boolean getUserBanStatus(int userId){
-        try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
-            final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_STATUS);
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                return resultSet.getBoolean(1);
-            }
-        } catch (SQLException throwables) {
-            logger.error(throwables.getMessage());
-        }
-            return null;
-    }
-
+    @Override
     public BigDecimal findUserBalance(int id){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BALANCE);
@@ -215,6 +195,7 @@ public class UserDao implements CommonDao<User> {
         return null;
     }
 
+    @Override
     public boolean userExists(String login){
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(CHECK_EXISTING_USER);
@@ -227,13 +208,13 @@ public class UserDao implements CommonDao<User> {
         }
     }
 
+    @Override
     public boolean setUserBalance(int id, BigDecimal newBalance) {
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()) {
             final PreparedStatement preparedStatement = conn.prepareStatement(SET_USER_BALANCE);
             preparedStatement.setBigDecimal(1, newBalance);
             preparedStatement.setInt(2, id);
             int updatedRows = preparedStatement.executeUpdate();
-            logger.info(updatedRows + " row(-s) were updated");
             if (updatedRows == 0){
                 throw new SQLException("0 rows were updated");
             }
@@ -244,7 +225,8 @@ public class UserDao implements CommonDao<User> {
         }
     }
 
-        public Optional<User> findById(int id) {
+    @Override
+    public Optional<User> findById(int id) {
         try (final Connection conn = ConnectionPool.getInstance().retrieveConnection()){
             final PreparedStatement preparedStatement = conn.prepareStatement(GET_USER_BY_ID);
             preparedStatement.setInt(1, id);

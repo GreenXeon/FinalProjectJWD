@@ -33,11 +33,11 @@
             <br>
             <label><fmt:message key="form.name"/></label>
             <br>
-            <input name="name" size="30" value="${requestScope.user.name}" required pattern="^[a-zA-Z-]{1,20}$"/>
+            <input name="name" size="30" value="${requestScope.user.name}" pattern="^[a-zA-Z-]{0,20}$"/>
             <br>
             <label><fmt:message key="form.surname"/></label>
             <br>
-            <input name="surname" size="30" value="${requestScope.user.surname}" required pattern="^[a-zA-Z-]{1,20}$"/>
+            <input name="surname" size="30" value="${requestScope.user.surname}" pattern="^[a-zA-Z-]{0,20}$"/>
             <br>
             <label><fmt:message key="form.email"/></label>
             <br>

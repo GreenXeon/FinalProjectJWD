@@ -4,12 +4,11 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowSignUpPageCommand;
 import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -26,10 +25,10 @@ public enum SignUpCommand implements Command {
 
     private final Logger logger = LogManager.getLogger(SignUpCommand.class);
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     SignUpCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private final int SALT_ROUNDS = 15;

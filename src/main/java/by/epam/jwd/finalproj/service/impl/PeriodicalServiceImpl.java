@@ -1,26 +1,28 @@
 package by.epam.jwd.finalproj.service.impl;
 
-import by.epam.jwd.finalproj.dao.impl.PeriodicalDao;
+import by.epam.jwd.finalproj.dao.impl.PeriodicalDaoImpl;
 import by.epam.jwd.finalproj.model.periodicals.Periodical;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
-import by.epam.jwd.finalproj.service.CommonService;
+import by.epam.jwd.finalproj.service.PeriodicalService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public enum PeriodicalService implements CommonService<PeriodicalDto> {
+public enum PeriodicalServiceImpl implements PeriodicalService {
     INSTANCE;
 
-    private final PeriodicalDao periodicalDao;
+    private final PeriodicalDaoImpl periodicalDao;
 
-    PeriodicalService(){
-        this.periodicalDao = new PeriodicalDao();
+    PeriodicalServiceImpl(){
+        this.periodicalDao = new PeriodicalDaoImpl();
     }
 
-    private final Logger logger = LogManager.getLogger(PeriodicalService.class);
+    private final Logger logger = LogManager.getLogger(PeriodicalServiceImpl.class);
 
     @Override
     public Optional<List<PeriodicalDto>> findAll() {
@@ -31,6 +33,7 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
                 .collect(Collectors.toList()));
     }
 
+    @Override
     public Optional<List<PeriodicalDto>> findForCurrentUser(int userId){
         Optional<List<Periodical>> periodicals = periodicalDao.findForCurrentUser(userId);
         return periodicals.map(periodical -> periodical
@@ -39,6 +42,7 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
                 .collect(Collectors.toList()));
     }
 
+    @Override
     public List<PeriodicalDto> findPeriodicalByPhrase(int userId, String phrase) {
         List<PeriodicalDto> periodicals = this.findForCurrentUser(userId).orElse(Collections.emptyList());
         if(periodicals.isEmpty()){
@@ -47,13 +51,13 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
         List<PeriodicalDto> foundPeriodicals = new ArrayList<>();
         for (PeriodicalDto periodical : periodicals){
             if (periodical.getName().toLowerCase().contains(phrase.toLowerCase())){
-                logger.info(periodical.getName() + " contains " + phrase);
                 foundPeriodicals.add(periodical);
             }
         }
         return foundPeriodicals;
     }
 
+    @Override
     public List<PeriodicalDto> findPeriodicalByPhrase(String phrase) {
         List<PeriodicalDto> periodicals = this.findAll().orElse(Collections.emptyList());
         if (periodicals.isEmpty()){
@@ -62,17 +66,19 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
         List<PeriodicalDto> foundPeriodicals = new ArrayList<>();
         for (PeriodicalDto periodical : periodicals){
             if (periodical.getName().toLowerCase().contains(phrase.toLowerCase())){
-                logger.info(periodical.getName() + " contains " + phrase);
                 foundPeriodicals.add(periodical);
             }
         }
         return foundPeriodicals;
     }
+
+    @Override
     public Optional<PeriodicalDto> findByName(String name){
         Optional<Periodical> foundPeriodical = periodicalDao.findByName(name);
         return foundPeriodical.map(this::convertToDto);
     }
 
+    @Override
     public Optional<PeriodicalDto> findById(int id){
         Optional<Periodical> foundPeriodical = periodicalDao.findById(id);
         return foundPeriodical.map(this::convertToDto);
@@ -93,7 +99,8 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
         return periodicalDao.delete(id);
     }
 
-    private Periodical convertToEntity(PeriodicalDto dto) {
+    @Override
+    public Periodical convertToEntity(PeriodicalDto dto) {
         return new Periodical(
                 dto.getId(),
                 dto.getName(),
@@ -105,7 +112,8 @@ public enum PeriodicalService implements CommonService<PeriodicalDto> {
         );
     }
 
-    private PeriodicalDto convertToDto(Periodical periodical){
+    @Override
+    public PeriodicalDto convertToDto(Periodical periodical){
         return new PeriodicalDto(
                 periodical.getId(),
                 periodical.getName(),

@@ -1,9 +1,9 @@
 package by.epam.jwd.finalproj.service.impl;
 
-import by.epam.jwd.finalproj.dao.impl.UserDao;
+import by.epam.jwd.finalproj.dao.impl.UserDaoImpl;
 import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.CommonService;
+import by.epam.jwd.finalproj.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -15,17 +15,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public enum UserService implements CommonService<UserDto> {
+public enum UserServiceImpl implements UserService {
     INSTANCE;
 
     private static final String SILLY_PASSWORD = "HelloWorld123";
 
-    private final UserDao userDao;
+    private final UserDaoImpl userDao;
 
-    private final Logger logger = LogManager.getLogger(UserService.class);
+    private final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    UserService() {
-        this.userDao = new UserDao();
+    UserServiceImpl() {
+        this.userDao = new UserDaoImpl();
     }
 
     @Override
@@ -37,6 +37,7 @@ public enum UserService implements CommonService<UserDto> {
                 .collect(Collectors.toList()));
     }
 
+    @Override
     public List<UserDto> findByPhraseLogin(String phrase){
         List<UserDto> users = this.findAll().orElse(Collections.emptyList());
         if(users.isEmpty()){
@@ -51,15 +52,18 @@ public enum UserService implements CommonService<UserDto> {
         return foundUsers;
     }
 
+    @Override
     public Optional<UserDto> findByLogin(String login){
         Optional<User> foundUser = userDao.findByLogin(login);
         return foundUser.map(this::convertToDto);
     }
 
+    @Override
     public void setUserRole(int userId, int userRole){
         userDao.setUserRole(userId, userRole);
     }
 
+    @Override
     public void setUserStatus(int userId, int status){
         boolean result = userDao.setUserBanStatus(userId, status);
         if (!result){
@@ -69,18 +73,17 @@ public enum UserService implements CommonService<UserDto> {
         }
     }
 
+    @Override
     public boolean userExists(String login){
         return userDao.userExists(login);
     }
 
+    @Override
     public void changeUserPassword(int userId, String passwordHash){
         userDao.changeUserPassword(userId, passwordHash);
     }
 
-    public boolean getUserStatus(int userId){
-        return userDao.getUserBanStatus(userId);
-    }
-
+    @Override
     public Optional<UserDto> findById(int id){
         Optional<User> foundUser = userDao.findById(id);
         return foundUser.map(this::convertToDto);
@@ -97,31 +100,25 @@ public enum UserService implements CommonService<UserDto> {
     }
 
     @Override
-    public boolean delete(int id) {
-        return userDao.delete(id);
-    }
-
     public Optional<UserDto> login(String login, String password){
         final Optional<User> user = userDao.findByLogin(login);
         if (user.isPresent()){
             String passwordHash = user.get().getPassword();
             boolean equalPass = BCrypt.checkpw(password, passwordHash);
             if (equalPass){
-                logger.info("User " + login + " is valid");
                 return user.map(this::convertToDto);
             }
             else {
-                logger.info("Password is wrong");
                 return Optional.empty();
             }
         }
         else {
             boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));
-            logger.info("User is not found");
             return Optional.empty();
         }
     }
 
+    @Override
     public boolean topUpUserBalance(int userId, BigDecimal sumOfMoney){
         BigDecimal userBalance = userDao.findUserBalance(userId);
         if (userBalance == null){
@@ -130,15 +127,14 @@ public enum UserService implements CommonService<UserDto> {
         }
         BigDecimal newBalance = userBalance.add(sumOfMoney);
         if (newBalance.compareTo(BigDecimal.ZERO) == -1){
-            logger.warn("User balance can't be less than zero");
             return userDao.setUserBalance(userId, BigDecimal.ZERO);
         } else if (newBalance.compareTo(BigDecimal.valueOf(9999.99)) == 1){
-            logger.warn("User balance can't be more than 9999.99");
             return userDao.setUserBalance(userId, BigDecimal.valueOf(9999.99));
         }
         return userDao.setUserBalance(userId, newBalance);
     }
 
+    @Override
     public boolean lowerUserBalance(int userId, BigDecimal sumToLower){
         BigDecimal userBalance = userDao.findUserBalance(userId);
         if (userBalance == null){
@@ -157,18 +153,13 @@ public enum UserService implements CommonService<UserDto> {
         }
     }
 
-    public BigDecimal getUserBalance(int id){
-        if (userDao.findUserBalance(id) == null){
-            logger.error("Balance is not found");
-        }
-        return userDao.findUserBalance(id);
-    }
-
-    private UserDto convertToDto(User user){
+    @Override
+    public UserDto convertToDto(User user){
         return new UserDto(user.getId(), user.getLogin(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail(), user.getCash(), user.getRole(), user.isBlocked(), user.getRegistrationDate());
     }
 
-    private User convertToEntity(UserDto userDto){
+    @Override
+    public User convertToEntity(UserDto userDto){
         return new User(
                 userDto.getId(),
                 userDto.getLogin(),

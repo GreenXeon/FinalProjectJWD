@@ -6,7 +6,7 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowProfilePageCommand;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,10 +16,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum TopUpBalanceCommand implements Command {
     INSTANCE;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     TopUpBalanceCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(TopUpBalanceCommand.class);

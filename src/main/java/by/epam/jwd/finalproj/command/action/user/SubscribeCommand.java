@@ -11,9 +11,9 @@ import by.epam.jwd.finalproj.command.page.user.ShowSubscribeCommand;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
 import by.epam.jwd.finalproj.model.subscription.SubscriptionDto;
-import by.epam.jwd.finalproj.service.impl.PeriodicalService;
-import by.epam.jwd.finalproj.service.impl.SubscriptionService;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.PeriodicalServiceImpl;
+import by.epam.jwd.finalproj.service.impl.SubscriptionServiceImpl;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import by.epam.jwd.finalproj.strategy.CommonStrategy;
 import by.epam.jwd.finalproj.strategy.StrategyManager;
 import org.apache.logging.log4j.LogManager;
@@ -34,9 +34,9 @@ public enum SubscribeCommand implements Command {
     INSTANCE;
 
     private CommonStrategy paymentStrategy;
-    private SubscriptionService subscriptionService;
-    private PeriodicalService periodicalService;
-    private UserService userService;
+    private SubscriptionServiceImpl subscriptionService;
+    private PeriodicalServiceImpl periodicalService;
+    private UserServiceImpl userService;
 
     private final String PROPERTY_FILE = "email.properties";
 
@@ -57,9 +57,9 @@ public enum SubscribeCommand implements Command {
     }
 
     SubscribeCommand(){
-        this.subscriptionService = SubscriptionService.INSTANCE;
-        this.userService = UserService.INSTANCE;
-        this.periodicalService = PeriodicalService.INSTANCE;
+        this.subscriptionService = SubscriptionServiceImpl.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
+        this.periodicalService = PeriodicalServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(SubscribeCommand.class);

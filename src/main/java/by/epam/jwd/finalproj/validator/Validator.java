@@ -4,8 +4,8 @@ public class Validator {
     private static final String LOGIN_PATTERN = "^[a-zA-Z0-9]{5,50}$";
     private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9#№.,-=:;!?&]{6,50}$";
     private static final String EMAIL_PATTERN = "^[([a-zA-Z0-9_.-]+)@([a-zA-Z0-9.-]{4,})]{6,45}$";
-    private static final String NAME_PATTERN = "^[a-zA-Z-]{1,20}$";
-    private static final String SURNAME_PATTERN = "^[a-zA-Z-]{1,20}$";
+    private static final String NAME_PATTERN = "^[a-zA-Z-]{0,20}$";
+    private static final String SURNAME_PATTERN = "^[a-zA-Z-]{0,20}$";
     private static final String PERIODICAL_NAME_PATTERN = "^[a-zA-Z0-9#№.,-=:;!?& ]{1,50}$";
     private static final String PERIODICAL_AUTHOR_PATTERN = "^[a-zA-Z ]{1,50}$";
     private static final String PERIODICAL_COST_PATTERN = "\\d{1,4}(\\.\\d{1,2})?";
@@ -24,11 +24,11 @@ public class Validator {
     }
 
     public static boolean isValidUserName(String username){
-        return !username.trim().isEmpty() && username.matches(NAME_PATTERN);
+        return username.trim().matches(NAME_PATTERN);
     }
 
     public static boolean isValidUserSurname(String surname){
-        return !surname.trim().isEmpty() && surname.matches(SURNAME_PATTERN);
+        return surname.trim().matches(SURNAME_PATTERN);
     }
 
     public static boolean isValidPeriodicalName(String periodicalName){

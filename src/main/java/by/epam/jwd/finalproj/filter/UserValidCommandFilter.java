@@ -26,7 +26,7 @@ public class UserValidCommandFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String path= request.getRequestURI();
-        if (path.endsWith(".css") || path.endsWith(".ico")){
+        if (path.endsWith(".css") || path.endsWith(".ico") || path.endsWith(".js")){
             filterChain.doFilter(request,response);
             return;
         }

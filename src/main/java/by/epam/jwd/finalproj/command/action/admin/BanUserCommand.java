@@ -4,11 +4,9 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowAllUsersCommand;
 import by.epam.jwd.finalproj.model.UserBanStatus;
-import by.epam.jwd.finalproj.service.impl.UserService;
-import by.epam.jwd.finalproj.util.ParameterNames;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
@@ -16,10 +14,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum BanUserCommand implements Command {
     INSTANCE;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     BanUserCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(BanUserCommand.class);

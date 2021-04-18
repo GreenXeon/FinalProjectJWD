@@ -7,7 +7,7 @@ import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
-import by.epam.jwd.finalproj.service.impl.PeriodicalService;
+import by.epam.jwd.finalproj.service.impl.PeriodicalServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public enum FindPeriodicalCommand implements Command {
         String phraseToFind = request.getParameter(FINDER);
         String userRole = (String) request.getSessionAttribute(SESSION_USER_ROLE);
         int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
-        PeriodicalService periodicalService = PeriodicalService.INSTANCE;
+        PeriodicalServiceImpl periodicalService = PeriodicalServiceImpl.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
         request.setAttribute(PERIODICALS, foundPeriodicals);
         if (userRole.equalsIgnoreCase("ADMIN")){

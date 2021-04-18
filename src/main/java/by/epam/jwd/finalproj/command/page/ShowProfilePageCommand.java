@@ -6,7 +6,7 @@ import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.exception.CommandException;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
@@ -16,10 +16,10 @@ public enum ShowProfilePageCommand implements Command {
 
     private final Logger logger = LogManager.getLogger(ShowProfilePageCommand.class);
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     ShowProfilePageCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private static final Route SHOW_PROFILE_RESPONSE = new Route() {

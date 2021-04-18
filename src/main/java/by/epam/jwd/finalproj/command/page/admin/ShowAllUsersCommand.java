@@ -5,7 +5,7 @@ import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +14,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum ShowAllUsersCommand implements Command {
     INSTANCE;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     ShowAllUsersCommand(){
-        this.userService = UserService.INSTANCE;
+        this.userService = UserServiceImpl.INSTANCE;
     }
 
     private static final Route SHOW_USERS_RESPONSE = new Route() {

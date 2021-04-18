@@ -4,13 +4,12 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowLoginPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.command.page.ShowMainPageCommand;
 import by.epam.jwd.finalproj.model.Role;
 import by.epam.jwd.finalproj.model.user.UserDto;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -20,17 +19,16 @@ import java.util.Optional;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
-import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum LoginCommand implements Command {
     INSTANCE;
 
     private final Logger logger = LogManager.getLogger(LoginCommand.class);
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     LoginCommand() {
-        userService = UserService.INSTANCE;
+        userService = UserServiceImpl.INSTANCE;
     }
 
     private final int SALT_ROUNDS = 15;

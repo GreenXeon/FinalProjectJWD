@@ -5,7 +5,7 @@ import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
 import by.epam.jwd.finalproj.command.page.ShowChangePasswordCommand;
-import by.epam.jwd.finalproj.service.impl.UserService;
+import by.epam.jwd.finalproj.service.impl.UserServiceImpl;
 import org.mindrot.jbcrypt.BCrypt;
 
 import static by.epam.jwd.finalproj.validator.Validator.*;
@@ -30,7 +30,7 @@ public enum ChangePasswordCommand implements Command {
             return result;
         }
         int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
-        UserService userService = UserService.INSTANCE;
+        UserServiceImpl userService = UserServiceImpl.INSTANCE;
         if (!password.equals(repeatPassword)){
             request.setAttribute(ERROR, "Passwords are not equal!");
             return result;

@@ -1,7 +1,7 @@
 package by.epam.jwd.finalproj.strategy.impl;
 
 import by.epam.jwd.finalproj.model.payment.PaymentDto;
-import by.epam.jwd.finalproj.service.impl.PaymentService;
+import by.epam.jwd.finalproj.service.impl.PaymentServiceImpl;
 import by.epam.jwd.finalproj.strategy.CommonStrategy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +12,10 @@ import java.util.Optional;
 
 public class CreditPayStrategy implements CommonStrategy {
 
-    private final PaymentService paymentService;
+    private final PaymentServiceImpl paymentService;
 
     public CreditPayStrategy(){
-        this.paymentService = PaymentService.INSTANCE;
+        this.paymentService = PaymentServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(OnlinePayStrategy.class);

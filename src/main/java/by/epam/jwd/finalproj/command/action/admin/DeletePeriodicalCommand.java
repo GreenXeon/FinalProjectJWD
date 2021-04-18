@@ -4,11 +4,9 @@ import by.epam.jwd.finalproj.command.Command;
 import by.epam.jwd.finalproj.command.RequestContext;
 import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.command.Route;
-import by.epam.jwd.finalproj.command.page.ShowErrorPageCommand;
 import by.epam.jwd.finalproj.command.page.admin.ShowMainAdminPageCommand;
 import by.epam.jwd.finalproj.exception.CommandException;
-import by.epam.jwd.finalproj.service.impl.PeriodicalService;
-import by.epam.jwd.finalproj.util.ParameterNames;
+import by.epam.jwd.finalproj.service.impl.PeriodicalServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +15,10 @@ import static by.epam.jwd.finalproj.util.ParameterNames.*;
 public enum DeletePeriodicalCommand implements Command {
     INSTANCE;
 
-    private final PeriodicalService periodicalService;
+    private final PeriodicalServiceImpl periodicalService;
 
     DeletePeriodicalCommand(){
-        this.periodicalService = PeriodicalService.INSTANCE;
+        this.periodicalService = PeriodicalServiceImpl.INSTANCE;
     }
 
     private final Logger logger = LogManager.getLogger(DeletePeriodicalCommand.class);

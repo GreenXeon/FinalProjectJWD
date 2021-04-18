@@ -1,10 +1,9 @@
 package by.epam.jwd.finalproj.service.impl;
 
-import by.epam.jwd.finalproj.dao.impl.SubscriptionDao;
-import by.epam.jwd.finalproj.model.periodicals.PeriodicalDto;
+import by.epam.jwd.finalproj.dao.impl.SubscriptionDaoImpl;
 import by.epam.jwd.finalproj.model.subscription.Subscription;
 import by.epam.jwd.finalproj.model.subscription.SubscriptionDto;
-import by.epam.jwd.finalproj.service.CommonService;
+import by.epam.jwd.finalproj.service.SubscriptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,22 +13,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public enum SubscriptionService implements CommonService<SubscriptionDto> {
+public enum SubscriptionServiceImpl implements SubscriptionService {
     INSTANCE;
 
-    private final SubscriptionDao subscriptionDao;
+    private final SubscriptionDaoImpl subscriptionDao;
 
-    SubscriptionService(){
-        this.subscriptionDao = new SubscriptionDao();
+    SubscriptionServiceImpl(){
+        this.subscriptionDao = new SubscriptionDaoImpl();
     }
 
-    private final Logger logger = LogManager.getLogger(SubscriptionService.class);
-    
+    private final Logger logger = LogManager.getLogger(SubscriptionServiceImpl.class);
+
     @Override
-    public Optional<List<SubscriptionDto>> findAll() {
-        return Optional.empty();
-    }
-
     public Optional<List<SubscriptionDto>> findByUserId(int userId){
         Optional<List<Subscription>> subscriptionsByUserId = subscriptionDao.findByUserId(userId);
         return subscriptionsByUserId.map(subscriptions -> subscriptions
@@ -38,6 +33,7 @@ public enum SubscriptionService implements CommonService<SubscriptionDto> {
                 .collect(Collectors.toList()));
     }
 
+    @Override
     public List<SubscriptionDto> findByPhrase(int userId, String phrase){
         List<SubscriptionDto> subscriptions = this.findByUserId(userId).orElse(Collections.emptyList());
         if(subscriptions.isEmpty()){
@@ -46,7 +42,6 @@ public enum SubscriptionService implements CommonService<SubscriptionDto> {
         List<SubscriptionDto> foundSubscriptions = new ArrayList<>();
         for (SubscriptionDto subscription : subscriptions){
            if(subscription.getPeriodicalName().toLowerCase().contains(phrase.toLowerCase())){
-                logger.info(subscription.getPeriodicalName() + " contains " + phrase);
                 foundSubscriptions.add(subscription);
             }
         }
@@ -59,16 +54,7 @@ public enum SubscriptionService implements CommonService<SubscriptionDto> {
     }
 
     @Override
-    public Optional<SubscriptionDto> update(SubscriptionDto dto) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(int id) {
-        return false;
-    }
-
-    private Subscription convertToEntity(SubscriptionDto dto){
+    public Subscription convertToEntity(SubscriptionDto dto){
         return new Subscription.Builder()
             .withUserId(dto.getUserId())
             .withSubscriptionCost(dto.getSubscriptionCost())
@@ -79,7 +65,8 @@ public enum SubscriptionService implements CommonService<SubscriptionDto> {
             .build();
     }
 
-    private SubscriptionDto convertToDto(Subscription entity){
+    @Override
+    public SubscriptionDto convertToDto(Subscription entity){
         return new SubscriptionDto.Builder()
                 .withId(entity.getId())
                 .withUserId(entity.getUserId())
