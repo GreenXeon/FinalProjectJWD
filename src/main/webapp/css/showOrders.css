@@ -12,6 +12,10 @@ table{
     margin-top: 25px;
 }
 
+body h3{
+    color: #ac0319;
+}
+
 .orders{
     margin-top: 40px;
     text-align: center;

@@ -12,6 +12,10 @@ body{
     padding-bottom: 10%;
 }
 
+body h3{
+    color: #ac0319;
+}
+
 th, td, tr{
     font-family: Arial, sans-serif;
     font-size: 17px;

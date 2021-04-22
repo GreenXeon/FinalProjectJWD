@@ -35,14 +35,19 @@ public enum ShowGuestPageCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         String phraseToFind = request.getParameter(FINDER);
+        final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         if (phraseToFind == null || phraseToFind.isEmpty()){
-            final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
             request.setAttribute(PERIODICALS, periodicals);
             return GUEST_PAGE_RESPONSE;
         }
         PeriodicalServiceImpl periodicalService = PeriodicalServiceImpl.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(phraseToFind);
-        request.setAttribute(PERIODICALS, foundPeriodicals);
+        if (foundPeriodicals.isEmpty()){
+            request.setAttribute(ERROR, "Periodicals are not found");
+            request.setAttribute(PERIODICALS, periodicals);
+        } else {
+            request.setAttribute(PERIODICALS, foundPeriodicals);
+        }
         return GUEST_PAGE_RESPONSE;
     }
 }

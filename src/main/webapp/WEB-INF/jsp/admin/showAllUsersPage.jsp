@@ -68,7 +68,7 @@
                             </c:if></td>
                         <td>${user.email}</td>
                         <td>${user.registrationDate}</td>
-                        <td>${user.cash}</td>
+                        <td>${user.cash} <fmt:message key="currency"/></td>
                         <td>${user.role}</td>
                         <td>
                             <c:if test="${user.blocked == false}">

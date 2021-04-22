@@ -27,6 +27,7 @@
             <br>
         </form>
     </div>
+    <h3>${errorMessage}</h3>
     <hr>
     <c:if test="${not empty requestScope.userSubscriptions}">
         <div class="orders">

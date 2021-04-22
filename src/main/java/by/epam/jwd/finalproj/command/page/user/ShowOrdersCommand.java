@@ -40,24 +40,44 @@ public enum ShowOrdersCommand implements Command {
 
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
-        int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
-        String phraseToFind = request.getParameter(FINDER);
-        if (phraseToFind == null || phraseToFind.isEmpty()){
+        try {
+            int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
+            String phraseToFind = request.getParameter(FINDER);
             Optional<List<SubscriptionDto>> subscriptionsOfUser = subscriptionService.findByUserId(userId);
-            try {
-                if (!subscriptionsOfUser.isPresent()){
+            if (phraseToFind == null || phraseToFind.isEmpty()) {
+                if (!subscriptionsOfUser.isPresent()) {
                     throw new CommandException("Subscriptions are not found");
+                } else {
+                    if (subscriptionsOfUser.get().isEmpty()){
+                        request.setAttribute(ERROR, "You don't have subscriptions yet");
+                    } else {
+                        request.setAttribute(USER_SUBSCRIPTIONS, subscriptionsOfUser.get());
+                    }
+                    return SHOW_ORDERS_RESPONSE;
                 }
-            } catch (CommandException e) {
-                logger.error(e.getMessage());
-                request.setAttribute(ERROR, e.getMessage());
-                return ShowErrorPageCommand.INSTANCE.execute(request, response);
             }
-            request.setAttribute(USER_SUBSCRIPTIONS, subscriptionsOfUser.get());
+            final List<SubscriptionDto> subscriptions = subscriptionService.findByPhrase(userId, phraseToFind);
+            if (subscriptions.isEmpty()) {
+                if (subscriptionsOfUser.isPresent()) {
+                    request.setAttribute(ERROR, "Subscriptions are not found");
+                    if (subscriptionsOfUser.get().isEmpty()){
+                        request.setAttribute(ERROR, "You don't have subscriptions yet");
+                    } else {
+                        request.setAttribute(USER_SUBSCRIPTIONS, subscriptionsOfUser.get());
+                    }
+                    return SHOW_ORDERS_RESPONSE;
+                } else {
+                    request.setAttribute(ERROR, "Subscriptions are not available right now");
+                    throw new CommandException("Error while getting user subscriptions");
+                }
+            } else {
+                request.setAttribute(USER_SUBSCRIPTIONS, subscriptions);
+            }
             return SHOW_ORDERS_RESPONSE;
+        } catch (CommandException e) {
+            logger.error(e.getMessage());
+            request.setAttribute(ERROR, e.getMessage());
+            return ShowErrorPageCommand.INSTANCE.execute(request, response);
         }
-        final List<SubscriptionDto> subscriptions = subscriptionService.findByPhrase(userId, phraseToFind);
-        request.setAttribute(USER_SUBSCRIPTIONS, subscriptions);
-        return SHOW_ORDERS_RESPONSE;
     }
 }

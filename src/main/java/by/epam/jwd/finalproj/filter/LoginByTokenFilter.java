@@ -132,7 +132,6 @@ public class LoginByTokenFilter implements Filter {
                 }
             }
             if(!cookieExists) {
-                logger.info(cookieExists);
                 Cookie localeCookie = new Cookie(LOCALE_COOKIE_NAME, "en");
                 localeCookie.setMaxAge(COOKIE_FOR_MONTH);
                 response.addCookie(localeCookie);

@@ -41,7 +41,13 @@ public enum ShowAllUsersCommand implements Command {
             return SHOW_USERS_RESPONSE;
         }
         List<UserDto> foundUsers = userService.findByPhraseLogin(phraseToFind);
-        request.setAttribute(REQUEST_USERS, foundUsers);
+        if (foundUsers.isEmpty()){
+            List<UserDto> allUsers = userService.findAll().orElse(Collections.emptyList());
+            request.setAttribute(ERROR, "Users are not found");
+            request.setAttribute(REQUEST_USERS, allUsers);
+        } else {
+            request.setAttribute(REQUEST_USERS, foundUsers);
+        }
         return SHOW_USERS_RESPONSE;
     }
 }

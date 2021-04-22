@@ -9,6 +9,8 @@ import by.epam.jwd.finalproj.service.impl.PeriodicalServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 import static by.epam.jwd.finalproj.util.ParameterNames.*;
 
 public enum ShowMainPageCommand implements Command {
@@ -44,7 +46,13 @@ public enum ShowMainPageCommand implements Command {
         }
         PeriodicalServiceImpl periodicalService = PeriodicalServiceImpl.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
-        request.setAttribute(PERIODICALS, foundPeriodicals);
+        if (foundPeriodicals.isEmpty()){
+            List<PeriodicalDto> allPeriodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());
+            request.setAttribute(ERROR, "Periodicals are not found");
+            request.setAttribute(PERIODICALS, allPeriodicals);
+        } else {
+            request.setAttribute(PERIODICALS, foundPeriodicals);
+        }
         return MAIN_PAGE_RESPONSE;
     }
 }

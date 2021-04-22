@@ -46,7 +46,13 @@ public enum ShowMainAdminPageCommand implements Command {
         }
         PeriodicalServiceImpl periodicalService = PeriodicalServiceImpl.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(phraseToFind);
-        request.setAttribute(PERIODICALS, foundPeriodicals);
+        if (foundPeriodicals.isEmpty()){
+            List<PeriodicalDto> allPeriodicals = periodicalService.findAll().orElse(Collections.emptyList());
+            request.setAttribute(ERROR, "Periodicals are not found");
+            request.setAttribute(PERIODICALS, allPeriodicals);
+        } else {
+            request.setAttribute(PERIODICALS, foundPeriodicals);
+        }
         return MAIN_ADMIN_RESPONSE;
     }
 }

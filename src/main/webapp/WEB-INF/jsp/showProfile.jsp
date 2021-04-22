@@ -66,17 +66,19 @@
             <button><fmt:message key="button.change.profile"/></button>
         </form>
         <hr>
-        <form action="controller">
-            <input type="hidden" name="command" value="top_up_balance">
-            <div class="cash-button">
-                <label>
-                    <input type="number" step="0.1" name="balancer">
-                </label>
-                <br>
-                <button><fmt:message key="button.topup"/></button>
-            </div>
-        </form>
-        <hr>
+        <c:if test="${sessionScope.role == 'USER'}">
+            <form action="controller">
+                <input type="hidden" name="command" value="top_up_balance">
+                <div class="cash-button">
+                    <label>
+                        <input type="number" step="0.1" name="balancer">
+                    </label>
+                    <br>
+                    <button><fmt:message key="button.topup"/></button>
+                </div>
+            </form>
+            <hr>
+        </c:if>
         <form action="controller">
             <input type="hidden" name="command" value="change_language">
             <div class="lang-button">

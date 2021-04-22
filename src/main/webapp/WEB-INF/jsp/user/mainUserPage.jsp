@@ -29,7 +29,7 @@
     </div>
     <hr>
     <div class="errorMessage">
-        ${errorMessage}
+        <h3>${errorMessage}</h3>
     </div>
     <c:if test="${not empty requestScope.periodicals}">
         <form action="controller" method="post">
