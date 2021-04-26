@@ -1,6 +1,9 @@
 package by.epam.jwd.finalproj.service.impl;
 
+import by.epam.jwd.finalproj.command.RequestContext;
+import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.dao.impl.UserDaoImpl;
+import by.epam.jwd.finalproj.model.Language;
 import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.model.user.UserDto;
 import by.epam.jwd.finalproj.service.UserService;
@@ -8,12 +11,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.servlet.http.Cookie;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static by.epam.jwd.finalproj.util.ParameterNames.LOCALE_COOKIE_NAME;
 
 public enum UserServiceImpl implements UserService {
     INSTANCE;
@@ -116,6 +122,22 @@ public enum UserServiceImpl implements UserService {
             boolean result = BCrypt.checkpw(password, BCrypt.hashpw(SILLY_PASSWORD, BCrypt.gensalt(15)));
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void logOut(RequestContext request, ResponseContext response){
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies){
+            if (!cookie.getName().equals(LOCALE_COOKIE_NAME)) {
+                cookie.setMaxAge(0);
+                cookie.setValue("");
+                cookie.setPath("/");
+            } else {
+                cookie.setValue(Language.en.name());
+            }
+            response.addCookie(cookie);
+        }
+        request.invalidateSession();
     }
 
     @Override

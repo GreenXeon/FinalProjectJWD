@@ -47,35 +47,36 @@ public class UserValidCommandFilter implements Filter {
         }
         String commandName = request.getParameter(COMMAND);
         String command;
-
         if (commandName != null){
             if (!(permittedCommands.contains(commandName) || permittedCommands.contains(commandName.toUpperCase()))){
                 logger.warn("Command " + commandName + " is not permitted for " + role);
                 String route;
-                if (role.equalsIgnoreCase("ADMIN")){
-                    route = CommandManager.SHOW_PER_ADMIN.name();
-                } else if (role.equalsIgnoreCase("USER")){
-                    route = CommandManager.SHOW_USER_MAIN.name();
-                } else {
-                    route = CommandManager.SHOWGUEST.name();
+                switch (role.toUpperCase()){
+                    case "ADMIN":
+                        route = CommandManager.SHOW_PER_ADMIN.name();
+                        break;
+                    case "USER":
+                        route = CommandManager.SHOW_USER_MAIN.name();
+                        break;
+                    default:
+                        route = CommandManager.SHOWGUEST.name();
                 }
                 response.sendRedirect(request.getContextPath() + "/controller?command=" + route.toLowerCase());
-                return;
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
-                return;
             }
         } else {
-            if (role.equalsIgnoreCase("ADMIN")){
-                command = CommandManager.SHOW_PER_ADMIN.name();
-            } else if (role.equalsIgnoreCase("USER")){
-                command = CommandManager.SHOW_USER_MAIN.name();
-            }
-            else {
-                command = CommandManager.SHOWGUEST.name();
+            switch (role.toUpperCase()){
+                case "ADMIN":
+                    command = CommandManager.SHOW_PER_ADMIN.name();
+                    break;
+                case "USER":
+                    command = CommandManager.SHOW_USER_MAIN.name();
+                    break;
+                default:
+                    command = CommandManager.SHOWGUEST.name();
             }
             response.sendRedirect(request.getContextPath() + "/controller?command=" + command.toLowerCase());
-            return;
         }
     }
 

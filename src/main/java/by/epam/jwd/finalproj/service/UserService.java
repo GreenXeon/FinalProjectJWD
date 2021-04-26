@@ -1,5 +1,7 @@
 package by.epam.jwd.finalproj.service;
 
+import by.epam.jwd.finalproj.command.RequestContext;
+import by.epam.jwd.finalproj.command.ResponseContext;
 import by.epam.jwd.finalproj.dao.UserDao;
 import by.epam.jwd.finalproj.model.user.User;
 import by.epam.jwd.finalproj.model.user.UserDto;
@@ -40,6 +42,14 @@ public interface UserService {
      * @return {@link Optional} of {@link UserDto}
      */
     Optional<UserDto> findByLogin(String login);
+
+    /**
+     * Logouts user from service, deletes cookies
+     *
+     * @param request {@link RequestContext}
+     * @param response {@link ResponseContext}
+     */
+    void logOut(RequestContext request, ResponseContext response);
 
     /**
      * Sets {@link UserDto}'s role, represented by {@link by.epam.jwd.finalproj.model.Role}'s int value

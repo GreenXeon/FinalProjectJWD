@@ -51,6 +51,7 @@ public class ValidatorTest {
                 "",
                 " ",
                 "@",
+                "mem@f",
                 "samplemail#mail.ru",
                 "qwertyuiop123456asddfgsdgfsdgsgsdfgsdfghjkcvncvncxvnv55474lzxcvbnm@mail.ru"
         };
