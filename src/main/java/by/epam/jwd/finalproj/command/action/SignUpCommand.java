@@ -36,38 +36,40 @@ public enum SignUpCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final String login = request.getParameter(USER_LOGIN).trim();
-            final String password = request.getParameter(USER_PASSWORD).trim();
-            final String passwordSecond = request.getParameter(SECOND_PASSWORD).trim();
-            final String userEmail = request.getParameter(USER_EMAIL).trim();
-            Route errorResult = ShowSignUpPageCommand.INSTANCE.execute(request, response);
-            if(!isValidLogin(login) || !isValidPassword(password) || !isValidPassword(passwordSecond) || !isValidEmail(userEmail)) {
+            String login = request.getParameter(USER_LOGIN).trim();
+            String password = request.getParameter(USER_PASSWORD).trim();
+            String passwordSecond = request.getParameter(SECOND_PASSWORD).trim();
+            String userEmail = request.getParameter(USER_EMAIL).trim();
+            Route signUpRoute = ShowSignUpPageCommand.INSTANCE.execute(request, response);
+            if (!isValidLogin(login) || !isValidPassword(password) || !isValidPassword(passwordSecond) || !isValidEmail(userEmail)) {
                 request.setAttribute(ERROR, "Check your data!");
-                return errorResult;
+                return signUpRoute;
             }
-            if(!password.equals(passwordSecond)){
+            if (!password.equals(passwordSecond)){
                 request.setAttribute(ERROR, "Passwords differ!");
-                return errorResult;
+                return signUpRoute;
             }
             if (userService.userExists(login)){
                 request.setAttribute(ERROR, "User with this login exists!");
-                return errorResult;
+                return signUpRoute;
             }
             String salt = BCrypt.gensalt(SALT_ROUNDS);
             String passwordHash = BCrypt.hashpw(password, salt);
-            Optional<UserDto> user = userService.save(new UserDto.Builder()
-                    .withLogin(login)
-                    .withPassword(passwordHash)
-                    .withEmail(userEmail)
-                    .withCash(BigDecimal.ZERO)
-                    .withRegistrationDate(new Timestamp(System.currentTimeMillis()))
-                    .withRole(Role.USER)
-                    .build());
+            Optional<UserDto> user = userService.save(
+                    new UserDto.Builder()
+                        .withLogin(login)
+                        .withPassword(passwordHash)
+                        .withEmail(userEmail)
+                        .withCash(BigDecimal.ZERO)
+                        .withRegistrationDate(new Timestamp(System.currentTimeMillis()))
+                        .withRole(Role.USER)
+                        .build()
+            );
             if (user.isPresent()) {
                 return ShowLoginPageCommand.INSTANCE.execute(request, response);
             } else {
                 request.setAttribute(ERROR, "User is not signed up");
-                return errorResult;
+                return signUpRoute;
             }
         } catch (NullPointerException e) {
             logger.error("Incorrect data for sign up");

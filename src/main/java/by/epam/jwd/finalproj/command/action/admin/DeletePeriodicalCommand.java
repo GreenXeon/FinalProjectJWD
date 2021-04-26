@@ -26,7 +26,7 @@ public enum DeletePeriodicalCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final int periodicalId = Integer.parseInt(request.getParameter(PERIODICAL_ID));
+            int periodicalId = Integer.parseInt(request.getParameter(PERIODICAL_ID));
             boolean deletingResult = periodicalService.delete(periodicalId);
             if (!deletingResult) {
                 throw new CommandException("Periodical was not deleted");

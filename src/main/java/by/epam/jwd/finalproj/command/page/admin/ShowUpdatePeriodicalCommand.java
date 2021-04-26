@@ -38,11 +38,8 @@ public enum ShowUpdatePeriodicalCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         String periodicalName;
-        if(request.getParameter(PERIODICAL_NAME_REQUEST) == null){
-            periodicalName = (String) request.getAttribute(PERIODICAL_NAME_REQUEST);
-        } else {
-            periodicalName = request.getParameter(PERIODICAL_NAME_REQUEST);
-        }
+        periodicalName = (request.getParameter(PERIODICAL_NAME_REQUEST) == null) ? (String) request.getAttribute(PERIODICAL_NAME_REQUEST)
+                : request.getParameter(PERIODICAL_NAME_REQUEST);
         Optional<PeriodicalDto> periodical = periodicalService.findByName(periodicalName);
         if (periodical.isPresent()){
             request.setAttribute(PERIODICAL, periodical.get());

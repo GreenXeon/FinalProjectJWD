@@ -16,21 +16,26 @@ public enum ChangePasswordCommand implements Command {
 
     private final int SALT_ROUNDS = 15;
 
+    private final UserServiceImpl userService;
+
+    ChangePasswordCommand(){
+        this.userService = UserServiceImpl.INSTANCE;
+    }
+
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         Route result = ShowChangePasswordCommand.INSTANCE.execute(request, response);
-        if(request.getParameter(PASSWORD) == null || request.getParameter(REPEAT_PASSWORD) == null){
+        if (request.getParameter(PASSWORD) == null || request.getParameter(REPEAT_PASSWORD) == null){
             request.setAttribute(ERROR, "Check your data!");
             return result;
         }
         String password = request.getParameter(PASSWORD);
         String repeatPassword = request.getParameter(REPEAT_PASSWORD);
-        if(!isValidPassword(password) || !isValidPassword(repeatPassword)){
+        if (!isValidPassword(password) || !isValidPassword(repeatPassword)){
             request.setAttribute(ERROR, "Check your data!");
             return result;
         }
         int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
-        UserServiceImpl userService = UserServiceImpl.INSTANCE;
         if (!password.equals(repeatPassword)){
             request.setAttribute(ERROR, "Passwords are not equal!");
             return result;

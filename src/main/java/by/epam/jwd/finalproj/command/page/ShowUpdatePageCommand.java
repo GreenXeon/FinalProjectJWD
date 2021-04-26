@@ -34,7 +34,6 @@ public enum ShowUpdatePageCommand implements Command {
         }
     };
 
-
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         int userId = (int) request.getSessionAttribute(SESSION_USER_ID);

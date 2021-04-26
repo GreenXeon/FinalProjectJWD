@@ -38,14 +38,14 @@ public enum LoginCommand implements Command {
     public Route execute(RequestContext request, ResponseContext response) {
         try {
             Route loginPage = ShowLoginPageCommand.INSTANCE.execute(request, response);
-            final String login = String.valueOf(request.getParameter(USER_LOGIN)).trim();
-            final String password = String.valueOf(request.getParameter(USER_PASSWORD)).trim();
-            final String rememberMe = request.getParameter(REMEMBER_ME);
+            String login = String.valueOf(request.getParameter(USER_LOGIN)).trim();
+            String password = String.valueOf(request.getParameter(USER_PASSWORD)).trim();
+            String rememberMe = request.getParameter(REMEMBER_ME);
             if (!isValidLogin(login) || !isValidPassword(password)) {
                 request.setAttribute(ERROR, "Check your data!");
                 return loginPage;
             }
-            final Optional<UserDto> user = userService.login(login, password);
+            Optional<UserDto> user = userService.login(login, password);
             if (!user.isPresent()) {
                 request.setSessionAttribute(SESSION_USER_ROLE, Role.GUEST);
                 request.setAttribute(ERROR, "Wrong login or password!");
@@ -59,19 +59,16 @@ public enum LoginCommand implements Command {
             request.setSessionAttribute(SESSION_USER_ID, user.get().getId());
             request.setSessionAttribute(SESSION_USER_ROLE, user.get().getRole().name());
             if (rememberMe != null) {
-                final String userData = user.get().getLogin() + ":" + user.get().getRegistrationDate().toString();
-                final String salt = BCrypt.gensalt(SALT_ROUNDS);
-                final String hashedToken = BCrypt.hashpw(userData, salt) + ":" + user.get().getId();
+                String userData = user.get().getLogin() + ":" + user.get().getRegistrationDate().toString();
+                String salt = BCrypt.gensalt(SALT_ROUNDS);
+                String hashedToken = BCrypt.hashpw(userData, salt) + ":" + user.get().getId();
                 Cookie userToken = new Cookie(USER_TOKEN_COOKIE, hashedToken);
                 userToken.setMaxAge(COOKIE_FOR_MONTH);
                 response.addCookie(userToken);
             }
             String userRoleName = user.get().getRole().name();
-            if (userRoleName.equalsIgnoreCase("user")) {
-                return ShowMainPageCommand.INSTANCE.execute(request, response);
-            } else {
-                return ShowMainAdminPageCommand.INSTANCE.execute(request, response);
-            }
+            return userRoleName.equalsIgnoreCase("user") ? ShowMainPageCommand.INSTANCE.execute(request, response)
+                    : ShowMainAdminPageCommand.INSTANCE.execute(request, response);
         } catch (NullPointerException e){
             logger.error("Incorrect data for login");
             request.setAttribute(ERROR, "Check your data!");

@@ -35,14 +35,15 @@ public enum AddPeriodicalCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         try {
-            final String name = String.valueOf(request.getParameter(PERIODICAL_NAME));
-            final String author = request.getParameter(PERIODICAL_AUTHOR);
-            final LocalDate publishDate = LocalDate.parse(request.getParameter(PERIODICAL_PUBLISH_DATE));
-            final PeriodicalType type = PeriodicalType.findById(Integer.parseInt(request.getParameter(PERIODICAL_TYPE)));
-            final BigDecimal cost = new BigDecimal(request.getParameter(PERIODICAL_COST)).setScale(2, RoundingMode.UNNECESSARY);
-            final String publisher = request.getParameter(PERIODICAL_PUBLISHER);
+            String name = String.valueOf(request.getParameter(PERIODICAL_NAME));
+            String author = request.getParameter(PERIODICAL_AUTHOR);
+            LocalDate publishDate = LocalDate.parse(request.getParameter(PERIODICAL_PUBLISH_DATE));
+            PeriodicalType type = PeriodicalType.findById(Integer.parseInt(request.getParameter(PERIODICAL_TYPE)));
+            BigDecimal cost = new BigDecimal(request.getParameter(PERIODICAL_COST)).setScale(2, RoundingMode.UNNECESSARY);
+            String publisher = request.getParameter(PERIODICAL_PUBLISHER);
             Route addPeriodicalPage = ShowAddPeriodicalCommand.INSTANCE.execute(request, response);
-            if(!isValidPeriodicalName(name) || !isValidPeriodicalAuthor(author) || !isValidPeriodicalCost(cost.toString()) ||
+
+            if (!isValidPeriodicalName(name) || !isValidPeriodicalAuthor(author) || !isValidPeriodicalCost(cost.toString()) ||
                 !isValidPeriodicalPublisher(publisher)){
                 request.setAttribute(ERROR, "Check input data!");
                 return addPeriodicalPage;

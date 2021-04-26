@@ -32,7 +32,7 @@ public enum ShowMainAdminPageCommand implements Command {
 
         @Override
         public boolean isRedirect() {
-            return false;
+            return true;
         }
     };
 

@@ -14,8 +14,6 @@ public class ApplicationController extends HttpServlet {
 
     private static final String COMMAND_PARAMETER_NAME = "command";
 
-    private final Logger logger = LogManager.getLogger(ApplicationController.class);
-
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         process(req, resp);
     }

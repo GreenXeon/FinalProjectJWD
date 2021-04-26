@@ -40,11 +40,10 @@ public enum ShowMainPageCommand implements Command {
         int userId = (int) request.getSessionAttribute(SESSION_USER_ID);
         String phraseToFind = request.getParameter(FINDER);
         if (phraseToFind == null || phraseToFind.isEmpty()){
-            final List<PeriodicalDto> periodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());
+            List<PeriodicalDto> periodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());
             request.setAttribute(PERIODICALS, periodicals);
             return MAIN_PAGE_RESPONSE;
         }
-        PeriodicalServiceImpl periodicalService = PeriodicalServiceImpl.INSTANCE;
         List<PeriodicalDto> foundPeriodicals = periodicalService.findPeriodicalByPhrase(userId, phraseToFind);
         if (foundPeriodicals.isEmpty()){
             List<PeriodicalDto> allPeriodicals = periodicalService.findForCurrentUser(userId).orElse(Collections.emptyList());

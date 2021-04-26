@@ -37,7 +37,6 @@ public enum CommandManager {
     SUBSCRIBE(SubscribeCommand.INSTANCE),
     SHOW_CHANGE_PASSWORD(ShowChangePasswordCommand.INSTANCE),
     CHANGE_PASSWORD(ChangePasswordCommand.INSTANCE),
-    FIND_PHRASE_PERIODICALS(FindPeriodicalCommand.INSTANCE),
 
     CHANGE_LANGUAGE(ChangeLanguageCommand.INSTANCE),
 

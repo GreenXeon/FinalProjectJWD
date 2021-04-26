@@ -35,7 +35,7 @@ public enum ShowGuestPageCommand implements Command {
     @Override
     public Route execute(RequestContext request, ResponseContext response) {
         String phraseToFind = request.getParameter(FINDER);
-        final List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
+        List<PeriodicalDto> periodicals = periodicalService.findAll().orElse(Collections.emptyList());
         if (phraseToFind == null || phraseToFind.isEmpty()){
             request.setAttribute(PERIODICALS, periodicals);
             return GUEST_PAGE_RESPONSE;

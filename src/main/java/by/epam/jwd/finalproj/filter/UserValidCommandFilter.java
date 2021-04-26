@@ -109,7 +109,6 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.UPDATE_USER.name(),
             CommandManager.SHOW_PROFILE_USER.name(),
             CommandManager.TOP_UP_BALANCE.name(),
-            CommandManager.FIND_PHRASE_PERIODICALS.name(),
             CommandManager.CHANGE_LANGUAGE.name(),
             CommandManager.SHOW_SUCCESS_PAGE.name()
     );
@@ -128,7 +127,6 @@ public class UserValidCommandFilter implements Filter {
             CommandManager.SHOW_ERROR.name(),
             CommandManager.SHOW_CHANGE_PASSWORD.name(),
             CommandManager.CHANGE_PASSWORD.name(),
-            CommandManager.FIND_PHRASE_PERIODICALS.name(),
             CommandManager.CHANGE_LANGUAGE.name(),
             CommandManager.SHOW_SUCCESS_PAGE.name()
     );
